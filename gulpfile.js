@@ -114,8 +114,10 @@ gulp.task('inject', function() {
 gulp.task('copy', function() {
     log('Copying assets');
 
+    var assets = [].concat(config.assetsLazyLoad, config.assetsToCopy);
+
     return gulp
-        .src(config.assets, {base: config.client})
+        .src(assets, {base: config.client})
         .pipe(gulp.dest(config.dist + '/'));
 });
 
