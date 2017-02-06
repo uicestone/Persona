@@ -25,6 +25,8 @@
                 $element.removeClass('on-canvas');
                 $element.removeClass('body-wide body-err body-lock body-auth');
                 switch (path) {
+                    case '/welcome':
+                        return $element.addClass('body-wide body-welcome');
                     case '/404':
                     case '/500':
                         return $element.addClass('body-wide body-err');

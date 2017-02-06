@@ -4,7 +4,8 @@ body {
 
 
 .body-auth,
-.body-err {
+.body-err,
+.body-welcome {
     &.app > .main-container:before {
         background: none;
     }
@@ -14,7 +15,8 @@ body {
         .page-signin,
         .page-signup,
         .page-forgot,
-        .page-err {
+        .page-err,
+        .page-welcome {
             margin-right: 220px;
         }
     }

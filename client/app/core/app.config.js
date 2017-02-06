@@ -55,31 +55,36 @@
     }
 
     function mdConfig($mdThemingProvider) {
-        var cyanAlt = $mdThemingProvider.extendPalette('cyan', {
-            'contrastLightColors': '500 600 700 800 900',
-            'contrastStrongLightColors': '500 600 700 800 900'
-        })
-        var lightGreenAlt = $mdThemingProvider.extendPalette('light-green', {
-            'contrastLightColors': '500 600 700 800 900',
-            'contrastStrongLightColors': '500 600 700 800 900'
-        })        
+        var amberAlt = $mdThemingProvider.extendPalette('amber', {
+            'contrastLightColors': '600 700 800 900',
+            'contrastStrongLightColors': '600 700 800 900'
+        });
+        // var cyanAlt = $mdThemingProvider.extendPalette('cyan', {
+        //     'contrastLightColors': '500 600 700 800 900',
+        //     'contrastStrongLightColors': '500 600 700 800 900'
+        // })
+        // var lightGreenAlt = $mdThemingProvider.extendPalette('light-green', {
+        //     'contrastLightColors': '500 600 700 800 900',
+        //     'contrastStrongLightColors': '500 600 700 800 900'
+        // })        
 
         $mdThemingProvider
-            .definePalette('cyanAlt', cyanAlt)
-            .definePalette('lightGreenAlt', lightGreenAlt);
+            .definePalette('amberAlt', amberAlt);
+            // .definePalette('cyanAlt', cyanAlt)
+            // .definePalette('lightGreenAlt', lightGreenAlt);
 
 
         $mdThemingProvider.theme('default')
-            .primaryPalette('teal', {
-                'default': '500'
-            })
-            .accentPalette('cyanAlt', {
-                'default': '500'
-            })
-            .warnPalette('red', {
-                'default': '500'
-            })
-            .backgroundPalette('grey');
+            .primaryPalette('amberAlt', {
+                'default': '600'
+            });
+            // .accentPalette('cyanAlt', {
+            //     'default': '500'
+            // })
+            // .warnPalette('red', {
+            //     'default': '500'
+            // })
+            // .backgroundPalette('grey');
     }
 
 })();

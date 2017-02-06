@@ -175,5 +175,9 @@
     "DATA_SETTING": "数据设置",
     "USER_SETTING": "用户及权限管理",
     "CHANNEL_SETTING": "渠道设置",
-    "GET_SDK": "获得SDK"
+    "GET_SDK": "获得SDK",
+
+    "WELCOME_TO_PERSONA": "欢迎使用Persona香蕉客",
+    "FOLLOW_THE_WIZARD": "请根据向导设计您的营销项目吧！开启Persona之旅！",
+    "START": "出&nbsp;&nbsp;发"
 }

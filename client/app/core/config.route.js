@@ -7,11 +7,11 @@
                 var routes, setRoutes;
 
                 routes = [
-                    'wizard/welcome', 'wizard/create-project', 'wizard/set-kpi', 'wizard/set-channel', 'wizard/set-timing', 'wizard/preview',
+                    'wizard/create-project', 'wizard/set-kpi', 'wizard/set-channel', 'wizard/set-timing', 'wizard/preview',
                     'project/list', 'project/timing',
                     'client/image',
                     'setting/data', 'setting/user', 'setting/channel',
-                    'get-sdk', '404', '500', 'forgot-password', 'lock-screen', 'profile', 'signin', 'signup',
+                    'welcome', 'get-sdk', '404', '500', 'forgot-password', 'lock-screen', 'profile', 'signin', 'signup',
                     
                     'ui/cards', 'ui/typography', 'ui/buttons', 'ui/icons', 'ui/grids', 'ui/widgets', 'ui/components', 'ui/timeline', 'ui/lists', 'ui/pricing-tables',
                     'table/static', 'table/responsive', 'table/data',
@@ -77,8 +77,8 @@
                     });
 
                 $urlRouterProvider
-                    .when('/', '/wizard/welcome')
-                    .otherwise('/wizard/welcome');
+                    .when('/', '/welcome')
+                    .otherwise('/welcome');
             }
         ]);
 
