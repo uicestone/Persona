@@ -500,11 +500,11 @@
     &.bg-info-alt,
     &.bg-warning,
     &.bg-danger {
-        color: $bright;
+        color: $white;
         a {
-            color: $bright;
+            color: $white;
             &:hover {
-                color: $bright;
+                color: $white;
             }
         }
         .dropdown-menu {
@@ -517,14 +517,14 @@
             }        
         }
 
-        .input-group-addon { color: $gray-lighter; }
-        ::-webkit-input-placeholder { color: #eaeaea; }
-        :-moz-placeholder { color: #eaeaea; } // Firefox 18-
-        ::-moz-placeholder {  color: #eaeaea; } // Firefox 19+
-        :-ms-input-placeholder {color: #eaeaea; }   
+        .input-group-addon { color: $bright; }
+        ::-webkit-input-placeholder { color: $bright; }
+        :-moz-placeholder { color: $bright; } // Firefox 18-
+        ::-moz-placeholder {  color: $bright; } // Firefox 19+
+        :-ms-input-placeholder {color: $bright; }   
 
         .top-nav .nav-left > li > a .badge {
-            color: #eaeaea;
+            color: #bright;
         }
 
         .search-box {
@@ -574,11 +574,11 @@
             &.bg-info-alt,
             &.bg-warning,
             &.bg-danger {
-                color: $bright;
+                color: $white;
                 a {
-                    color: $bright;
+                    color: $white;
                     &:hover {
-                        color: $bright;
+                        color: $white;
                     }
                 }
             }        

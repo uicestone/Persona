@@ -37,7 +37,7 @@
             link: ''
         };
         var color = {
-            primary:    '#009688',
+            primary:    '#FFA800', // Amber 600-700
             success:    '#8BC34A',
             info:       '#00BCD4',
             infoAlt:    '#7E57C2',
