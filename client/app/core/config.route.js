@@ -7,11 +7,17 @@
                 var routes, setRoutes;
 
                 routes = [
+                    'wizard/welcome', 'wizard/create-project', 'wizard/set-kpi', 'wizard/set-channel', 'wizard/set-timing', 'wizard/preview',
+                    'project/list', 'project/timing',
+                    'client/image',
+                    'setting/data', 'setting/user', 'setting/channel',
+                    'get-sdk', '404', '500', 'forgot-password', 'lock-screen', 'profile', 'signin', 'signup',
+                    
                     'ui/cards', 'ui/typography', 'ui/buttons', 'ui/icons', 'ui/grids', 'ui/widgets', 'ui/components', 'ui/timeline', 'ui/lists', 'ui/pricing-tables',
                     'table/static', 'table/responsive', 'table/data',
                     'form/elements', 'form/layouts', 'form/validation',
                     'chart/echarts', 'chart/echarts-line', 'chart/echarts-bar', 'chart/echarts-pie', 'chart/echarts-scatter', 'chart/echarts-more',
-                    'page/404', 'page/500', 'page/blank', 'page/forgot-password', 'page/invoice', 'page/lock-screen', 'page/profile', 'page/signin', 'page/signup',
+                    'page/blank', 'page/invoice',
                     'app/calendar'
                 ]
 
@@ -71,8 +77,8 @@
                     });
 
                 $urlRouterProvider
-                    .when('/', '/dashboard')
-                    .otherwise('/dashboard');
+                    .when('/', '/wizard/welcome')
+                    .otherwise('/wizard/welcome');
             }
         ]);
 

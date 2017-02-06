@@ -26,14 +26,13 @@
                 $element.removeClass('body-wide body-err body-lock body-auth');
                 switch (path) {
                     case '/404':
-                    case '/page/404':
-                    case '/page/500':
+                    case '/500':
                         return $element.addClass('body-wide body-err');
-                    case '/page/signin':
-                    case '/page/signup':
-                    case '/page/forgot-password':
+                    case '/signin':
+                    case '/signup':
+                    case '/forgot-password':
                         return $element.addClass('body-wide body-auth');
-                    case '/page/lock-screen':
+                    case '/lock-screen':
                         return $element.addClass('body-wide body-lock');
                 }
             };
