@@ -227,6 +227,7 @@ function startBrowserSync(opt) {
             '!' + config.sass,
             config.tmp + '/**/*.css'
         ];
+        options.open = false;
 
         browserSync(options);
     }

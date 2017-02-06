@@ -24,8 +24,8 @@
         var date = new Date();
         var year = date.getFullYear();
         var main = {
-            brand: 'Material',
-            name: 'Lisa',
+            brand: 'Persona',
+            name: 'Tracy',
             year: year,
             layout: 'wide',                                 // String: 'boxed', 'wide'
             menu: 'vertical',                               // String: 'horizontal', 'vertical'
@@ -34,7 +34,7 @@
             fixedSidebar: true,                             // Boolean: true, false
             pageTransition: pageTransitionOpts[0],          // Object: 0, 1, 2, 3 and build your own
             skin: '12',                                     // String: 11,12,13,14,15,16; 21,22,23,24,25,26; 31,32,33,34,35,36
-            link: 'https://themeforest.net/item/material-design-admin-with-angularjs/13582227'
+            link: ''
         };
         var color = {
             primary:    '#009688',
