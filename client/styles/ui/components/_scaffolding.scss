@@ -104,11 +104,13 @@ a.bg-danger { @include bg-variant-alt ($brand-danger); }
 // 
 .section-header,
 .article-title {
-    font-size: 24px;
+    font-size: 34px;
     font-weight: normal;
     line-height: 32px;
     margin: .6em 0;
-    color: $brand-primary;
+    color: $text-color;
+    border-left: 10px $brand-primary solid;
+    padding: 6px 10px;
     &.color-dark {
         color: $text-color;
     }
