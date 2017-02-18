@@ -201,7 +201,7 @@ function startBrowserSync(opt) {
     switch(opt) {
         case 'dist':
             log('Serving dist app');
-            serveDistApp();
+            // serveDistApp();
             break;
         case 'docs':
             log('Serving docs');
@@ -239,6 +239,7 @@ function startBrowserSync(opt) {
             ]
         };
         options.files = [];
+        options.open = false;
 
         browserSync(options);
     }
