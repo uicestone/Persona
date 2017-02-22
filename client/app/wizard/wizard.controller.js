@@ -19,6 +19,14 @@
         $scope.cities = [
             '上海', '北京', '深圳', '广州', '杭州', '南京', '成都', '武汉', '大连', '青岛'
         ];
+
+        $scope.project = {};
+
+        $scope.project.kpis = [{}];
+
+        $scope.addKpiForm = function() {
+            $scope.project.kpis.push({});
+        };
     }
     
 })(); 

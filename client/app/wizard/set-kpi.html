@@ -46,15 +46,19 @@
         <div class="col-md-7">
           <form name="userForm">
 
-            <div layout-gt-xs="row">
+            <div layout-gt-xs="row" ng-repeat="kpi in project.kpis">
               <md-input-container class="md-block">
                 <label>KPI类型</label>
-                <input ng-model="project.kpis.name">
+                <input ng-model="kpi.type">
               </md-input-container>
 
               <md-input-container flex-gt-xs>
                 <label>数值</label>
-                <input ng-model="project.kpis.value">
+                <input ng-model="kpi.value">
+              </md-input-container>
+
+              <md-input-container ng-if="$index==project.kpis.length-1">
+                <md-button ng-click="addKpiForm()">添加KPI指标</md-button>
               </md-input-container>
             </div>
 
