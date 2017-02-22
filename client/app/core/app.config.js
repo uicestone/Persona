@@ -77,14 +77,14 @@
         $mdThemingProvider.theme('default')
             .primaryPalette('amberAlt', {
                 'default': '600'
+            })
+            .accentPalette('amberAlt', {
+                'default': '800'
             });
-            // .accentPalette('cyanAlt', {
-            //     'default': '500'
-            // })
             // .warnPalette('red', {
             //     'default': '500'
             // })
-            // .backgroundPalette('grey');
+            // .backgroundPalette('grey', {'default':'50'});
     }
 
 })();
