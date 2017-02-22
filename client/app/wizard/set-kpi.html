@@ -1,73 +1,73 @@
 <div class="page" ng-controller="wizardCtrl">
-  <div class="row ui-section">
-    <div class="col-lg-12 clearfix">
-      <ul class="steps-indicator steps-5">
-        <li class="editing">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            创建项目
-          </a>
-        </li>
-        <li class="editing">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            设置KPI
-          </a>
-        </li>
-        <li class="default">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            渠道设置
-          </a>
-        </li>
-        <li class="default">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            关键节点
-          </a>
-        </li>
-        <li class="default">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            项目预览
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div class="col-lg-10 col-lg-offset-1 clearfix">
-      <h2 class="section-header">第二步 设置KPI</h2>
-      <br><br>
-    </div>
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div class="col-md-3 col-lg-offset-1 text-center">
-          <img src="/assets/images/wizard-set-kpi.png" style="width:100%">
+    <div class="row ui-section">
+        <div class="col-lg-12 clearfix">
+            <ul class="steps-indicator steps-5">
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        创建项目
+                    </a>
+                </li>
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        设置KPI
+                    </a>
+                </li>
+                <li class="default">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        渠道设置
+                    </a>
+                </li>
+                <li class="default">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        关键节点
+                    </a>
+                </li>
+                <li class="default">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        项目预览
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="col-md-7">
-          <form name="userForm">
+        <div class="col-lg-10 col-lg-offset-1 clearfix">
+            <h2 class="section-header">第二步 设置KPI</h2>
+            <br><br>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-3 col-lg-offset-1 text-center">
+                    <img src="/assets/images/wizard-set-kpi.png" style="width:100%">
+                </div>
+                <div class="col-md-7">
+                    <form name="userForm">
 
-            <div layout-gt-xs="row" ng-repeat="kpi in project.kpis">
-              <md-input-container class="md-block">
-                <label>KPI类型</label>
-                <input ng-model="kpi.type">
-              </md-input-container>
+                        <div layout-gt-xs="row" ng-repeat="kpi in project.kpis">
+                            <md-input-container class="md-block">
+                                <label>KPI类型</label>
+                                <input ng-model="kpi.type">
+                            </md-input-container>
 
-              <md-input-container flex-gt-xs>
-                <label>数值</label>
-                <input ng-model="kpi.value">
-              </md-input-container>
+                            <md-input-container flex-gt-xs>
+                                <label>数值</label>
+                                <input ng-model="kpi.value">
+                            </md-input-container>
 
-              <md-input-container ng-if="$index==project.kpis.length-1">
-                <md-button ng-click="addKpiForm()">添加KPI指标</md-button>
-              </md-input-container>
+                            <md-input-container ng-if="$index==project.kpis.length-1">
+                                <md-button ng-click="addKpiForm()">添加KPI指标</md-button>
+                            </md-input-container>
+                        </div>
+
+                    </form>
+                </div>
             </div>
-
-          </form>
+            <div class="wizard-actions text-center">
+             <md-button href="/#!/wizard/set-channel" class="md-raised md-default" style="line-height:34px">下一步</md-button>
+            </div>
         </div>
-      </div>
-      <div class="wizard-actions text-center">
-       <md-button href="/#!/wizard/set-channel" class="md-raised md-default" style="line-height:34px">下一步</md-button>
-      </div>
     </div>
-  </div>
 </div>

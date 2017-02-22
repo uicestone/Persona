@@ -1,95 +1,95 @@
 <div class="page" ng-controller="wizardCtrl">
-  <div class="row ui-section">
-    <div class="col-lg-12 clearfix">
-      <ul class="steps-indicator steps-5">
-        <li class="editing">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            创建项目
-          </a>
-        </li>
-        <li class="editing">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            设置KPI
-          </a>
-        </li>
-        <li class="editing">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            渠道设置
-          </a>
-        </li>
-        <li class="default">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            关键节点
-          </a>
-        </li>
-        <li class="default">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            项目预览
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div class="col-lg-10 col-lg-offset-1 clearfix">
-      <h2 class="section-header">第三步 渠道设置</h2>
-      <br><br>
-    </div>
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div class="col-md-5 col-lg-offset-1">
-          <form>
-            <md-input-container class="md-block">
-              <label>搜索你想投放的渠道</label>
-              <md-icon>search</md-icon>
-              <input ng-model="channelKeyword">
-            </md-input-container>
-          </form>
-          <md-content md-whiteframe="2" style="height:212px;background:none">
-            <table class="table" style="margin-bottom:0">
-              <tr ng-repeat="channel in channels | filter:channelKeyword">
-                <td>{{ channel.name }}</td>
-                <td>{{ channel.topic }}</td>
-                <td>{{ channel.rank }}</td>
-                <td>
-                  <md-input-container style="margin:0;padding:0">
-                    <md-checkbox ng-model="channel.selected" style="margin-bottom:0" aria-label="选择"></md-checkbox>
-                  </md-input-container>
-                </td>
-              </tr>
-            </table>
-          </md-content>
+    <div class="row ui-section">
+        <div class="col-lg-12 clearfix">
+            <ul class="steps-indicator steps-5">
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        创建项目
+                    </a>
+                </li>
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        设置KPI
+                    </a>
+                </li>
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        渠道设置
+                    </a>
+                </li>
+                <li class="default">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        关键节点
+                    </a>
+                </li>
+                <li class="default">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        项目预览
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="col-md-5">
-          <md-content md-whiteframe="2" style="height:280px;background:none">
-            <table class="table">
-              <thead>
-                <tr><th>已选渠道</th><th>投放时间</th></tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="channel in project.channels">
-                  <td>{{ channel.name }}</td>
-                  <td><md-input-container>
-                    <label>开始时间</label>
-                    <md-datepicker ng-model="channel.startDate" md-hide-icons="calendar"></md-datepicker>
-                  </md-input-container>
-                  <md-input-container>
-                    <label>结束时间</label>
-                    <md-datepicker ng-model="channel.endDate" md-hide-icons="calendar"></md-datepicker>
-                  </md-input-container></td>
-                </tr>
-              </tbody>
-            </table>
-          </md-content>
+        <div class="col-lg-10 col-lg-offset-1 clearfix">
+            <h2 class="section-header">第三步 渠道设置</h2>
+            <br><br>
         </div>
-      </div>
-      <div class="wizard-actions text-center">
-       <md-button href="/#!/wizard/set-timing" class="md-raised md-primary" style="line-height:34px;margin-right:100px">先跳过</md-button>
-       <md-button href="/#!/wizard/set-timing" class="md-raised md-default" style="line-height:34px">下一步</md-button>
-      </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-5 col-lg-offset-1">
+                    <form>
+                        <md-input-container class="md-block">
+                            <label>搜索你想投放的渠道</label>
+                            <md-icon>search</md-icon>
+                            <input ng-model="channelKeyword">
+                        </md-input-container>
+                    </form>
+                    <md-content md-whiteframe="2" style="height:212px;background:none">
+                        <table class="table" style="margin-bottom:0">
+                            <tr ng-repeat="channel in channels | filter:channelKeyword">
+                                <td>{{ channel.name }}</td>
+                                <td>{{ channel.topic }}</td>
+                                <td>{{ channel.rank }}</td>
+                                <td>
+                                    <md-input-container style="margin:0;padding:0">
+                                        <md-checkbox ng-model="channel.selected" style="margin-bottom:0" aria-label="选择"></md-checkbox>
+                                    </md-input-container>
+                                </td>
+                            </tr>
+                        </table>
+                    </md-content>
+                </div>
+                <div class="col-md-5">
+                    <md-content md-whiteframe="2" style="height:280px;background:none">
+                        <table class="table">
+                            <thead>
+                                <tr><th>已选渠道</th><th>投放时间</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="channel in project.channels">
+                                    <td>{{ channel.name }}</td>
+                                    <td><md-input-container>
+                                        <label>开始时间</label>
+                                        <md-datepicker ng-model="channel.startDate" md-hide-icons="calendar"></md-datepicker>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>结束时间</label>
+                                        <md-datepicker ng-model="channel.endDate" md-hide-icons="calendar"></md-datepicker>
+                                    </md-input-container></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-content>
+                </div>
+            </div>
+            <div class="wizard-actions text-center">
+             <md-button href="/#!/wizard/set-timing" class="md-raised md-primary" style="line-height:34px;margin-right:100px">先跳过</md-button>
+             <md-button href="/#!/wizard/set-timing" class="md-raised md-default" style="line-height:34px">下一步</md-button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

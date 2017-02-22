@@ -1,128 +1,128 @@
 <div class="page" ng-controller="wizardCtrl">
-  <div class="row ui-section">
-    <div class="col-lg-12 clearfix">
-      <ul class="steps-indicator steps-5">
-        <li class="editing">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            创建项目
-          </a>
-        </li>
-        <li class="default">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            设置KPI
-          </a>
-        </li>
-        <li class="default">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            渠道设置
-          </a>
-        </li>
-        <li class="default">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            关键节点
-          </a>
-        </li>
-        <li class="default">
-          <a>
-            <span class="icon"><md-icon>create</md-icon></span>
-            项目预览
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div class="col-lg-10 col-lg-offset-1 clearfix">
-      <h2 class="section-header">第一步 创建项目</h2>
-      <br><br>
-    </div>
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div class="col-md-3 col-lg-offset-1 text-center">
-          <img src="/assets/images/wizard-create-project.png" style="width:100%">
+    <div class="row ui-section">
+        <div class="col-lg-12 clearfix">
+            <ul class="steps-indicator steps-5">
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        创建项目
+                    </a>
+                </li>
+                <li class="default">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        设置KPI
+                    </a>
+                </li>
+                <li class="default">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        渠道设置
+                    </a>
+                </li>
+                <li class="default">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        关键节点
+                    </a>
+                </li>
+                <li class="default">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        项目预览
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="col-md-7">
-          <form name="userForm">
-
-            <div layout-gt-xs="row">
-              <md-input-container class="md-block" flex-gt-xs>
-                <label>项目名称</label>
-                <input ng-model="project.name">
-              </md-input-container>
-
-              <md-input-container>
-                <label>开始时间</label>
-                <md-datepicker ng-model="project.startDate"></md-datepicker>
-              </md-input-container>
-
-              <md-input-container>
-                <label>结束时间</label>
-                <md-datepicker ng-model="project.endDate"></md-datepicker>
-              </md-input-container>
-            </div>
-
-            <div layout-gt-sm="row">
-              <md-input-container class="md-block" flex-gt-sm>
-                <label>备注</label>
-                <input ng-model="project.comment" md-maxlength="100">
-              </md-input-container>
-            </div>
-
-            <div layout-gt-sm="row">
-
-              <md-input-container class="md-block" flex-gt-sm>
-                <label>URL</label>
-                <input name="postalCode" ng-model="project.url" placeholder="https://">
-              </md-input-container>
-
-              <md-input-container class="md-block" flex-gt-sm>
-                <label>投放平台</label>
-                <md-select ng-model="project.platform">
-                  <md-option ng-repeat="platform in platforms" value="{{platform}}">
-                    {{platform}}
-                  </md-option>
-                </md-select>
-              </md-input-container>
-
-              <md-input-container class="md-block" flex-gt-sm>
-                <label>城市</label>
-                <md-select ng-model="user.state">
-                  <md-option ng-repeat="city in cities" value="{{city}}">
-                    {{city}}
-                  </md-option>
-                </md-select>
-              </md-input-container>
-            </div>
-
-            <div layout-gt-sm="row">
-
-              <md-input-container class="md-block" flex-gt-sm>
-                <label>执行者</label>
-                <md-select ng-model="project.executive">
-                  <md-option ng-repeat="user in users" value="{{user.name}}">
-                    {{user.name}}
-                  </md-option>
-                </md-select>
-              </md-input-container>
-
-              <md-input-container class="md-block" flex-gt-sm>
-                <label>管理者</label>
-                <input name="manager" ng-model="project.manager">
-              </md-input-container>
-
-              <md-input-container class="md-block" flex-gt-sm>
-                <label>APPID</label>
-                <input name="appid" ng-model="project.appid">
-              </md-input-container>
-            </div>
-          </form>
+        <div class="col-lg-10 col-lg-offset-1 clearfix">
+            <h2 class="section-header">第一步 创建项目</h2>
+            <br><br>
         </div>
-      </div>
-      <div class="wizard-actions text-center">
-       <md-button href="/#!/wizard/set-kpi" class="md-raised md-default" style="line-height:34px">下一步</md-button>
-      </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-3 col-lg-offset-1 text-center">
+                    <img src="/assets/images/wizard-create-project.png" style="width:100%">
+                </div>
+                <div class="col-md-7">
+                    <form name="userForm">
+
+                        <div layout-gt-xs="row">
+                            <md-input-container class="md-block" flex-gt-xs>
+                                <label>项目名称</label>
+                                <input ng-model="project.name">
+                            </md-input-container>
+
+                            <md-input-container>
+                                <label>开始时间</label>
+                                <md-datepicker ng-model="project.startDate"></md-datepicker>
+                            </md-input-container>
+
+                            <md-input-container>
+                                <label>结束时间</label>
+                                <md-datepicker ng-model="project.endDate"></md-datepicker>
+                            </md-input-container>
+                        </div>
+
+                        <div layout-gt-sm="row">
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>备注</label>
+                                <input ng-model="project.comment" md-maxlength="100">
+                            </md-input-container>
+                        </div>
+
+                        <div layout-gt-sm="row">
+
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>URL</label>
+                                <input name="postalCode" ng-model="project.url" placeholder="https://">
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>投放平台</label>
+                                <md-select ng-model="project.platform">
+                                    <md-option ng-repeat="platform in platforms" value="{{platform}}">
+                                        {{platform}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>城市</label>
+                                <md-select ng-model="user.state">
+                                    <md-option ng-repeat="city in cities" value="{{city}}">
+                                        {{city}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+
+                        <div layout-gt-sm="row">
+
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>执行者</label>
+                                <md-select ng-model="project.executive">
+                                    <md-option ng-repeat="user in users" value="{{user.name}}">
+                                        {{user.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>管理者</label>
+                                <input name="manager" ng-model="project.manager">
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>APPID</label>
+                                <input name="appid" ng-model="project.appid">
+                            </md-input-container>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="wizard-actions text-center">
+             <md-button href="/#!/wizard/set-kpi" class="md-raised md-default" style="line-height:34px">下一步</md-button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
