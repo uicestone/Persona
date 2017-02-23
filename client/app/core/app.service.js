@@ -19,7 +19,7 @@
 
     function brandService($resource) {
 
-        let brand = $resource(api + 'brand/:id', {id: '@id'}, {
+        let brand = $resource(api + 'brand/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST'},
             update: {method: 'PUT'}
@@ -28,7 +28,7 @@
         // Angular mix PUT and POST methot to $save,
         // we seperate them to $create and $update here
         brand.prototype.$save = function (a, b, c, d) {
-            if (this.id && !a.restore) {
+            if (this._id) {
                 return this.$update(a, b, c, d);
             }
             else {
@@ -42,7 +42,7 @@
 
     function channelService($resource) {
 
-        let channel = $resource(api + 'channel/:id', {id: '@id'}, {
+        let channel = $resource(api + 'channel/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST'},
             update: {method: 'PUT'}
@@ -51,7 +51,7 @@
         // Angular mix PUT and POST methot to $save,
         // we seperate them to $create and $update here
         channel.prototype.$save = function (a, b, c, d) {
-            if (this.id && !a.restore) {
+            if (this._id) {
                 return this.$update(a, b, c, d);
             }
             else {
@@ -65,7 +65,7 @@
 
     function clientService($resource) {
 
-        let client = $resource(api + 'client/:id', {id: '@id'}, {
+        let client = $resource(api + 'client/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST'},
             update: {method: 'PUT'}
@@ -74,7 +74,7 @@
         // Angular mix PUT and POST methot to $save,
         // we seperate them to $create and $update here
         client.prototype.$save = function (a, b, c, d) {
-            if (this.id && !a.restore) {
+            if (this._id) {
                 return this.$update(a, b, c, d);
             }
             else {
@@ -88,7 +88,7 @@
 
     function projectService($resource) {
 
-        let project = $resource(api + 'project/:id', {id: '@id'}, {
+        let project = $resource(api + 'project/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST'},
             update: {method: 'PUT'}
@@ -97,7 +97,7 @@
         // Angular mix PUT and POST methot to $save,
         // we seperate them to $create and $update here
         project.prototype.$save = function (a, b, c, d) {
-            if (this.id && !a.restore) {
+            if (this._id) {
                 return this.$update(a, b, c, d);
             }
             else {
@@ -111,7 +111,7 @@
 
     function userService($resource) {
 
-        let user = $resource(api + 'user/:id', {id: '@id'}, {
+        let user = $resource(api + 'user/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST'},
             update: {method: 'PUT'}
@@ -120,7 +120,7 @@
         // Angular mix PUT and POST methot to $save,
         // we seperate them to $create and $update here
         user.prototype.$save = function (a, b, c, d) {
-            if (this.id && !a.restore) {
+            if (this._id) {
                 return this.$update(a, b, c, d);
             }
             else {
