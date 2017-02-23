@@ -1,10 +1,43 @@
-<div class="page">
-
+<div class="page" ng-controller="clientCtrl">
     <div class="row ui-section">
-        <div class="col-lg-8 clearfix">
-            <h2 class="section-header">Blank</h2>
-        </div>
         <div class="col-md-12">
+            <md-tabs class="project-detail" md-dynamic-height md-border-bottom>
+                <md-tab label="用户画像">
+                    <md-content class="md-padding">
+                        <div class="filters" layout="row">
+                            <md-chips ng-model="query.withTags" placeholder="包含的标签" flex="50"></md-chips>
+                            <md-chips ng-model="query.withoutTags" placeholder="排除的标签" flex="50"></md-chips>
+                        </div>
+                        <br>
+                        <div layout="row">
+                            <md-input-container ng-repeat="meta in showKeys">
+                                <md-checkbox ng-model="meta.show">{{ meta.label }}</md-checkbox>
+                            </md-input-container>
+                            <md-autocomplete md-items="meta in otherKeys" placeholder="新增显示字段">
+                                <span>{{ meta.label }}</span>
+                            </md-autocomplete>
+                        </div>
+                        <table class="table table-striped table-hover" style="background:white">
+                            <thead>
+                                <tr>
+                                    <th ng-repeat="meta in showKeys">{{ meta.label }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="client in clients">
+                                    <td ng-repeat="meta in showKeys">{{ client[meta.key] }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="actions text-right">
+                            <md-button href="" class="md-raised md-primary" style="line-height:34px">定义分组</md-button>
+                            <md-button href="" class="md-raised md-primary" style="line-height:34px">导出表格</md-button>
+                        </div>
+                    </md-content>
+                </md-tab>
+                <md-tab label="高级搜索">
+                </md-tab>
+            </md-tabs>
         </div>
     </div>
 </div>
