@@ -6,6 +6,7 @@
          'ngAnimate'
         ,'ngAria'
         ,'ngMessages'
+        ,'ngResource'
 
         // Custom modules
         ,'app.layout'
