@@ -29,22 +29,32 @@
 
         $scope.project = {startDate:'2016-11-11', endDate:'2016-11-30'};
 
-        $scope.project.kpis = [{type:'提交次数',value:8888}, {type:'分享次数', value:3000}];
+        $scope.project.kpis = [
+            {type:'提交次数',value:8888, timings:[
+                {name:'前期目标', startDate:new Date('2016-11-13'), endDate:new Date('2016-11-22'), percentage: 40},
+                {name:'后期目标', startDate:new Date('2016-11-23'), endDate:new Date('2016-11-29'), percentage: 40}
+            ]},
+            {type:'分享次数', value:3000}
+        ];
+
         $scope.project.channels = [
-            {name:'同道大叔', startDate:'2016-11-13', endDate:'2016-11-22'},
-            {name:'姜茶茶', startDate:'2016-11-14', endDate:'2016-11-25'},
+            {name:'同道大叔', startDate:new Date('2016-11-13'), endDate:new Date('2016-11-22')},
+            {name:'姜茶茶', startDate:new Date('2016-11-14'), endDate:new Date('2016-11-25')},
         ];
 
         $scope.addKpiForm = function() {
             $scope.project.kpis.push({});
         };
-        $scope.project.duration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
-        $scope.project.channels.map(channel => {
-            channel.startDatePercentage = (new Date(channel.startDate) - new Date($scope.project.startDate)) / $scope.project.duration * 100;
-            channel.endDatePercentage = (new Date(channel.endDate) - new Date($scope.project.startDate)) / $scope.project.duration * 100;
-            channel.durationPercentage = (new Date(channel.endDate) - new Date(channel.startDate)) / $scope.project.duration * 100;
-            return channel;
-        });
+
+        $scope.startDatePercentage = function(item) {
+            const projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
+            return (new Date(item.startDate) - new Date($scope.project.startDate)) / projectDuration * 100;
+        };
+
+        $scope.durationPercentage = function(item) {
+            const projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
+            return (new Date(item.endDate) - new Date(item.startDate)) / projectDuration * 100;
+        };
 
         // $scope.$watch('channels', function(channels) {
         //     $scope.project.channels = channels.filter(channel => channel.selected);

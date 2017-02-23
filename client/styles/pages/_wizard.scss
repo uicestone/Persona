@@ -1,6 +1,6 @@
 .set-timing {
 
-    .timeline-channels {
+    .timeline-channels, .timeline-timings {
 
         .endpoint {
             color: #d6d6d6;
@@ -26,6 +26,7 @@
                 label {
                     font-size: 12px;
                     color: #7f7f7f;
+                    margin-left: -10px;
                 }
 
                 .channel-endpoint {
@@ -48,6 +49,14 @@
                     }
                 }
             }
+        }
+    }
+
+    .kpis-timing {
+        margin-top: 40px;
+
+        .kpi-timing {
+            margin-top: 40px;
         }
     }
 }
