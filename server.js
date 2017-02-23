@@ -4,6 +4,7 @@ var express     = require('express');
 var bodyParser  = require('body-parser');
 var mongoose    = require('mongoose');
 var http        = require('http');
+var cors        = require('cors');
 
 var app         = express();
 var router      = express.Router();
@@ -14,6 +15,7 @@ var io          = require('socket.io')(httpServer);
 mongoose.connect(process.env.DATABASE_URL || 'mongodb://localhost/policemon');
 
 app.use(bodyParser.json());
+app.use(cors());
 
 require('./server/apis')(app, router);
 
