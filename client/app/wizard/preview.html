@@ -1,10 +1,186 @@
-<div class="page">
-
+<div class="page" ng-controller="wizardCtrl">
     <div class="row ui-section">
-        <div class="col-lg-8 clearfix">
-            <h2 class="section-header">Blank</h2>
+        <div class="col-lg-12 clearfix">
+            <ul class="steps-indicator steps-5">
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        创建项目
+                    </a>
+                </li>
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>assessment</md-icon></span>
+                        设置KPI
+                    </a>
+                </li>
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>voice_chat</md-icon></span>
+                        渠道设置
+                    </a>
+                </li>
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>timeline</md-icon></span>
+                        关键节点
+                    </a>
+                </li>
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>play_arrow</md-icon></span>
+                        项目预览
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="col-md-12">
+        <div class="col-lg-10 col-lg-offset-1 clearfix">
+            <h2 class="section-header">第五步 项目预览</h2>
+            <br><br>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-8 col-md-offset-2">
+                    <form name="userForm">
+
+                        <div layout-gt-xs="row">
+                            <md-input-container class="md-block" flex-gt-xs>
+                                <label>项目名称</label>
+                                <input ng-model="project.name" disabled>
+                            </md-input-container>
+
+                            <md-input-container>
+                                <label>开始时间</label>
+                                <md-datepicker ng-model="project.startDate" disabled></md-datepicker>
+                            </md-input-container>
+
+                            <md-input-container>
+                                <label>结束时间</label>
+                                <md-datepicker ng-model="project.endDate" disabled></md-datepicker>
+                            </md-input-container>
+                        </div>
+
+                        <div layout-gt-sm="row">
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>备注</label>
+                                <input ng-model="project.comment" md-maxlength="100" disabled>
+                            </md-input-container>
+                        </div>
+
+                        <div layout-gt-sm="row">
+
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>URL</label>
+                                <input name="postalCode" ng-model="project.url" placeholder="https://" disabled>
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex-gt-sm="25">
+                                <label>投放平台</label>
+                                <md-select ng-model="project.platform" disabled>
+                                    <md-option ng-repeat="platform in platforms" value="{{platform}}">
+                                        {{platform}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex-gt-sm="25">
+                                <label>城市</label>
+                                <md-select ng-model="user.state" disabled>
+                                    <md-option ng-repeat="city in cities" value="{{city}}">
+                                        {{city}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+
+                        </div>
+
+                        <div layout-gt-sm="row">
+
+                            <md-input-container class="md-block" flex-gt-sm="25">
+                                <label>执行者</label>
+                                <md-select ng-model="project.executive" disabled disabled>
+                                    <md-option ng-repeat="user in users" value="{{user.name}}">
+                                        {{user.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex-gt-sm="25">
+                                <label>管理者</label>
+                                <input name="manager" ng-model="project.manager" disabled>
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>APPID</label>
+                                <input name="appid" ng-model="project.appid" disabled>
+                            </md-input-container>
+                        </div>
+
+                        <div>
+                            <div ng-repeat="kpi in project.kpis" layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-sm="50">
+                                    <label>KPI类型</label>
+                                    <input ng-model="kpi.type" disabled>
+                                </md-input-container>
+                                <md-input-container class="md-block" flex-gt-sm="50">
+                                    <label>数值</label>
+                                    <input ng-model="kpi.value" disabled>
+                                </md-input-container>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-12">
+                    <!--各渠道时间段-->
+                    <div layout="row" layout-align="center end" class="timeline-channels">
+                        <div class="endpoint" flex="1">
+                            <label>开始时间</label>
+                            <p>{{ project.startDate | date:'y/M/d' }}</p>
+                        </div>
+                        <div class="baseline" flex layout="column">
+                            <div ng-repeat="channel in project.channels" class="channel" layout="row" layout-align="center end" style="margin-left:{{ startDatePercentage(channel) }}%;width:{{ durationPercentage(channel) }}%">
+                                <div class="channel-endpoint" flex="1" style="left:-15px">
+                                    <div class="date">{{ channel.startDate | date:'M/d' }}</div>
+                                </div>
+                                <label flex>{{ channel.name }}</label>
+                                <div class="channel-endpoint" flex="1" style="left:15px">
+                                    <div class="date">{{ channel.endDate | date:'M/d' }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="endpoint" flex="1">
+                            <label>结束时间</label>
+                            <p>{{ project.endDate | date:'y/M/d' }}</p>
+                        </div>
+                    </div>
+                    <!--各KPI关键节点-->
+                    <div class="kpis-timing">
+                        <div ng-repeat="kpi in project.kpis" class="kpi-timing">
+                            <!--所有节点显示在一个轴上-->
+                            <div layout="row" layout-align="center end" class="timeline-timings">
+                                <div class="endpoint" flex="1">
+                                    <label>{{ kpi.type }}</label>
+                                    <p>{{ kpi.value }}</p>
+                                </div>
+                                <div class="baseline" flex layout="column">
+                                    <div ng-repeat="timing in kpi.timings" class="channel" layout="row" layout-align="center end" style="margin-left:{{ startDatePercentage(timing) }}%;width:{{ durationPercentage(timing) }}%">
+                                        <div class="channel-endpoint" flex="1" style="left:-15px">
+                                            <div class="date">{{ timing.startDate | date:'M/d' }}</div>
+                                        </div>
+                                        <label flex>{{ timing.name }} {{ timing.percentage }}%</label>
+                                        <div class="channel-endpoint" flex="1" style="left:15px">
+                                            <div class="date">{{ timing.endDate | date:'M/d' }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-actions text-center">
+             <md-button href="/#!/project/list" class="md-raised md-default md-primary" style="line-height:34px">进入系统</md-button>
+            </div>
         </div>
     </div>
 </div>

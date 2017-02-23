@@ -27,7 +27,7 @@
             {name:'四个辣妈', topic:'母婴', rank:3}
         ];
 
-        $scope.project = {startDate:'2016-11-11', endDate:'2016-11-30'};
+        $scope.project = {name:'昆城广场宠物帮帮帮项目', startDate:new Date('2016-11-11'), endDate:new Date('2016-11-30')};
 
         $scope.project.kpis = [
             {type:'提交次数',value:8888, timings:[
