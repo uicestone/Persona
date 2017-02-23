@@ -34,7 +34,7 @@
 
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>URL</label>
-                                    <input name="postalCode" ng-model="project.url" placeholder="https://">
+                                    <input name="postalCode" ng-model="project.url" placeholder="https://www.example.com">
                                 </md-input-container>
 
                                 <md-input-container class="md-block" flex-gt-sm="25">
@@ -48,7 +48,7 @@
 
                                 <md-input-container class="md-block" flex-gt-sm="25">
                                     <label>城市</label>
-                                    <md-select ng-model="user.state">
+                                    <md-select ng-model="project.city">
                                         <md-option ng-repeat="city in cities" value="{{city}}">
                                             {{city}}
                                         </md-option>
@@ -69,7 +69,7 @@
 
                                 <md-input-container class="md-block" flex-gt-sm="25">
                                     <label>管理者</label>
-                                    <input name="manager" ng-model="project.manager" disabled>
+                                    <input name="manager" ng-model="project.manager.name" disabled>
                                 </md-input-container>
 
                                 <md-input-container class="md-block" flex-gt-sm>
@@ -93,7 +93,7 @@
 
                             <div class="actions text-center">
                                 <md-button class="md-raised md-primary" href="#!/wizard/set-kpi" style="line-height:34px">修改API</md-button>
-                                <md-button class="md-raised md-default" style="margin-left:20px">保存修改</md-button>
+                                <md-button class="md-raised md-default" style="margin-left:20px" ng-click="updateProject(project)">保存修改</md-button>
                             </div>
                         </div>
                         <div class="col-md-12">

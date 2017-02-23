@@ -71,7 +71,7 @@
 
                             <md-input-container class="md-block" flex-gt-sm>
                                 <label>URL</label>
-                                <input name="postalCode" ng-model="project.url" placeholder="https://" disabled>
+                                <input name="postalCode" ng-model="project.url" placeholder="https://www.example.com" disabled>
                             </md-input-container>
 
                             <md-input-container class="md-block" flex-gt-sm="25">
@@ -85,7 +85,7 @@
 
                             <md-input-container class="md-block" flex-gt-sm="25">
                                 <label>城市</label>
-                                <md-select ng-model="user.state" disabled>
+                                <md-select ng-model="project.city" disabled>
                                     <md-option ng-repeat="city in cities" value="{{city}}">
                                         {{city}}
                                     </md-option>
@@ -107,7 +107,7 @@
 
                             <md-input-container class="md-block" flex-gt-sm="25">
                                 <label>管理者</label>
-                                <input name="manager" ng-model="project.manager" disabled>
+                                <input name="manager" ng-model="project.manager.name" disabled>
                             </md-input-container>
 
                             <md-input-container class="md-block" flex-gt-sm>
