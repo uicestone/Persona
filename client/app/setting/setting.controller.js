@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.setting')
-    .controller('settingCtrl', ['$scope', '$window', '$mdBottomSheet', '$mdToast', settingCtrl]);
+    .controller('settingCtrl', ['$scope', '$window', '$mdBottomSheet', '$mdToast', 'channelService', settingCtrl]);
 
-    function settingCtrl($scope, $window, $mdBottomSheet, $mdToast) {
+    function settingCtrl($scope, $window, $mdBottomSheet, $mdToast, channelService) {
         $scope.users = [
             {name: 'Tracy'},
             {name: 'David'},
@@ -30,7 +30,9 @@
         $scope.channelTopics = ['星座','娱乐','时尚','母婴'];
 
         $scope.editChannel = function(channel) {
-            $scope.alert = '';
+            if(!channel) {
+                channel = new channelService();
+            }
             $scope.channel = channel;
             $mdBottomSheet.show({
                 templateUrl: 'app/setting/channel-bottom-sheet.html',
@@ -41,6 +43,7 @@
 
         $scope.updateChannel = function(channel) {
             $mdBottomSheet.hide();
+            channel.$save();
         };
 
     }
