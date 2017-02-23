@@ -42,6 +42,10 @@
                         url: '/dashboard',
                         templateUrl: 'app/dashboard/dashboard.html'
                     })
+                    .state('project/:id', {
+                        url: '/project/:id',
+                        templateUrl: 'app/project/detail.html'
+                    })
                     .state('form/editor', {
                         url: '/form/editor',
                         templateUrl: "app/form/editor.html",

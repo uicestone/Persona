@@ -19,3 +19,23 @@
         }
     }
 }
+
+md-tabs.project-detail {
+
+    border: 1px solid #d7d7d7;
+    md-tabs-canvas {
+        background: white;
+    }
+    md-tabs-content-wrapper {
+        background: #fafafa;
+
+        .section-header {
+            font-size: 28px;
+            margin: 40px 0 80px;
+        }
+    }
+
+    .actions {
+        margin: 30px auto;
+    }
+}

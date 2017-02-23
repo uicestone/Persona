@@ -77,7 +77,7 @@
                                 <input name="postalCode" ng-model="project.url" placeholder="https://">
                             </md-input-container>
 
-                            <md-input-container class="md-block" flex-gt-sm>
+                            <md-input-container class="md-block" flex-gt-sm="25">
                                 <label>投放平台</label>
                                 <md-select ng-model="project.platform">
                                     <md-option ng-repeat="platform in platforms" value="{{platform}}">
@@ -86,7 +86,7 @@
                                 </md-select>
                             </md-input-container>
 
-                            <md-input-container class="md-block" flex-gt-sm>
+                            <md-input-container class="md-block" flex-gt-sm="25">
                                 <label>城市</label>
                                 <md-select ng-model="user.state">
                                     <md-option ng-repeat="city in cities" value="{{city}}">
@@ -98,7 +98,7 @@
 
                         <div layout-gt-sm="row">
 
-                            <md-input-container class="md-block" flex-gt-sm>
+                            <md-input-container class="md-block" flex-gt-sm="25">
                                 <label>执行者</label>
                                 <md-select ng-model="project.executive">
                                     <md-option ng-repeat="user in users" value="{{user.name}}">
@@ -107,7 +107,7 @@
                                 </md-select>
                             </md-input-container>
 
-                            <md-input-container class="md-block" flex-gt-sm>
+                            <md-input-container class="md-block" flex-gt-sm="25">
                                 <label>管理者</label>
                                 <input name="manager" ng-model="project.manager">
                             </md-input-container>
