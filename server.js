@@ -12,7 +12,7 @@ var portHttp    = process.env.PORT_HTTP || 8080;
 var httpServer   = http.createServer(app);
 var io          = require('socket.io')(httpServer);
 
-mongoose.connect(process.env.DATABASE_URL || 'mongodb://localhost/policemon');
+mongoose.connect(process.env.DATABASE_URL || 'mongodb://localhost/persona');
 
 app.use(bodyParser.json());
 app.use(cors());
