@@ -14,6 +14,8 @@
         	{name:'暖暖内涵光', platform:'微信', manager:{name:'Natt'}, createdAt:new Date('2016-1-10'), status:'准备中'},
         	{name:'昆宠帮帮帮', platform:'微信', manager:{name:'Natt'}, createdAt:new Date('2016-11-5'), status:'已结束'}
         ];
+
+        $scope.projects = [];
     }
     
 })(); 
