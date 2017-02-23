@@ -121,7 +121,6 @@
                             </div>
                             <div class="actions text-center">
                                 <md-button class="md-raised md-primary" href="#!/wizard/set-channel" style="line-height:34px">添加渠道</md-button>
-                                <md-button class="md-raised md-default" style="margin-left:20px">保存修改</md-button>
                             </div>
 
                             <!--各KPI关键节点-->
@@ -149,26 +148,55 @@
                             </div>
                             <div class="actions text-center">
                                 <md-button class="md-raised md-primary" href="#!/wizard/set-timing" style="line-height:34px">修改节点</md-button>
-                                <md-button class="md-raised md-default" style="margin-left:20px">保存修改</md-button>
                             </div>
                         </div>
                     </md-content>
                 </md-tab>
                 <md-tab label="渠道监控">
                     <h2 class="section-header">{{ project.name }}</h2>
-                    <div layout="row">
-                        <md-input-container flex="1">
-                            <label>开始时间</label>
-                            <md-datepicker ng-model="project.startDate" md-hide-icons="calendar"></md-datepicker>
-                        </md-input-container>
-                        <md-input-container flex="1">
-                            <label>结束时间</label>
-                            <md-datepicker ng-model="project.endDate" md-hide-icons="calendar"></md-datepicker>
-                        </md-input-container>
-                    </div>
+                    <md-content class="md-padding">
+                        <div layout="row">
+                            <md-input-container flex="1">
+                                <label>开始时间</label>
+                                <md-datepicker ng-model="project.startDate" md-hide-icons="calendar"></md-datepicker>
+                            </md-input-container>
+                            <md-input-container flex="1">
+                                <label>结束时间</label>
+                                <md-datepicker ng-model="project.endDate" md-hide-icons="calendar"></md-datepicker>
+                            </md-input-container>
+                        </div>
+                        <div layout="row">
+                            <table class="table table-hover table-bordered" flex="80" flex-offset="10" style="background:white">
+                                <thead>
+                                    <tr>
+                                        <th>监控字段</th>
+                                        <th ng-repeat="channel in project.channels">{{ channel.name }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="kpi in project.kpis">
+                                        <td>{{ kpi.type }}</td>
+                                        <td ng-repeat="channel in project.channels"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </md-content>
                 </md-tab>
                 <md-tab label="报表统计">
                     <h2 class="section-header">{{ project.name }}</h2>
+                    <md-content class="md-padding">
+                        <div layout="row">
+                            <md-input-container flex="1">
+                                <label>开始时间</label>
+                                <md-datepicker ng-model="project.startDate" md-hide-icons="calendar"></md-datepicker>
+                            </md-input-container>
+                            <md-input-container flex="1">
+                                <label>结束时间</label>
+                                <md-datepicker ng-model="project.endDate" md-hide-icons="calendar"></md-datepicker>
+                            </md-input-container>
+                        </div>
+                    </md-content>
                 </md-tab>
             </md-tabs>
         </div>
