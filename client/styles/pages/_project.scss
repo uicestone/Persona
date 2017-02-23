@@ -12,11 +12,6 @@
     }
     .panel-body {
         background: #fafafa;
-        min-height: 400px;
-        .table-hover > tbody > tr:hover {
-            background-color: $brand-primary;
-            color: white;
-        }
     }
 }
 
