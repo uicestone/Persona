@@ -3,7 +3,7 @@
 
     angular.module('app.core')
         .factory('appConfig', [appConfig])
-        .config(['$mdThemingProvider', mdConfig]);
+        .config(['$mdThemingProvider', '$mdDateLocaleProvider', mdConfig]);
 
     function appConfig() {
         var pageTransitionOpts = [
@@ -54,7 +54,7 @@
         }
     }
 
-    function mdConfig($mdThemingProvider) {
+    function mdConfig($mdThemingProvider, $mdDateLocaleProvider) {
         var amberAlt = $mdThemingProvider.extendPalette('amber', {
             'contrastLightColors': '600 700 800 900',
             'contrastStrongLightColors': '600 700 800 900'
@@ -85,6 +85,20 @@
             //     'default': '500'
             // })
             // .backgroundPalette('grey', {'default':'50'});
+
+        $mdDateLocaleProvider.months = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+        $mdDateLocaleProvider.shortMonths = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+        $mdDateLocaleProvider.days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+        $mdDateLocaleProvider.shortDays = ['日', '一', '二', '三', '四', '五', '六'];
+
+        $mdDateLocaleProvider.formatDate = function(date) {
+            if(date) {
+                return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+            }
+            else {
+                return '';
+            }
+        };
     }
 
 })();
