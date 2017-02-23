@@ -24,7 +24,8 @@ var projectSchema = new Schema({
     appid: String,
     kpis: [
     	{type: String, value: Number}
-    ]
+    ],
+    createdAt: Date
 });
 
 projectSchema.index({name:1}, {unique:true});
