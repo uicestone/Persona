@@ -1,0 +1,53 @@
+.set-timing {
+
+    .timeline-channels {
+
+        .endpoint {
+            color: #d6d6d6;
+            text-align: center;
+            position: relative;
+            top: 15px;
+
+            label {
+                font-size: 12px;
+            }
+        }
+
+        .baseline {
+            border-bottom: 3px solid #eeeeee;
+            margin: 0 10px;
+
+            .channel {
+                position: relative;
+                height: 45px;
+                top: 3px;
+                border-bottom: 3px solid #bde2a8;
+
+                label {
+                    font-size: 12px;
+                    color: #7f7f7f;
+                }
+
+                .channel-endpoint {
+                    background-color: #c5eab1;
+                    width: 30px;
+                    height: 30px;
+                    border-top-left-radius: 0;
+                    border-top-right-radius: 75px;
+                    border-bottom-right-radius: 75px;
+                    border-bottom-left-radius: 75px;
+                    transform: rotate(-135deg);
+                    margin-bottom: 7px;
+                    position: relative;
+
+                    .date {
+                        transform: rotate(135deg) scale(0.9);
+                        padding: 0 0 4px 3px;
+                        font-size: 12px;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}

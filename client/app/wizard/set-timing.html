@@ -1,10 +1,99 @@
-<div class="page">
-
+<div class="page set-timing" ng-controller="wizardCtrl">
     <div class="row ui-section">
-        <div class="col-lg-8 clearfix">
-            <h2 class="section-header">Blank</h2>
+        <div class="col-lg-12 clearfix">
+            <ul class="steps-indicator steps-5">
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>create</md-icon></span>
+                        创建项目
+                    </a>
+                </li>
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>assessment</md-icon></span>
+                        设置KPI
+                    </a>
+                </li>
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>voice_chat</md-icon></span>
+                        渠道设置
+                    </a>
+                </li>
+                <li class="editing">
+                    <a>
+                        <span class="icon"><md-icon>timeline</md-icon></span>
+                        关键节点
+                    </a>
+                </li>
+                <li class="default">
+                    <a>
+                        <span class="icon"><md-icon>play_arrow</md-icon></span>
+                        项目预览
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="col-md-12">
+        <div class="col-lg-10 col-lg-offset-1 clearfix">
+            <h2 class="section-header">第四步 关键节点</h2>
+            <br><br>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-12">
+                    <!--各渠道时间段-->
+                    <div layout="row" layout-align="center end" class="timeline-channels">
+                        <div class="endpoint" flex="1">
+                            <label>开始时间</label>
+                            <p>{{ project.startDate | date:'y/M/d' }}</p>
+                        </div>
+                        <div class="baseline" flex layout="column">
+                            <div ng-repeat="channel in project.channels" class="channel" layout="row" layout-align="center center" style="margin-left:{{ channel.startDatePercentage }}%;width:{{ channel.durationPercentage }}%">
+                                <div class="channel-endpoint" flex="1" style="left:-15px">
+                                    <div class="date">{{ channel.startDate | date:'M/d' }}</div>
+                                </div>
+                                <label flex>{{ channel.name }}</label>
+                                <div class="channel-endpoint" flex="1" style="left:15px">
+                                    <div class="date">{{ channel.endDate | date:'M/d' }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="endpoint" flex="1">
+                            <label>结束时间</label>
+                            <p>{{ project.endDate | date:'y/M/d' }}</p>
+                        </div>
+                    </div>
+                    <!--各KPI关键节点-->
+                    <!-- <div>
+                        <div ng-repeat="kpi in project.kpis">
+                            <div>
+                                <md-input-container flex>
+                                    <label>新增节点名称</label>
+                                    <md-input ng-model="timing.name"></md-input>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>开始时间</label>
+                                    <md-datepicker ng-model="timing.startDate" md-hide-icons="calendar"></md-input>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>结束时间</label>
+                                    <md-datepicker ng-model="timing.endDate" md-hide-icons="calendar"></md-input>
+                                </md-input-container>
+                                <md-slider-container flex>
+                                    <span>完成率</span>
+                                    <md-slider flex min="0" max="100" ng-model="timing.percentage" aria-label="percentage" id="timing-percentage-slider"></md-slider>
+                                    <md-input-container>
+                                        <input flex type="number" ng-model="timing.percentage" aria-label="percentage" aria-controls="timing-percentage-slider">
+                                    </md-input-container>
+                                </md-slider-container>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <div class="wizard-actions text-center">
+             <md-button href="/#!/wizard/preview" class="md-raised md-primary" style="line-height:34px">项目预览</md-button>
+            </div>
         </div>
     </div>
 </div>
