@@ -1,10 +1,42 @@
-<div class="page">
+<div class="page" ng-controller="settingCtrl">
 
     <div class="row ui-section">
-        <div class="col-lg-8 clearfix">
-            <h2 class="section-header">Blank</h2>
-        </div>
         <div class="col-md-12">
+            <div class="panel panel-default project-list">
+                <div class="panel-heading">
+                    <div class="panel-title">渠道管理</div>
+                </div>
+                <div class="panel-body">
+                    <div class="filters" layout="row">
+                        <md-input-container flex>
+                            <label>搜索渠道</label>
+                            <input ng-model="query.channelKeyword">
+                        </md-input-container>
+                    </div>
+                    <md-content md-whiteframe="2" style="background:white">
+                        <table class="table" style="margin-bottom:0">
+                            <thead>
+                                <tr>
+                                    <th>渠道名称</th>
+                                    <th>渠道分类</th>
+                                    <th>渠道评分</th>
+                                    <th>SPID</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="channel in channels | filter:channelKeyword">
+                                    <td>{{ channel.name }}</td>
+                                    <td>{{ channel.topic }}</td>
+                                    <td>{{ channel.rank }}</td>
+                                    <td>{{ channel.spid }}</td>
+                                    <td><md-icon class="md-primary">edit</md-icon> <md-icon class="md-primary">delete</md-icon></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-content>
+                </div>
+            </div>
         </div>
     </div>
 </div>
