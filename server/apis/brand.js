@@ -12,7 +12,7 @@ module.exports = function(router) {
             // save the brand and check for errors
             brand.save(function(err) {
                 if (err)
-                    res.send(err);
+                    res.status(500).send(err);
 
                 res.json(brand);
             });
@@ -63,7 +63,7 @@ module.exports = function(router) {
         .get(function(req, res) {
             Brand.findById(req.params.brandId, function(err, brand) {
                 if (err)
-                    res.send(err);
+                    res.status(500).send(err);
                 res.json(brand);
             });
         })
@@ -71,13 +71,13 @@ module.exports = function(router) {
         .put(function(req, res) {
             Brand.where({_id: req.params.brandId}).update(req.body, function(err, raw) {
                 if (err) {
-                    res.send(err);
+                    res.status(500).send(err);
                     return;
                 }
 
                 Brand.findById(req.params.brandId, function(err, brand) {
                     if (err)
-                        res.send(err);
+                        res.status(500).send(err);
 
                     res.json(brand);
                 });
@@ -90,7 +90,7 @@ module.exports = function(router) {
                 _id: req.params.brandId
             }, function(err, brand) {
                 if (err)
-                    res.send(err);
+                    res.status(500).send(err);
 
                 res.end();
             });

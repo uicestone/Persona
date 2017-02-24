@@ -12,7 +12,7 @@ module.exports = function(router) {
             // save the channel and check for errors
             channel.save(function(err) {
                 if (err)
-                    res.send(err);
+                    res.status(500).send(err);
 
                 res.json(channel);
             });
@@ -63,7 +63,7 @@ module.exports = function(router) {
         .get(function(req, res) {
             Channel.findById(req.params.channelId, function(err, channel) {
                 if (err)
-                    res.send(err);
+                    res.status(500).send(err);
                 res.json(channel);
             });
         })
@@ -71,13 +71,13 @@ module.exports = function(router) {
         .put(function(req, res) {
             Channel.where({_id: req.params.channelId}).update(req.body, function(err, raw) {
                 if (err) {
-                    res.send(err);
+                    res.status(500).send(err);
                     return;
                 }
 
                 Channel.findById(req.params.channelId, function(err, channel) {
                     if (err)
-                        res.send(err);
+                        res.status(500).send(err);
 
                     res.json(channel);
                 });
@@ -90,7 +90,7 @@ module.exports = function(router) {
                 _id: req.params.channelId
             }, function(err, channel) {
                 if (err)
-                    res.send(err);
+                    res.status(500).send(err);
 
                 res.end();
             });

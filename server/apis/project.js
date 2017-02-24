@@ -12,7 +12,7 @@ module.exports = function(router) {
             // save the project and check for errors
             project.save(function(err) {
                 if (err)
-                    res.send(err);
+                    res.status(500).send(err);
 
                 res.json({ message: 'Project created!' });
             });
@@ -100,7 +100,7 @@ module.exports = function(router) {
         .get(function(req, res) {
             Project.findById(req.params.projectId, function(err, project) {
                 if (err)
-                    res.send(err);
+                    res.status(500).send(err);
                 res.json(project);
             });
         })
@@ -108,14 +108,14 @@ module.exports = function(router) {
         .put(function(req, res) {
             Project.where({_id: req.params.projectId}).update(req.body, function(err, raw) {
                 if (err) {
-                    res.send(err);
+                    res.status(500).send(err);
                     
                     return;
                 }
 
                 Project.findById(req.params.projectId, function(err, project) {
                     if (err)
-                        res.send(err);
+                        res.status(500).send(err);
                     
                     res.json(project);
                 });
@@ -128,7 +128,7 @@ module.exports = function(router) {
                 _id: req.params.projectId
             }, function(err, project) {
                 if (err)
-                    res.send(err);
+                    res.status(500).send(err);
 
                 res.json({ message: 'Successfully deleted' });
             });

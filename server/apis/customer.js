@@ -12,7 +12,7 @@ module.exports = function(router) {
             // save the customer and check for errors
             customer.save(function(err) {
                 if (err)
-                    res.send(err);
+                    res.status(500).send(err);
 
                 res.json(customer);
             });
@@ -63,7 +63,7 @@ module.exports = function(router) {
         .get(function(req, res) {
             Customer.findById(req.params.customerId, function(err, customer) {
                 if (err)
-                    res.send(err);
+                    res.status(500).send(err);
                 res.json(customer);
             });
         })
@@ -71,13 +71,13 @@ module.exports = function(router) {
         .put(function(req, res) {
             Customer.where({_id: req.params.customerId}).update(req.body, function(err, raw) {
                 if (err) {
-                    res.send(err);
+                    res.status(500).send(err);
                     return;
                 }
 
                 Customer.findById(req.params.customerId, function(err, customer) {
                     if (err)
-                        res.send(err);
+                        res.status(500).send(err);
                     
                     res.json(customer);
                 });
@@ -90,7 +90,7 @@ module.exports = function(router) {
                 _id: req.params.customerId
             }, function(err, customer) {
                 if (err)
-                    res.send(err);
+                    res.status(500).send(err);
 
                 res.end();
             });
