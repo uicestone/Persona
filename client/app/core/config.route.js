@@ -7,7 +7,7 @@
                 var routes, setRoutes;
 
                 routes = [
-                    'wizard/create-project', 'wizard/preview',
+                    'wizard/create-project',
                     'project/list', 'project/timing',
                     'client/image',
                     'setting/data', 'setting/user', 'setting/channel',
@@ -57,6 +57,10 @@
                     .state('wizard/set-timing', {
                         url: '/wizard/set-timing/:id?',
                         templateUrl: 'app/wizard/set-timing.html'
+                    })
+                    .state('wizard/preview', {
+                        url: '/wizard/preview/:id?',
+                        templateUrl: 'app/wizard/preview.html'
                     })
                     .state('form/editor', {
                         url: '/form/editor',

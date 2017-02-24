@@ -14,7 +14,7 @@ module.exports = function(router) {
                 if (err)
                     res.status(500).send(err);
 
-                res.json({ message: 'Project created!' });
+                res.json(project);
             });
             
         })

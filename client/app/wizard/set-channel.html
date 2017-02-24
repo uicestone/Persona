@@ -85,9 +85,9 @@
                 </div>
             </div>
             <div class="wizard-actions text-center">
-             <md-button ng-if="!project._id" href="/#!/wizard/set-timing/" class="md-raised md-primary" style="line-height:34px;margin-right:40px">先跳过</md-button>
-             <md-button ng-if="!project._id" ng-click="saveProject(project)" href="/#!/wizard/set-timing/" class="md-raised md-default" style="line-height:34px">下一步</md-button>
-             <md-button ng-if="project._id" ng-click="saveProject(project)" ng-href="/#!/project/{{ project._id }}" class="md-raised md-default" style="line-height:34px">保存</md-button>
+             <md-button ng-if="!isEditing" href="/#!/wizard/set-timing/{{ project._id }}" class="md-raised md-primary" style="line-height:34px;margin-right:40px">先跳过</md-button>
+             <md-button ng-if="!isEditing" ng-click="saveProject(project, 'wizard/set-timing')" class="md-raised md-default" style="line-height:34px">下一步</md-button>
+             <md-button ng-if="isEditing" ng-click="saveProject(project)" ng-href="/#!/project/{{ project._id }}" class="md-raised md-default" style="line-height:34px">保存</md-button>
             </div>
         </div>
     </div>

@@ -23,7 +23,15 @@ var projectSchema = new Schema({
     },
     appid: String,
     kpis: [
-    	new Schema({type: String, value: Number})
+    	new Schema({
+            type: String,
+            value: Number,
+            timings: [{
+                startDate: Date,
+                endDate: Date,
+                name: String,
+                percentage: Number
+            }]})
     ],
     channels: [
         new Schema({

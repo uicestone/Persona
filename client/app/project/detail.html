@@ -92,7 +92,7 @@
                             </div>
 
                             <div class="actions text-center">
-                                <md-button class="md-raised md-primary" href="#!/wizard/set-kpi/{{ project._id }}" style="line-height:34px">修改KPI</md-button>
+                                <md-button class="md-raised md-primary" href="#!/wizard/set-kpi/{{ project._id }}?editing=true" style="line-height:34px">修改KPI</md-button>
                                 <md-button class="md-raised md-default" style="margin-left:20px" ng-click="updateProject(project)">保存修改</md-button>
                             </div>
                         </div>
@@ -120,7 +120,7 @@
                                 </div>
                             </div>
                             <div class="actions text-center">
-                                <md-button class="md-raised md-primary" href="#!/wizard/set-channel/{{ project._id }}" style="line-height:34px">添加渠道</md-button>
+                                <md-button class="md-raised md-primary" href="#!/wizard/set-channel/{{ project._id }}?editing=true" style="line-height:34px">添加渠道</md-button>
                             </div>
 
                             <!--各KPI关键节点-->
@@ -133,7 +133,7 @@
                                             <p>{{ kpi.value }}</p>
                                         </div>
                                         <div class="baseline" flex layout="column">
-                                            <div ng-repeat="timing in kpi.timings" class="channel" layout="row" layout-align="center end" style="margin-left:{{ startDatePercentage(timing) }}%;width:{{ durationPercentage(timing) }}%">
+                                            <div ng-repeat="timing in kpi.timings" ng-if="timing.startDate && timing.endDate" class="channel" layout="row" layout-align="center end" style="margin-left:{{ startDatePercentage(timing) }}%;width:{{ durationPercentage(timing) }}%">
                                                 <div class="channel-endpoint" flex="1" style="left:-15px">
                                                     <div class="date">{{ timing.startDate | date:'M/d' }}</div>
                                                 </div>
@@ -147,7 +147,7 @@
                                 </div>
                             </div>
                             <div class="actions text-center">
-                                <md-button class="md-raised md-primary" href="#!/wizard/set-timing/{{ project._id}}" style="line-height:34px">修改节点</md-button>
+                                <md-button class="md-raised md-primary" href="#!/wizard/set-timing/{{ project._id}}?editing=true" style="line-height:34px">修改节点</md-button>
                             </div>
                         </div>
                     </md-content>

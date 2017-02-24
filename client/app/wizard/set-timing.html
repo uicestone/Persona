@@ -87,8 +87,8 @@
                                         <input flex type="number" ng-model="timing.percentage" aria-label="percentage" aria-controls="timing-percentage-slider-{{$index}}">
                                     </md-input-container>
                                 </md-slider-container>
-                                <md-input-container flex="1">
-                                    <md-button>添加</md-button>
+                                <md-input-container flex="1" ng-if="$index==kpi.timings.length-1">
+                                    <md-button ng-click="addKpiTimingForm(kpi)">添加</md-button>
                                 </md-input-container>
                             </div>
                             <!--所有节点显示在一个轴上-->
@@ -98,7 +98,7 @@
                                     <p>{{ kpi.value }}</p>
                                 </div>
                                 <div class="baseline" flex layout="column">
-                                    <div ng-repeat="timing in kpi.timings" class="channel" layout="row" layout-align="center end" style="margin-left:{{ startDatePercentage(timing) }}%;width:{{ durationPercentage(timing) }}%">
+                                    <div ng-repeat="timing in kpi.timings" ng-if="timing.startDate && timing.endDate" class="channel" layout="row" layout-align="center end" style="margin-left:{{ startDatePercentage(timing) }}%;width:{{ durationPercentage(timing) }}%">
                                         <div class="channel-endpoint" flex="1" style="left:-15px">
                                             <div class="date">{{ timing.startDate | date:'M/d' }}</div>
                                         </div>
@@ -114,7 +114,8 @@
                 </div>
             </div>
             <div class="wizard-actions text-center">
-            <md-button ng-click="saveProject(project)" href="/#!/wizard/preview" class="md-raised md-primary" style="line-height:34px">项目预览</md-button>
+            <md-button ng-if="!isEditing" ng-click="saveProject(project, 'wizard/preview')" class="md-raised md-primary" style="line-height:34px">项目预览</md-button>
+            <md-button ng-if="isEditing" ng-click="saveProject(project)" ng-href="/#!/project/{{ project._id }}" class="md-raised md-default" style="line-height:34px">保存</md-button>
             </div>
         </div>
     </div>

@@ -27,6 +27,16 @@
                         channel.endDate && (channel.endDate = new Date(channel.endDate));
                     });
                 }
+                if(project.kpis) {
+                    project.kpis.forEach(kpi => {
+                        if(kpi.timings) {
+                            kpi.timings.forEach(timing => {
+                                timing.startDate && (timing.startDate = new Date(timing.startDate));
+                                timing.endDate && (timing.endDate = new Date(timing.endDate));
+                            });
+                        }
+                    });
+                }
             });
         }
         else {
