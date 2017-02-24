@@ -7,7 +7,7 @@
                 var routes, setRoutes;
 
                 routes = [
-                    'wizard/create-project', 'wizard/set-kpi', 'wizard/set-channel', 'wizard/set-timing', 'wizard/preview',
+                    'wizard/create-project', 'wizard/preview',
                     'project/list', 'project/timing',
                     'client/image',
                     'setting/data', 'setting/user', 'setting/channel',
@@ -45,6 +45,18 @@
                     .state('project/:id', {
                         url: '/project/:id',
                         templateUrl: 'app/project/detail.html'
+                    })
+                    .state('wizard/set-kpi', {
+                        url: '/wizard/set-kpi/:id?',
+                        templateUrl: 'app/wizard/set-kpi.html'
+                    })
+                    .state('wizard/set-channel', {
+                        url: '/wizard/set-channel/:id?',
+                        templateUrl: 'app/wizard/set-channel.html'
+                    })
+                    .state('wizard/set-timing', {
+                        url: '/wizard/set-timing/:id?',
+                        templateUrl: 'app/wizard/set-timing.html'
                     })
                     .state('form/editor', {
                         url: '/form/editor',

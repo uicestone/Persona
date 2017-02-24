@@ -92,7 +92,7 @@
                             </div>
 
                             <div class="actions text-center">
-                                <md-button class="md-raised md-primary" href="#!/wizard/set-kpi" style="line-height:34px">修改API</md-button>
+                                <md-button class="md-raised md-primary" href="#!/wizard/set-kpi/{{ project._id }}" style="line-height:34px">修改KPI</md-button>
                                 <md-button class="md-raised md-default" style="margin-left:20px" ng-click="updateProject(project)">保存修改</md-button>
                             </div>
                         </div>
@@ -120,7 +120,7 @@
                                 </div>
                             </div>
                             <div class="actions text-center">
-                                <md-button class="md-raised md-primary" href="#!/wizard/set-channel" style="line-height:34px">添加渠道</md-button>
+                                <md-button class="md-raised md-primary" href="#!/wizard/set-channel/{{ project._id }}" style="line-height:34px">添加渠道</md-button>
                             </div>
 
                             <!--各KPI关键节点-->
@@ -147,7 +147,7 @@
                                 </div>
                             </div>
                             <div class="actions text-center">
-                                <md-button class="md-raised md-primary" href="#!/wizard/set-timing" style="line-height:34px">修改节点</md-button>
+                                <md-button class="md-raised md-primary" href="#!/wizard/set-timing/{{ project._id}}" style="line-height:34px">修改节点</md-button>
                             </div>
                         </div>
                     </md-content>
