@@ -42,8 +42,6 @@ module.exports = function(router) {
             .exec()
             .then(result => {
 
-                console.log(result)
-
                 if(skip + result.length > User.totalCount) {
                     User.totalCount = skip + result.length;
                 }
