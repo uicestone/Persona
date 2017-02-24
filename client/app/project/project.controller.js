@@ -21,6 +21,12 @@
             $scope.project.$promise.then(project => {
                 project.startDate && (project.startDate = new Date(project.startDate));
                 project.endDate && (project.endDate = new Date(project.endDate));
+                if(project.channels) {
+                    project.channels.forEach(channel => {
+                        channel.startDate && (channel.startDate = new Date(channel.startDate));
+                        channel.endDate && (channel.endDate = new Date(channel.endDate));
+                    });
+                }
             });
         }
         else {
@@ -37,7 +43,7 @@
                 project.startDate && (project.startDate = new Date(project.startDate));
                 project.endDate && (project.endDate = new Date(project.endDate));
             });
-        }
+        };
 
         $scope.startDatePercentage = function(item) {
             const projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
