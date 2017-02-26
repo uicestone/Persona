@@ -18,19 +18,19 @@
 
         if($state.params.id) {
             $scope.project = projectService.get({id:$state.params.id});
-            $scope.project.$promise.then(project => {
+            $scope.project.$promise.then(function(project) {
                 project.startDate && (project.startDate = new Date(project.startDate));
                 project.endDate && (project.endDate = new Date(project.endDate));
                 if(project.channels) {
-                    project.channels.forEach(channel => {
+                    project.channels.forEach(function(channel) {
                         channel.startDate && (channel.startDate = new Date(channel.startDate));
                         channel.endDate && (channel.endDate = new Date(channel.endDate));
                     });
                 }
                 if(project.kpis) {
-                    project.kpis.forEach(kpi => {
+                    project.kpis.forEach(function(kpi) {
                         if(kpi.timings) {
-                            kpi.timings.forEach(timing => {
+                            kpi.timings.forEach(function(timing) {
                                 timing.startDate && (timing.startDate = new Date(timing.startDate));
                                 timing.endDate && (timing.endDate = new Date(timing.endDate));
                             });
@@ -44,24 +44,24 @@
         }
 
         $scope.showProjectDetail = function(project) {
-            $location.path(`project/${project._id}`);
+            $location.path('project/' + project._id);
         };
 
         $scope.updateProject = function(project) {
             project.$save()
-            .then(project => {
+            .then(function(project) {
                 project.startDate && (project.startDate = new Date(project.startDate));
                 project.endDate && (project.endDate = new Date(project.endDate));
             });
         };
 
         $scope.startDatePercentage = function(item) {
-            const projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
+            var projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
             return (new Date(item.startDate) - new Date($scope.project.startDate)) / projectDuration * 100;
         };
 
         $scope.durationPercentage = function(item) {
-            const projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
+            var projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
             return (new Date(item.endDate) - new Date(item.startDate)) / projectDuration * 100;
         };
     }

@@ -1,7 +1,14 @@
 (function () {
     'use strict';
 
-    const api = 'http://localhost:8080/api/';
+    var api = 'http://localhost:8080/api/';
+
+    // add raw response as an attribute of resource,
+    // so that we can get http status, header etc from resource in controllers
+    var responseInterceptor = function (response) {
+        response.resource.$response = response;
+        return response.resource;
+    };
 
     angular.module('app')
         .service('brandService', ['$resource', brandService])
@@ -10,16 +17,9 @@
         .service('projectService', ['$resource', projectService])
         .service('userService', ['$resource', userService]);
 
-    // add raw response as an attribute of resource,
-    // so that we can get http status, header etc from resource in controllers
-    const responseInterceptor = function (response) {
-        response.resource.$response = response;
-        return response.resource;
-    };
-
     function brandService($resource) {
 
-        let brand = $resource(api + 'brand/:id', {id: '@_id'}, {
+        var brand = $resource(api + 'brand/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST'},
             update: {method: 'PUT'}
@@ -42,7 +42,7 @@
 
     function channelService($resource) {
 
-        let channel = $resource(api + 'channel/:id', {id: '@_id'}, {
+        var channel = $resource(api + 'channel/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST'},
             update: {method: 'PUT'}
@@ -65,7 +65,7 @@
 
     function clientService($resource) {
 
-        let client = $resource(api + 'client/:id', {id: '@_id'}, {
+        var client = $resource(api + 'client/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST'},
             update: {method: 'PUT'}
@@ -88,7 +88,7 @@
 
     function projectService($resource) {
 
-        let project = $resource(api + 'project/:id', {id: '@_id'}, {
+        var project = $resource(api + 'project/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST'},
             update: {method: 'PUT'}
@@ -111,7 +111,7 @@
 
     function userService($resource) {
 
-        let user = $resource(api + 'user/:id', {id: '@_id'}, {
+        var user = $resource(api + 'user/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST'},
             update: {method: 'PUT'}

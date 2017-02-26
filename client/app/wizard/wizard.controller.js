@@ -22,19 +22,19 @@
 
         if($state.params.id) {
             $scope.project = projectService.get({id:$state.params.id});
-            $scope.project.$promise.then(project => {
+            $scope.project.$promise.then(function(project) {
                 project.startDate && (project.startDate = new Date(project.startDate));
                 project.endDate && (project.endDate = new Date(project.endDate));
                 if(project.channels) {
-                    project.channels.forEach(channel => {
+                    project.channels.forEach(function(channel) {
                         channel.startDate && (channel.startDate = new Date(channel.startDate));
                         channel.endDate && (channel.endDate = new Date(channel.endDate));
                     });
                 }
                 if(project.kpis) {
-                    project.kpis.forEach(kpi => {
+                    project.kpis.forEach(function(kpi) {
                         if(kpi.timings) {
-                            kpi.timings.forEach(timing => {
+                            kpi.timings.forEach(function(timing) {
                                 timing.startDate && (timing.startDate = new Date(timing.startDate));
                                 timing.endDate && (timing.endDate = new Date(timing.endDate));
                             });
@@ -56,7 +56,7 @@
 
             // add default empty timing form for project.kpis
             if(kpis && kpis.length > 0) {
-                kpis.forEach(kpi => {
+                kpis.forEach(function(kpi) {
                     if(!kpi.timings || kpi.timings.length === 0) {
                         kpi.timings = [{}];
                     }
@@ -74,15 +74,17 @@
         }
 
         // check items in channel list which are already in project.channels
-        Promise.all([$scope.project.$promise, $scope.channels.$promise]).then(result => {
-            const [project, channels] = result;
+        Promise.all([$scope.project.$promise, $scope.channels.$promise]).then(function(result) {
+            var project = result[0];
+            var channels = result[1];
+            var projectChannelIds;
 
             if(!project) {
                 return;
             }
 
-            const projectChannelIds = project.channels.map(channel => channel._id);
-            channels.forEach(channel => {
+            projectChannelIds = project.channels.map(function(channel) { return channel._id; });
+            channels.forEach(function(channel) {
                 if(projectChannelIds.indexOf(channel._id) > -1) {
                     channel.selected = true;
                 }
@@ -108,9 +110,9 @@
         };
 
         $scope.saveProject = function(project, then) {
-            project.$save().then(project => {
+            project.$save().then(function(project) {
                 if(then) {
-                    $location.path(`${then}/${project._id}`);
+                    $location.path(then + '/' + project._id);
                 }
             });
         };
@@ -123,7 +125,7 @@
             }
             else {
                 // we remove this channel from project
-                $scope.project.channels = $scope.project.channels.filter(currentChannel => currentChannel._id !== channel._id);
+                $scope.project.channels = $scope.project.channels.filter(function(currentChannel) { return currentChannel._id !== channel._id; });
             }
         };
     }
