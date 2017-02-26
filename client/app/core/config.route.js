@@ -7,7 +7,6 @@
                 var routes, setRoutes;
 
                 routes = [
-                    'wizard/create-project',
                     'project/list', 'project/timing',
                     'client/image',
                     'setting/data', 'setting/user', 'setting/channel',
@@ -45,6 +44,10 @@
                     .state('project/:id', {
                         url: '/project/:id',
                         templateUrl: 'app/project/detail.html'
+                    })
+                    .state('wizard/create-project', {
+                        url: '/wizard/create-project/:id?',
+                        templateUrl: 'app/wizard/create-project.html'
                     })
                     .state('wizard/set-kpi', {
                         url: '/wizard/set-kpi/:id?',

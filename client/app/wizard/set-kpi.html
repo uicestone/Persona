@@ -66,8 +66,9 @@
                 </div>
             </div>
             <div class="wizard-actions text-center">
-             <md-button ng-if="!isEditing" ng-click="saveProject(project, 'wizard/set-channel')" class="md-raised md-default" style="line-height:34px">下一步</md-button>
-             <md-button ng-if="isEditing" ng-click="saveProject(project)" ng-href="/#!/project/{{ project._id }}" class="md-raised md-default" style="line-height:34px">保存</md-button>
+                <md-button ng-if="!isEditing" ng-click="saveProject(project, 'wizard/create-project')" class="md-default">上一步</md-button>
+                <md-button ng-if="!isEditing" ng-click="saveProject(project, 'wizard/set-channel')" class="md-raised md-primary">下一步</md-button>
+                <md-button ng-if="isEditing" ng-click="saveProject(project)" ng-href="/#!/project/{{ project._id }}" class="md-raised md-default btn">保存</md-button>
             </div>
         </div>
     </div>
