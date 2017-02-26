@@ -88,10 +88,39 @@
 
     function projectService($resource) {
 
+        var projectResponseIntercepter = function(response) {
+            
+            project = response.resource;
+
+            project.startDate && (project.startDate = new Date(project.startDate));
+            project.endDate && (project.endDate = new Date(project.endDate));
+            
+            if(project.channels) {
+                project.channels.forEach(function(channel) {
+                    channel.startDate && (channel.startDate = new Date(channel.startDate));
+                    channel.endDate && (channel.endDate = new Date(channel.endDate));
+                });
+            }
+
+            if(project.kpis) {
+                project.kpis.forEach(function(kpi) {
+                    if(kpi.timings) {
+                        kpi.timings.forEach(function(timing) {
+                            timing.startDate && (timing.startDate = new Date(timing.startDate));
+                            timing.endDate && (timing.endDate = new Date(timing.endDate));
+                        });
+                    }
+                });
+            }
+
+            return response.resource;
+        }
+
         var project = $resource(api + 'project/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
-            create: {method: 'POST'},
-            update: {method: 'PUT'}
+            create: {method: 'POST', interceptor: {response: projectResponseIntercepter}},
+            update: {method: 'PUT', interceptor: {response: projectResponseIntercepter}},
+            get: {method: 'GET', interceptor: {response: projectResponseIntercepter}}
         });
         
         // Angular mix PUT and POST methot to $save,
@@ -104,7 +133,7 @@
                 return this.$create(a, b, c, d);
             }
         }
-        
+
         return project;
 
     }

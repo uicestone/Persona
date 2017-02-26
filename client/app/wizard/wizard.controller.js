@@ -22,26 +22,6 @@
 
         if($state.params.id) {
             $scope.project = projectService.get({id:$state.params.id});
-            $scope.project.$promise.then(function(project) {
-                project.startDate && (project.startDate = new Date(project.startDate));
-                project.endDate && (project.endDate = new Date(project.endDate));
-                if(project.channels) {
-                    project.channels.forEach(function(channel) {
-                        channel.startDate && (channel.startDate = new Date(channel.startDate));
-                        channel.endDate && (channel.endDate = new Date(channel.endDate));
-                    });
-                }
-                if(project.kpis) {
-                    project.kpis.forEach(function(kpi) {
-                        if(kpi.timings) {
-                            kpi.timings.forEach(function(timing) {
-                                timing.startDate && (timing.startDate = new Date(timing.startDate));
-                                timing.endDate && (timing.endDate = new Date(timing.endDate));
-                            });
-                        }
-                    });
-                }
-            });
         }
         else {
             $scope.project = new projectService();
