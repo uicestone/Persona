@@ -48,7 +48,7 @@
         };
 
         // 渠道监控图表数据
-        if($scope.project && $scope.project.channel) {
+        if($scope.project) {
             
             $scope.kpiByChannels = projectService.getKpiByChannels({id:$state.params.id});
             $scope.kpiByChannelsTree = {};
@@ -68,7 +68,9 @@
 
                 kpiByChannels.map(function(kpiPerChannel) {
                     
-                    kpiPerChannel.name = project.channels[kpiPerChannel._id - 1].name;
+                    var channel = project.channels[kpiPerChannel._id - 1];
+
+                    kpiPerChannel.name = channel ? channel.name : '';
                     kpiPerChannel.users = kpiPerChannel.uv;
                     kpiPerChannel.pv = kpiPerChannel.uv * 4;
                     kpiPerChannel.convertRate = kpiPerChannel.converts / kpiPerChannel.users;
