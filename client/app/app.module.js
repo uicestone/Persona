@@ -7,7 +7,7 @@
         
         // Custom Feature modules
         ,'app.chart'
-        ,'app.client'
+        ,'app.customer'
         ,'app.project'
         ,'app.ui'
         ,'app.ui.form'

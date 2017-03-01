@@ -1,10 +1,10 @@
 (function () {
     'use strict';
 
-    angular.module('app.client')
-    .controller('clientCtrl', ['$scope', '$window', clientCtrl]);
+    angular.module('app.customer')
+    .controller('customerCtrl', ['$scope', '$window', customerCtrl]);
 
-    function clientCtrl($scope, $window) {
+    function customerCtrl($scope, $window) {
         $scope.query = {withTags:[], withoutTags:[]};
         $scope.showKeys = [
             {key:'mobile', label:'手机号码', show:true},

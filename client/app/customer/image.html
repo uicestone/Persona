@@ -1,4 +1,4 @@
-<div class="page" ng-controller="clientCtrl">
+<div class="page" ng-controller="customerCtrl">
     <div class="row ui-section">
         <div class="col-md-12">
             <md-tabs class="project-detail" md-dynamic-height md-border-bottom>
@@ -24,8 +24,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="client in clients">
-                                    <td ng-repeat="meta in showKeys">{{ client[meta.key] }}</td>
+                                <tr ng-repeat="customer in customers">
+                                    <td ng-repeat="meta in showKeys">{{ customer[meta.key] }}</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -8,7 +8,7 @@
 
                 routes = [
                     'project/list', 'project/timing',
-                    'client/image',
+                    'customer/image',
                     'setting/data', 'setting/user', 'setting/channel',
                     'welcome', 'get-sdk', '404', '500', 'forgot-password', 'lock-screen', 'profile', 'signin', 'signup',
                     
