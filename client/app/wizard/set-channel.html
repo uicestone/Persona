@@ -75,8 +75,8 @@
                                         {{ channel.name }}
                                     </td>
                                     <td>
-                                        <md-datepicker ng-model="channel.startDate" md-placeholder="开始时间" md-hide-icons="calendar"></md-datepicker>
-                                        <md-datepicker ng-model="channel.endDate" md-placeholder="结束时间" md-hide-icons="calendar"></md-datepicker>
+                                        <md-datepicker ng-model="channel.startDate" md-min-date="project.startDate" md-max-date="project.endDate" md-placeholder="开始时间" md-hide-icons="calendar"></md-datepicker>
+                                        <md-datepicker ng-model="channel.endDate" md-min-date="project.startDate" md-max-date="project.endDate" md-placeholder="结束时间" md-hide-icons="calendar"></md-datepicker>
                                     </td>
                                 </tr>
                             </tbody>

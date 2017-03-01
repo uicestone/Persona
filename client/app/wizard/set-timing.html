@@ -74,11 +74,11 @@
                                 </md-input-container>
                                 <md-input-container flex="1">
                                     <label>开始时间</label>
-                                    <md-datepicker ng-model="timing.startDate" md-hide-icons="calendar"></md-datepicker>
+                                    <md-datepicker ng-model="timing.startDate" md-min-date="project.startDate" md-max-date="project.endDate" md-hide-icons="calendar"></md-datepicker>
                                 </md-input-container>
                                 <md-input-container flex="1">
                                     <label>结束时间</label>
-                                    <md-datepicker ng-model="timing.endDate" md-hide-icons="calendar"></md-datepicker>
+                                    <md-datepicker ng-model="timing.endDate" md-min-date="project.startDate" md-max-date="project.endDate" md-hide-icons="calendar"></md-datepicker>
                                 </md-input-container>
                                 <md-slider-container flex>
                                     <span>完成率</span>
