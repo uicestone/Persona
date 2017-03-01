@@ -100,8 +100,9 @@
                     });
 
                 $urlRouterProvider
+                    .when('', '/welcome')
                     .when('/', '/welcome')
-                    .otherwise('/welcome');
+                    .otherwise('/404');
             }
         ]);
 
