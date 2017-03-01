@@ -88,7 +88,7 @@
                 <md-button ng-if="!isEditing" ng-click="saveProject(project, 'wizard/set-kpi')" class="md-default">上一步</md-button>
                 <md-button ng-if="!isEditing" href="/#!/wizard/set-timing/{{ project._id }}" class="md-default btn">先跳过</md-button>
                 <md-button ng-if="!isEditing" ng-click="saveProject(project, 'wizard/set-timing')" class="md-raised md-primary">下一步</md-button>
-                <md-button ng-if="isEditing" ng-click="saveProject(project)" ng-href="/#!/project/{{ project._id }}" class="md-raised md-default btn">保存</md-button>
+                <md-button ng-if="isEditing" ng-click="saveProject(project, true)" class="md-raised md-default btn">保存</md-button>
             </div>
         </div>
     </div>

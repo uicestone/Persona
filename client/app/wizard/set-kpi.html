@@ -57,15 +57,27 @@
                                 <input ng-model="kpi.value">
                             </md-input-container>
 
-                            <md-input-container ng-if="$index==project.kpis.length-1">
-                                <md-button ng-click="addKpiForm()">添加KPI指标</md-button>
-                            </md-input-container>
-
-                            <md-input-container ng-if="$index<project.kpis.length-1">
+                            <md-input-container>
                                 <md-button ng-click="removeKpi(kpi)"><md-icon>delete</md-icon></md-button>
                             </md-input-container>
                         </div>
                         
+                        <div layout-gt-xs="row">
+                            <md-input-container class="md-block">
+                                <label>KPI类型</label>
+                                <input ng-model="newKpi.type">
+                            </md-input-container>
+
+                            <md-input-container flex-gt-xs>
+                                <label>数值</label>
+                                <input ng-model="newKpi.value">
+                            </md-input-container>
+
+                            <md-input-container>
+                                <md-button ng-click="addKpi(newKpi)">添加KPI指标</md-button>
+                            </md-input-container>
+                        </div>
+
                     </form>
                 </div>
             </div>

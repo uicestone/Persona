@@ -122,7 +122,7 @@
             </div>
             <div class="wizard-actions text-center">
                 <md-button ng-if="!isEditing" ng-click="saveProject(project, 'wizard/set-kpi')" class="md-raised md-primary">下一步</md-button>
-                <md-button ng-if="isEditing" ng-click="saveProject(project)" ng-href="/#!/project/{{ project._id }}" class="md-raised md-default btn">保存</md-button>
+                <md-button ng-if="isEditing" ng-click="saveProject(project, true)"class="md-raised md-default btn">保存</md-button>
             </div>
         </div>
     </div>

@@ -69,7 +69,7 @@
                             <!--每个节点一行表单-->
                             <div layout="row" ng-repeat="timing in kpi.timings">
                                 <md-input-container flex="1" flex-offset="10">
-                                    <label>新增节点名称</label>
+                                    <label>节点名称</label>
                                     <input ng-model="timing.name">
                                 </md-input-container>
                                 <md-input-container flex="1">
@@ -87,8 +87,33 @@
                                         <input flex type="number" ng-model="timing.percentage" aria-label="percentage" aria-controls="timing-percentage-slider-{{$index}}">
                                     </md-input-container>
                                 </md-slider-container>
-                                <md-input-container flex="1" ng-if="$index==kpi.timings.length-1">
-                                    <md-button ng-click="addKpiTimingForm(kpi)">添加</md-button>
+                                <md-input-container flex="1">
+                                    <md-button ng-click="removeKpiTiming(kpi, timing)"><md-icon>delete</md-icon></md-button>
+                                </md-input-container>
+                            </div>
+                            <!--新增节点的表单-->
+                            <div layout="row">
+                                <md-input-container flex="1" flex-offset="10">
+                                    <label>新增节点名称</label>
+                                    <input ng-model="kpi.newTiming.name">
+                                </md-input-container>
+                                <md-input-container flex="1">
+                                    <label>开始时间</label>
+                                    <md-datepicker ng-model="kpi.newTiming.startDate" md-min-date="project.startDate" md-max-date="project.endDate" md-hide-icons="calendar"></md-datepicker>
+                                </md-input-container>
+                                <md-input-container flex="1">
+                                    <label>结束时间</label>
+                                    <md-datepicker ng-model="kpi.newTiming.endDate" md-min-date="project.startDate" md-max-date="project.endDate" md-hide-icons="calendar"></md-datepicker>
+                                </md-input-container>
+                                <md-slider-container flex>
+                                    <span>完成率</span>
+                                    <md-slider min="0" max="100" ng-model="kpi.newTiming.percentage" aria-label="percentage" id="timing-percentage-slider-{{$index}}"></md-slider>
+                                    <md-input-container>
+                                        <input flex type="number" ng-model="kpi.newTiming.percentage" aria-label="percentage" aria-controls="timing-percentage-slider-{{$index}}">
+                                    </md-input-container>
+                                </md-slider-container>
+                                <md-input-container flex="1">
+                                    <md-button ng-click="addKpiTiming(kpi, kpi.newTiming)">添加</md-button>
                                 </md-input-container>
                             </div>
                             <!--所有节点显示在一个轴上-->

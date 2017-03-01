@@ -27,23 +27,6 @@
             $scope.project = new projectService();
         }
         
-        $scope.$watch('project.kpis', function(kpis) {
-
-            // add default empty kpi form
-            if(kpis && kpis.length === 0) {
-                $scope.project.kpis = [{}];
-            }
-
-            // add default empty timing form for project.kpis
-            if(kpis && kpis.length > 0) {
-                kpis.forEach(function(kpi) {
-                    if(!kpi.timings || kpi.timings.length === 0) {
-                        kpi.timings = [{}];
-                    }
-                });
-            }
-        }, true);
-
         if($state.current.name === 'wizard/set-timing') {
             $scope.$watch('project.channels', function(channels) {
                 if(!channels) {
@@ -59,7 +42,7 @@
             var channels = result[1];
             var projectChannelIds;
 
-            if(!project) {
+            if(!project || !project.channels) {
                 return;
             }
 
@@ -71,8 +54,14 @@
             });
         });
 
-        $scope.addKpiForm = function() {
-            $scope.project.kpis.push({});
+        $scope.addKpi = function(kpi) {
+            
+            if(!$scope.project.kpis) {
+                $scope.project.kpis = [];
+            }
+
+            $scope.project.kpis.push(kpi);
+            $scope.newKpi = undefined;
         };
 
         $scope.removeKpi = function(kpiToRemove) {
@@ -81,8 +70,20 @@
             });
         }
 
-        $scope.addKpiTimingForm = function(kpi) {
-            kpi.timings.push({});
+        $scope.addKpiTiming = function(kpi, newTiming) {
+            
+            if(!kpi.timings) {
+                kpi.timings = [];
+            }
+
+            kpi.timings.push(newTiming);
+            delete kpi.newTiming;
+        }
+
+        $scope.removeKpiTiming = function(kpi, timingToRemove) {
+            kpi.timings = kpi.timings.filter(function(timing) {
+                return timing.name !== timingToRemove.name;
+            });
         }
 
         $scope.startDatePercentage = function(item) {
@@ -108,7 +109,12 @@
         $scope.updateProjectChannel = function(channel){
             
             if(channel.selected) {
+                
                 //we add this channel to project
+                if(!$scope.project.channels) {
+                    $scope.project.channels = [];
+                }
+
                 $scope.project.channels.push(channel);
             }
             else {
