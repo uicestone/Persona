@@ -1,0 +1,15 @@
+.customer-image {
+	md-autocomplete {
+		height: 35px;
+		width: 200px;
+
+		md-autocomplete-wrap {
+			height: 35px;
+		}
+
+		input:not(.md-input) {
+			height: 35px;
+			line-height: 35px;
+		}
+	}
+}

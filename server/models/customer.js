@@ -8,15 +8,15 @@ var customerSchema = new Schema({
     mobileAge: Number,
     sex: String,
     age: Number,
+    province: String,
     studyCity: String,
-    livingCity: String,
     workingCity: String,
     marriage: String,
     sexualOrientation: String,
     creditCards: Number,
     hasChild: Boolean,
-    consuming: String,
-    createdAt: Date,
+    annualSalary: String,
+    lastConsumedAt: Date,
     tags: [String]
 });
 
