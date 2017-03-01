@@ -21,6 +21,7 @@ module.exports = function(router) {
 
         // get all the customers
         .get(function(req, res) {
+            
             if(!Customer.totalCount){
                 Customer.count().exec().then(value => Customer.totalCount = value);
             }
@@ -36,13 +37,21 @@ module.exports = function(router) {
                 };
             }
 
+            if(req.query.withTags) {
+                !query.tags && (query.tags = {});
+                query.tags['$all'] = Array.isArray(req.query.withTags) ? req.query.withTags : [req.query.withTags];
+            }
+
+            if(req.query.withoutTags) {
+                !query.tags && (query.tags = {});
+                query.tags['$nin'] = Array.isArray(req.query.withoutTags) ? req.query.withoutTags : [req.query.withoutTags];
+            }
+
             Customer.find(query)
             .limit(limit)
             .skip(skip)
             .exec()
             .then(result => {
-
-                console.log(result)
 
                 if(skip + result.length > Customer.totalCount) {
                     Customer.totalCount = skip + result.length;

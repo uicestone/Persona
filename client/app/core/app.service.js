@@ -13,7 +13,7 @@
     angular.module('app')
         .service('brandService', ['$resource', brandService])
         .service('channelService', ['$resource', channelService])
-        .service('clientService', ['$resource', clientService])
+        .service('customerService', ['$resource', customerService])
         .service('projectService', ['$resource', projectService])
         .service('userService', ['$resource', userService]);
 
@@ -63,9 +63,9 @@
 
     }
 
-    function clientService($resource) {
+    function customerService($resource) {
 
-        var client = $resource(api + 'client/:id', {id: '@_id'}, {
+        var customers = $resource(api + 'customer/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST'},
             update: {method: 'PUT'}
@@ -73,7 +73,7 @@
         
         // Angular mix PUT and POST methot to $save,
         // we seperate them to $create and $update here
-        client.prototype.$save = function (a, b, c, d) {
+        customers.prototype.$save = function (a, b, c, d) {
             if (this._id) {
                 return this.$update(a, b, c, d);
             }
@@ -82,7 +82,7 @@
             }
         }
         
-        return client;
+        return customers;
 
     }
 
