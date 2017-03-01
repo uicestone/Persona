@@ -50,7 +50,6 @@ module.exports = function(router) {
             ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'].forEach(function(attribute) {
                 if(req.query[attribute]) {
                     query[attribute] = {$lte: req.query[attribute] / 100, $gt: (req.query[attribute] - 10) / 100}
-                    console.log(attribute, req.query[attribute] / 100, (req.query[attribute] - 10) / 100);
                 }
             });
 
