@@ -97,7 +97,9 @@
 
         $scope.saveProject = function(project, then) {
             project.$save().then(function(project) {
-                if(then) {
+                if(then === true) {
+                    $location.path('project/' + project._id);
+                } else if(then) {
                     $location.path(then + '/' + project._id);
                 }
             });
