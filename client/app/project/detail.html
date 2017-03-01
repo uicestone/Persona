@@ -176,7 +176,10 @@
                                 <tbody>
                                     <tr ng-repeat="kpi in project.kpis">
                                         <td>{{ kpi.type }}</td>
-                                        <td ng-repeat="channel in project.channels"></td>
+                                        <td ng-repeat="channel in project.channels">
+                                            <span ng-if="kpi.type.search('率')>-1">{{ kpiByChannelsTree[channel.name][kpi.type] * 100 | number:1 }}%</span>
+                                            <span ng-if="kpi.type.search('率')==-1">{{ kpiByChannelsTree[channel.name][kpi.type] | number }}</span>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -14,6 +14,8 @@
             '上海', '北京', '深圳', '广州', '杭州', '南京', '成都', '武汉', '大连', '青岛'
         ];
 
+        $scope.kpiNames = {pv:'PV', uv:'UV', converts:'转化数', convertRate:'转化率', users:'获取用户数', timeStay:'平均停留时间', shareRate:'分享率'};
+
         $scope.users = userService.query();
 
         if($state.params.id) {
@@ -46,6 +48,7 @@
         };
 
         $scope.kpiByChannels = projectService.getKpiByChannels({id:$state.params.id});
+        $scope.kpiByChannelsTree = {};
 
         $scope.uvByChannelsChart = {};
         $scope.pvByChannelsChart = {};
@@ -67,6 +70,17 @@
                 kpiPerChannel.pv = kpiPerChannel.uv * 4;
                 kpiPerChannel.convertRate = kpiPerChannel.converts / kpiPerChannel.users;
                 kpiPerChannel.shareRate = kpiPerChannel.shares / kpiPerChannel.users;
+
+                $scope.kpiByChannelsTree[kpiPerChannel.name] = {};
+
+                Object.keys(kpiPerChannel).forEach(function(kpiKey) {
+
+                    if(!$scope.kpiNames[kpiKey]) {
+                        return;
+                    }
+
+                    $scope.kpiByChannelsTree[kpiPerChannel.name][$scope.kpiNames[kpiKey]] = kpiPerChannel[kpiKey];
+                });
 
                 return kpiPerChannel;
             });
