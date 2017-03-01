@@ -97,7 +97,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <!--各渠道时间段-->
+                            <!--时间段-->
                             <div layout="row" layout-align="center end" class="timeline-channels">
                                 <div class="endpoint" flex="10">
                                     <label>开始时间</label>
@@ -180,6 +180,71 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">UV</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="uvByChannelsChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">PV</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="pvByChannelsChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">转化数</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="convertsByChannelsChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">转化率</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="convertRateByChannelsChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">获取用户数</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="usersByChannelsChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">平均停留时间</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="timeStayByChannelsChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">分享率</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="shareRateByChannelsChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </md-content>
                 </md-tab>

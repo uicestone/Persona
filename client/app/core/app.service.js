@@ -120,7 +120,8 @@
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST', interceptor: {response: projectResponseIntercepter}},
             update: {method: 'PUT', interceptor: {response: projectResponseIntercepter}},
-            get: {method: 'GET', interceptor: {response: projectResponseIntercepter}}
+            get: {method: 'GET', interceptor: {response: projectResponseIntercepter}},
+            getKpiByChannels: {method: 'GET', url: api + 'project/:id/kpi-by-channels', isArray: true}
         });
         
         // Angular mix PUT and POST methot to $save,

@@ -1,4 +1,5 @@
 var Project = require('../models/project.js');
+var Campaign = require('../models/campaign.js');
 
 module.exports = function(router) {
     // Project CURD
@@ -35,17 +36,17 @@ module.exports = function(router) {
             if(req.query.keyword) {
                 query.find({$or: [
                     {name: new RegExp(req.query.keyword)},
-                    {code: new RegExp(req.query.keyword)}
+                    {appid: new RegExp(req.query.keyword)}
                 ]});
             }
 
-            ['code', 'name'].forEach(property => {
+            ['name', 'url', 'appid'].forEach(property => {
                 if(req.query[property]) {
                     query.find({[property]: new RegExp(req.query[property])});
                 }
             });
 
-            ['percentage', 'pb', 'peTtm', 'peLyr', 'psr', 'marketCapital', 'floatMarketCapital'].forEach(property => {
+            ['startDate', 'endDate'].forEach(property => {
                 
                 if(req.query[property]) {
 
@@ -134,6 +135,21 @@ module.exports = function(router) {
                 res.json({ message: 'Successfully deleted' });
             });
         });
+
+    router.route('/project/:projectId/kpi-by-channels').get(function(req, res) {
+        Campaign.aggregate([{
+            $group: {
+                _id: "$fromChannel",
+                uv: {$sum: 1},
+                converts: {$sum: {$cond: {if: "$converted", then: 1, else: 0}}},
+                timeStay: {$avg: "$stayedFor"},
+                shares: {$sum: {$cond: {if: "$shared", then: 1, else: 0}}}
+            }
+        }]).then(function(result) {
+            res.send(result);
+        });
+
+    });
 
     return router;
 }

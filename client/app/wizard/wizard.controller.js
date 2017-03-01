@@ -47,6 +47,7 @@
             }
 
             projectChannelIds = project.channels.map(function(channel) { return channel._id; });
+
             channels.forEach(function(channel) {
                 if(projectChannelIds.indexOf(channel._id) > -1) {
                     channel.selected = true;

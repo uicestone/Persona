@@ -13,6 +13,7 @@ var httpServer   = http.createServer(app);
 var io          = require('socket.io')(httpServer);
 
 mongoose.connect(process.env.DATABASE_URL || 'mongodb://localhost/persona');
+mongoose.Promise = global.Promise;
 
 app.use(bodyParser.json());
 app.use(cors());
