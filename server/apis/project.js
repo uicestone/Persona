@@ -8,6 +8,7 @@ module.exports = function(router) {
         .post(function(req, res) {
             
             var project = new Project(req.body);      // create a new instance of the Project model
+            project.createdAt = new Date();
 
             // save the project and check for errors
             project.save(function(err) {
