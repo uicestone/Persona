@@ -47,6 +47,13 @@ module.exports = function(router) {
                 query.tags['$nin'] = Array.isArray(req.query.withoutTags) ? req.query.withoutTags : [req.query.withoutTags];
             }
 
+            ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'].forEach(function(attribute) {
+                if(req.query[attribute]) {
+                    query[attribute] = {$lte: req.query[attribute] / 100, $gt: (req.query[attribute] - 10) / 100}
+                    console.log(attribute, req.query[attribute] / 100, (req.query[attribute] - 10) / 100);
+                }
+            });
+
             Customer.find(query)
             .limit(limit)
             .skip(skip)
