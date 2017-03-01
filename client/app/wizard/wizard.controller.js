@@ -75,6 +75,12 @@
             $scope.project.kpis.push({});
         };
 
+        $scope.removeKpi = function(kpiToRemove) {
+            $scope.project.kpis = $scope.project.kpis.filter(function(kpi) {
+                return kpi.type !== kpiToRemove.type;
+            });
+        }
+
         $scope.addKpiTimingForm = function(kpi) {
             kpi.timings.push({});
         }

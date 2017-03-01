@@ -60,6 +60,10 @@
                             <md-input-container ng-if="$index==project.kpis.length-1">
                                 <md-button ng-click="addKpiForm()">添加KPI指标</md-button>
                             </md-input-container>
+
+                            <md-input-container ng-if="$index<project.kpis.length-1">
+                                <md-button ng-click="removeKpi(kpi)"><md-icon>delete</md-icon></md-button>
+                            </md-input-container>
                         </div>
                         
                     </form>
