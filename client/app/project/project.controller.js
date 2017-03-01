@@ -47,7 +47,8 @@
             return (new Date(item.endDate) - new Date(item.startDate)) / projectDuration * 100;
         };
 
-        if($scope.project) {
+        // 渠道监控图表数据
+        if($scope.project && $scope.project.channel) {
             
             $scope.kpiByChannels = projectService.getKpiByChannels({id:$state.params.id});
             $scope.kpiByChannelsTree = {};
