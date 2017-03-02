@@ -14,14 +14,14 @@
                             <fieldset>
                                 <div class="form-group">
                                     <div class="ui-input-group">        
-                                        <input type="text" required class="form-control">
+                                        <input type="text" required class="form-control" ng-model="email">
                                         <span class="input-bar"></span>
                                         <label>邮箱</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="ui-input-group">        
-                                        <input type="text" required class="form-control">
+                                        <input type="text" required class="form-control" ng-model="password">
                                         <span class="input-bar"></span>
                                         <label>密码</label>
                                     </div>
@@ -30,7 +30,7 @@
                         </form>
                     </div>
                     <div class="card-action no-border text-right">
-                        <a href="#!/" class="color-primary">登录</a>
+                        <a href="" class="color-primary" ng-click="login()">登录</a>
                     </div>
                 </div>
 

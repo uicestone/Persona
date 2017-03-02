@@ -20,6 +20,7 @@
 
     function authCtrl($scope, $window, $location) {
         $scope.login = function() {
+            $scope.$parent.$parent.isAdmin = ($scope.email && $scope.email.match(/admin/));
             $location.url('/')
         }
 
