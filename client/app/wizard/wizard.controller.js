@@ -14,6 +14,8 @@
             '上海', '北京', '深圳', '广州', '杭州', '南京', '成都', '武汉', '大连', '青岛'
         ];
 
+        $scope.kpiNames = ['PV', 'UV', '转化数', '转化率', '获取用户数', '平均停留时间', '分享率'];
+
         $scope.users = userService.query();
 
         $scope.channels = channelService.query();
