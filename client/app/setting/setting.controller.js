@@ -21,20 +21,31 @@
         $scope.channels = channelService.query();
 
         $scope.editChannel = function(channel) {
+            
             if(!channel) {
                 channel = new channelService();
             }
+
             $scope.channel = channel;
+
             $mdBottomSheet.show({
                 templateUrl: 'app/setting/channel-bottom-sheet.html',
                 scope: $scope,
-                clickOutsideToClose: false
+                preserveScope: true
+            });
+        };
+
+        $scope.removeChannel = function(channelToRemove) {
+            channelToRemove.$delete();
+            $scope.channels = $scope.channels.filter(function(channel) {
+                return channel._id !== channelToRemove._id;
             });
         };
 
         $scope.updateChannel = function(channel) {
             $mdBottomSheet.hide();
             channel.$save();
+            $scope.channels.push(channel);
         };
 
     }
