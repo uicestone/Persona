@@ -148,7 +148,49 @@ module.exports = function(router) {
         }]).then(function(result) {
             res.send(result);
         });
+    });
 
+    router.route('/project/:projectId/kpi-by-date').get(function(req, res) {
+        Campaign.aggregate([{
+            $group: {
+                _id: {$dateToString: {format: "%Y-%m-%d", date: "$accessedAt"}},
+                uv: {$sum: 1},
+                converts: {$sum: {$cond: {if: "$converted", then: 1, else: 0}}}
+            }
+        }, {
+            $sort: {_id: 1}
+        }]).then(function(result) {
+            res.send(result);
+        });
+    });
+
+    router.route('/project/:projectId/kpi-by-device').get(function(req, res) {
+        Campaign.aggregate([{
+            $group: {
+                _id: "$device",
+                uv: {$sum: 1},
+                converts: {$sum: {$cond: {if: "$converted", then: 1, else: 0}}}
+            }
+        }]).then(function(result) {
+            res.send(result);
+        });
+    });
+
+    router.route('/project/:projectId/kpi-by-region').get(function(req, res) {
+        Campaign.aggregate([{
+            $group: {
+                _id: "$province",
+                converts: {$sum: {$cond: {if: "$converted", then: 1, else: 0}}}
+            }
+        }]).then(function(result) {
+            res.send(result);
+        });
+    });
+
+    router.route('/project/:projectId/campaign-record').get(function(req, res) {
+        Campaign.find().limit(200).then(function(campaignRecords) {
+            res.send(campaignRecords);
+        });
     });
 
     return router;

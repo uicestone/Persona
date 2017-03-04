@@ -51,6 +51,11 @@
         if($scope.project) {
             
             $scope.kpiByChannels = projectService.getKpiByChannels({id:$state.params.id});
+            $scope.campaignRecords = projectService.getCampaignRecords({id:$state.params.id});
+            $scope.kpiByDate = projectService.getKpiByDate({id:$state.params.id});
+            $scope.kpiByRegion = projectService.getKpiByRegion({id:$state.params.id});
+            $scope.kpiByDevice = projectService.getKpiByDevice({id:$state.params.id});
+
             $scope.kpiByChannelsTree = {};
 
             $scope.uvByChannelsChart = {};
@@ -60,6 +65,12 @@
             $scope.usersByChannelsChart = {};
             $scope.timeStayByChannelsChart = {};
             $scope.shareRateByChannelsChart = {};
+
+            $scope.uvByDateChart = {};
+            $scope.convertsByDateChart = {}
+            $scope.uvByDeviceChart = {};
+            $scope.convertsByDeviceChart = {};
+            $scope.convertsByRegionChart = {};
 
             Promise.all([$scope.project.$promise, $scope.kpiByChannels.$promise]).then(function(result) {
 
@@ -443,6 +454,224 @@
                     ]
                 };
             });
+
+            $scope.kpiByDate.$promise.then(function(kpiByDate) {
+
+                $scope.uvByDateChart.options = {
+                    title : {
+                        text: '访问数 - 日期分布',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {
+                            type : 'shadow'
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'time'
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'UV',
+                            type:'line',
+                            data:kpiByDate.map(function(kpiPerDate) {
+                                return [kpiPerDate._id, kpiPerDate.uv]
+                            }),
+                            itemStyle: {normal: {areaStyle: {type: 'default'}}}
+                        }
+                    ]
+                };
+
+                $scope.convertsByDateChart.options = {
+                    title : {
+                        text: '转化率 - 日期分布',
+                        x:'center'
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    xAxis : [
+                        {
+                            type : 'time'
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'转化率',
+                            type:'line',
+                            data: kpiByDate.map(function(kpiPerDate) {
+                                return [kpiPerDate._id, kpiPerDate.converts]
+                            }),
+                            markPoint : {
+                                data : [
+                                    {type : 'max', name: '最多'},
+                                    {type : 'min', name: '最少'}
+                                ]
+                            },
+                            itemStyle: {normal: {areaStyle: {type: 'default'}}}
+                        }
+                    ]
+                };
+            });
+
+            $scope.kpiByRegion.$promise.then(function(kpiByRegion) {
+                $scope.convertsByRegionChart.options = {
+                    title: {
+                        text: '转化率 - 区域分布',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    visualMap: {
+                        min: 0,
+                        max: 2500,
+                        left: 'left',
+                        top: 'bottom',
+                        // text: ['高','低'],           // 文本，默认为数值文本
+                        calculable: true
+                    },
+                    toolbox: {
+                        show: true,
+                        orient: 'vertical',
+                        left: 'right',
+                        top: 'center',
+                        feature: {
+                            dataView: {readOnly: false},
+                            restore: {},
+                            saveAsImage: {}
+                        }
+                    },
+                    series: [
+                        {
+                            name: '转化率',
+                            type: 'map',
+                            mapType: 'china',
+                            roam: false,
+                            label: {
+                                normal: {
+                                    show: true
+                                },
+                                emphasis: {
+                                    show: true
+                                }
+                            },
+                            data: kpiByRegion.map(function(kpiPerRegion) {
+                                return {name: kpiPerRegion._id.replace(/省|市|自治区/, ''), value: kpiPerRegion.converts}
+                            })
+                        }
+                    ]
+                };
+            });
+            
+            $scope.kpiByDevice.$promise.then(function(kpiByDevice) {
+
+                $scope.uvByDeviceChart.options = {
+                    title : {
+                        text: '访问数 - 设备分布',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        orient : 'vertical',
+                        x : 'left',
+                        data: kpiByDevice.map(function(kpiPerDevice) {
+                            return kpiPerDevice._id;
+                        })
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    calculable : true,
+                    series : [
+                        {
+                            name:'设备',
+                            type:'pie',
+                            radius : '55%',
+                            center: ['50%', '60%'],
+                            data: kpiByDevice.map(function(kpiPerDevice) {
+                                return {
+                                    name: kpiPerDevice._id,
+                                    value: kpiPerDevice.uv
+                                };
+                            })
+                        }
+                    ]
+                };
+
+                $scope.convertsByDeviceChart.options = {
+                    title : {
+                        text: '转化率 - 设备分布',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        orient : 'vertical',
+                        x : 'left',
+                        data: kpiByDevice.map(function(kpiPerDevice) {
+                            return kpiPerDevice._id;
+                        })
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    calculable : true,
+                    series : [
+                        {
+                            name:'设备',
+                            type:'pie',
+                            radius : '55%',
+                            center: ['50%', '60%'],
+                            data: kpiByDevice.map(function(kpiPerDevice) {
+                                return {
+                                    name: kpiPerDevice._id,
+                                    value: kpiPerDevice.converts
+                                };
+                            })
+                        }
+                    ]
+                };
+
+            });            
         }
     }
 })(); 

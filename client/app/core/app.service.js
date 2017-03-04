@@ -121,7 +121,11 @@
             create: {method: 'POST', interceptor: {response: projectResponseIntercepter}},
             update: {method: 'PUT', interceptor: {response: projectResponseIntercepter}},
             get: {method: 'GET', interceptor: {response: projectResponseIntercepter}},
-            getKpiByChannels: {method: 'GET', url: api + 'project/:id/kpi-by-channels', isArray: true}
+            getKpiByChannels: {method: 'GET', url: api + 'project/:id/kpi-by-channels', isArray: true},
+            getKpiByDate: {method: 'GET', url: api + 'project/:id/kpi-by-date', isArray: true},
+            getKpiByDevice: {method: 'GET', url: api + 'project/:id/kpi-by-device', isArray: true},
+            getKpiByRegion: {method: 'GET', url: api + 'project/:id/kpi-by-region', isArray: true},
+            getCampaignRecords: {method: 'GET', url: api + 'project/:id/campaign-record', isArray: true}
         });
         
         // Angular mix PUT and POST methot to $save,

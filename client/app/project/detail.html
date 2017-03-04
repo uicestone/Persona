@@ -152,7 +152,7 @@
                         </div>
                     </md-content>
                 </md-tab>
-                <md-tab label="渠道监控" md-active="true">
+                <md-tab label="渠道监控">
                     <h2 class="section-header">{{ project.name }}</h2>
                     <md-content class="md-padding">
                         <div layout="row">
@@ -251,7 +251,7 @@
                         </div>
                     </md-content>
                 </md-tab>
-                <md-tab label="报表统计">
+                <md-tab label="报表统计" md-active="true">
                     <h2 class="section-header">{{ project.name }}</h2>
                     <md-content class="md-padding">
                         <div layout="row">
@@ -264,20 +264,61 @@
                                 <md-datepicker ng-model="project.endDate" md-hide-icons="calendar"></md-datepicker>
                             </md-input-container>
                         </div>
+                        <div>
+                            <md-content layout="row" style="height:40vh">
+                                <table flex="100" class="table table-hover table-bordered" style="background:white">
+                                    <thead>
+                                        <tr>
+                                            <th>访问时间</th>
+                                            <th>访问设备</th>
+                                            <th>OpenID</th>
+                                            <th>手机号</th>
+                                            <th>电邮</th>
+                                            <th>是否转化</th>
+                                            <th>停留时间</th>
+                                            <th>是否分享</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="record in campaignRecords">
+                                            <td>{{ record.accessedAt | date:'y-MM-dd' }}</td>
+                                            <td>{{ record.device }}</td>
+                                            <td>{{ record._id | limitTo:10 }}</td>
+                                            <td>{{ record.mobile }}</td>
+                                            <td>{{ record.email }}</td>
+                                            <td>{{ record.converted ? '是' : '否' }}</td>
+                                            <td>{{ record.stayedFor }}</td>
+                                            <td>{{ record.shared ? '是' : '否' }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </md-content>
+                        </div>
+                        <hr>
                         <div class="row">
-                            <img src="assets/images/project-chart-table.png" width="100%" />
+                            <div class="col-md-12">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">访问数</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="uvByDateChart.options" style="height: 350px"></div>
+                                        <div data-echarts data-options="uvByDeviceChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
-                            <img src="assets/images/project-chart-1.png" width="85%" style="margin-left:15%" />
-                        </div>
-                        <div class="row">
-                            <img src="assets/images/project-chart-2.png" width="100%" />
-                        </div>
-                        <div class="row">
-                            <img src="assets/images/project-chart-3.png" width="85%" style="margin-left:15%" />
-                        </div>
-                        <div class="row">
-                            <img src="assets/images/project-chart-4.png" width="85%" style="margin-left:15%" />
+                            <div class="col-md-12">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">转化率</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="convertsByRegionChart.options" style="height: 350px"></div>
+                                        <div data-echarts data-options="convertsByDeviceChart.options" style="height: 350px"></div>
+                                        <div data-echarts data-options="convertsByDateChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </md-content>
                 </md-tab>
