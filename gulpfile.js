@@ -131,10 +131,10 @@ gulp.task('optimize', ['inject', 'sass-min'], function() {
         .src(config.index)
         .pipe($.plumber({errorHandler: swallowError}))
         .pipe($.useref())
+        .pipe(jsFilter)
+        .pipe($.if('scripts/app.js', $.uglify()))
         .pipe($.replace(/http:\/\/localhost/g, 'http://persona.stirad.com'))
         .pipe($.replace(/\.html"/g, '.html?v=' + (new Date()).getTime() + '"'))
-        .pipe(jsFilter)
-        .pipe($.uglify())             // Minify any javascript sources
         .pipe(jsFilter.restore)
         .pipe(indexHtmlFilter)
         .pipe($.rev())                // Rename the concatenated files (but not index.html)
