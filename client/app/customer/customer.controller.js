@@ -8,6 +8,11 @@
         
         $scope.query = $location.search();
 
+        $scope.$watch('query', function(query) {
+            $location.search(query);
+            $scope.customers = customerService.query(query);
+        }, true);
+
         ['withTags', 'withoutTags', 'inGroup', 'notInGroup'].forEach(function(key) {
             if (!$scope.query[key]) {
                 $scope.query[key] = [];
@@ -53,6 +58,31 @@
             $scope.showKeys.push(newShowKey);
         }
 
+        $scope.getTags = function(searchText) {
+            
+            var possibleTags = [];
+            $scope.customers.forEach(function(customer) {
+                customer.tags.forEach(function(tag) {
+                    if(possibleTags.indexOf(tag) === -1) {
+                        possibleTags.push(tag);
+                    }
+                });
+            });
+
+            if(searchText) {
+                possibleTags = possibleTags.filter(function(tag) {
+                    return tag.search(searchText) > -1;
+                });
+            }
+
+            possibleTags = possibleTags.filter(function(tag) {
+                return $scope.query.withTags.indexOf(tag) === -1
+                    && $scope.query.withoutTags.indexOf(tag) === -1
+            });
+
+            return possibleTags;
+        }
+
         $scope.$watch('inGroup', function(inGroup) {
             if(!inGroup) {
                 $scope.query.in_group = null;
@@ -82,11 +112,6 @@
         $scope.addNotInGroup = function() {
             $scope.notInGroup.push(group);
         }
-
-        $scope.$watch('query', function(query) {
-            $location.search(query);
-            $scope.customers = customerService.query(query);
-        }, true);
 
         $scope.editGroup = function(group) {
             if(!group) {
