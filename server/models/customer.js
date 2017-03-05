@@ -17,7 +17,8 @@ var customerSchema = new Schema({
     hasChild: Boolean,
     annualSalary: String,
     lastConsumedAt: Date,
-    tags: [String]
+    tags: [String],
+    group: {_id: Schema.Types.ObjectId, name: String}
 });
 
 customerSchema.index({name:1}, {unique:true});

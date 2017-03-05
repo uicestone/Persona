@@ -204,6 +204,9 @@
             group.$save();
             $mdBottomSheet.hide();
             $scope.group = undefined;
+            if(!group._id) {
+                $scope.customerGroups.push(group);
+            }
         };
 
         $scope.removeGroup = function(groupToRemove) {

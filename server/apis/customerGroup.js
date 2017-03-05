@@ -1,4 +1,5 @@
 var CustomerGroup = require('../models/customerGroup.js');
+var Customer = require('../models/customer.js');
 
 module.exports = function(router) {
     // CustomerGroup CURD
@@ -15,6 +16,22 @@ module.exports = function(router) {
                     res.status(500).send(err);
 
                 res.json(customerGroup);
+
+                Customer.update({
+                    tags: {
+                        $all: customerGroup.query.withTags,
+                        $nin: customerGroup.query.withoutTags,
+                    }
+                }, {
+                    $set: {
+                        group: {
+                            _id: customerGroup._id,
+                            name: customerGroup.name
+                        }
+                    }
+                }, {multi: true}).then(function(result) {
+                    console.log(result.nModified + ' customers added to group: ' + customerGroup.name);
+                });
             });
             
         })

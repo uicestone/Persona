@@ -52,6 +52,18 @@ module.exports = function(router) {
                 query.tags['$nin'] = Array.isArray(req.query.withoutTags) ? req.query.withoutTags : [req.query.withoutTags];
             }
 
+            // 在访客组
+            if(req.query.inGroup) {
+                !query.group && (query['group._id'] = {});
+                query['group._id']['$all'] = Array.isArray(req.query.inGroup) ? req.query.inGroup : [req.query.inGroup];
+            }
+
+            // 不在访客组
+            if(req.query.notInGroup) {
+                !query.group && (query['group._id'] = {});
+                query['group._id']['$nin'] = Array.isArray(req.query.notInGroup) ? req.query.notInGroup : [req.query.notInGroup];
+            }
+
             // 维度过滤
             ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'].forEach(function(attribute) {
                 if(req.query[attribute]) {
