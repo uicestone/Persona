@@ -2,15 +2,15 @@
     'use strict';
 
     angular.module('app.customer')
-    .controller('customerCtrl', ['$scope', '$window', '$location', 'customerService', customerCtrl]);
+    .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', 'customerService', 'customerGroupService', customerCtrl]);
 
-    function customerCtrl($scope, $window, $location, customerService) {
+    function customerCtrl($scope, $window, $location, $mdBottomSheet, customerService, customerGroupService) {
         
         $scope.query = {withTags:[], withoutTags:[]};
         
         $scope.showKeys = [
             {key:'mobile', label:'手机号码', show:true},
-            {key:'privince', 'label':'居住城市', show:true},
+            {key:'province', 'label':'居住城市', show:true},
             {key:'sex', 'label':'性别', show:true},
             {key:'tags', 'label':'标签', show:true}
         ];
@@ -30,6 +30,8 @@
             {key:'marriage', label:'婚否'}
         ];
 
+        $scope.customerGroups = customerGroupService.query();
+
         $scope.addShowKey = function(newShowKey) {
             if(!newShowKey) {
                 return;
@@ -46,6 +48,29 @@
             $location.search(query);
             $scope.customers = customerService.query(query);
         }, true);
+
+        $scope.createGroup = function(group) {
+
+            if(!group) {
+                group = new customerGroupService();
+                group.showKeys = $scope.showKeys;
+                group.query = $scope.query;
+            }
+
+            $scope.group = group;
+
+            $mdBottomSheet.show({
+                templateUrl: 'app/customer/create-group-bottom-sheet.html',
+                scope: $scope,
+                preserveScope: true
+            });
+        };
+
+        $scope.updateGroup = function(group) {
+            group.$save();
+            $mdBottomSheet.hide();
+            $scope.group = undefined;
+        };
     }
     
 })(); 

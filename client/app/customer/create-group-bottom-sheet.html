@@ -1,0 +1,27 @@
+<md-bottom-sheet class="md-list md-has-header" style="position:fixed">
+    <md-subheader ng-cloak>编辑</md-subheader>
+    <div layout="row">
+        <div flex="30" layout="column">
+            <md-input-container>
+                <label>分组名称</label>
+                <input ng-model="group.name">
+            </md-input-container>
+            <md-input-container class="md-input-has-value">
+                <label>显示字段</label>
+                <p style="line-height:30px">
+                    <span ng-repeat="key in group.showKeys"> {{ key.label }} </span>
+                </p>
+            </md-input-container>
+            <md-input-container class="md-input-has-value">
+                <label>条件</label>
+                <p style="line-height:30px">
+                    <span ng-repeat="tag in group.query.withTags"> {{ tag }} </span>
+                    <span ng-repeat="tag in group.query.withoutTags"> {{ tag }} </span>
+                </p>
+            </md-input-container>
+        </div>
+        <div flex layout="row" layout-align="end start">
+            <div><md-button ng-click="updateGroup(group)">保存</md-button></div>
+        </div>
+    </div>
+</md-bottom-sheet>
