@@ -90,12 +90,52 @@
                 </md-tab>
                 <md-tab label="精准搜索">
                     <md-content class="md-padding">
-                        <img src="assets/images/customer-image-precise.png" alt="精准搜索" width="100%" />
+                        <div layout="row">
+                            <md-input-container flex="100">
+                                <label>搜索具体用户信息</label>
+                                <input ng-model="query.precise">
+                                <div class="hint" style="color:#CCC">
+                                    格式：{key}={value}&amp;{key}={value}
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <br>
+                        <div layout="row" layout-align="start start">
+                            <md-input-container ng-repeat="key in showKeys">
+                                <md-checkbox ng-model="key.show">{{ key.label }}</md-checkbox>
+                            </md-input-container>
+                            <div flex layout="row" layout-align="end center">
+                                <md-autocomplete placeholder="新增显示字段" md-items="key in otherKeys | filter:searchOtherKeysText" md-search-text="searchOtherKeysText" md-item-text="key.label" md-selected-item="newShowKey" md-min-length="0" md-selected-item-change="addShowKey(newShowKey)">
+                                    <span>{{ key.label }}</span>
+                                </md-autocomplete>
+                            </div>
+                        </div>
                     </md-content>
                 </md-tab>
-                <md-tab label="用户组管理">
-                    <md-content class="md-padding">
-                        <img src="assets/images/customer-image-group.png" alt="用户组管理" width="100%" />
+                <md-tab label="用户组管理" md-active="true">
+                    <md-content class="md-padding" layout="row">
+                        <md-input-container flex="100" class="md-input-has-value">
+                            <label>已有用户组</label>
+                            <md-chips ng-model="customerGroups" readonly="true">
+                                <md-chip-template ng-class="bg-primary">
+                                    <div>
+                                        {{ $chip.name }}
+                                    </div>
+                                </md-chip-template>
+                            </md-chips>
+                        </md-input-container>
+                    </md-content>
+                    <md-content class="md-padding" layout="row">
+                        <md-input-container flex="100" class="md-input-has-value">
+                            <label>筛选用户组</label>
+                            <md-chips ng-model="customerGroups" readonly="true">
+                                <md-chip-template>
+                                    <div>
+                                        {{ $chip.name }}
+                                    </div>
+                                </md-chip-template>
+                            </md-chips>
+                        </md-input-container>
                     </md-content>
                 </md-tab>
             </md-tabs>
