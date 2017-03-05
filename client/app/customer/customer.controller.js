@@ -33,6 +33,9 @@
         $scope.customerGroups = customerGroupService.query();
 
         $scope.query = $location.search();
+        $scope.inGroup = [];
+        $scope.notInGroup = [];
+
         $scope.addShowKey = function(newShowKey) {
             if(!newShowKey) {
                 return;
@@ -43,6 +46,36 @@
             });
             newShowKey.show = true;
             $scope.showKeys.push(newShowKey);
+        }
+
+        $scope.$watch('inGroup', function(inGroup) {
+            if(!inGroup) {
+                $scope.query.in_group = null;
+            }
+            else {
+                $scope.query.in_group = inGroup.map(function(group) {
+                    return group._id;
+                });
+            }
+        }, true);
+
+        $scope.$watch('notInGroup', function(notInGroup) {
+            if(!notInGroup) {
+                $scope.query.not_in_group = null;
+            }
+            else {
+                $scope.query.not_in_group = notInGroup.map(function(group) {
+                    return group._id;
+                });
+            }
+        }, true);
+
+        $scope.addInGroup = function(group) {
+            $scope.inGroup.push(group);
+        };
+
+        $scope.addNotInGroup = function() {
+            $scope.notInGroup.push(group);
         }
 
         $scope.$watch('query', function(query) {

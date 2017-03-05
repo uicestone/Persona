@@ -118,17 +118,29 @@
                             <label>已有用户组</label>
                             <md-chips ng-model="customerGroups" readonly="true">
                                 <md-chip-template ng-class="bg-primary">
-                                    <div>
+                                    <div ng-click="addInGroup($chip)">
                                         {{ $chip.name }}
+                                        <md-icon ng-click="editGroup($chip);$event.stopPropagation()">edit</md-icon>
+                                        <md-icon ng-click="removeGroup($chip);$event.stopPropagation()">close</md-icon>
                                     </div>
                                 </md-chip-template>
                             </md-chips>
                         </md-input-container>
                     </md-content>
                     <md-content class="md-padding" layout="row">
-                        <md-input-container flex="100" class="md-input-has-value">
+                        <md-input-container flex="50" class="md-input-has-value">
                             <label>筛选用户组</label>
-                            <md-chips ng-model="customerGroups" readonly="true">
+                            <md-chips ng-model="inGroup">
+                                <md-chip-template>
+                                    <div>
+                                        {{ $chip.name }}
+                                    </div>
+                                </md-chip-template>
+                            </md-chips>
+                        </md-input-container>
+                        <md-input-container flex="50" class="md-input-has-value">
+                            <label>排除用户组</label>
+                            <md-chips ng-model="notInGroup">
                                 <md-chip-template>
                                     <div>
                                         {{ $chip.name }}
