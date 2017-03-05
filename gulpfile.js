@@ -124,12 +124,22 @@ gulp.task('copy', function() {
 gulp.task('optimize', ['inject', 'sass-min'], function() {
     log('Optimizing the js, css, html');
 
+    var jsFilter = $.filter('client/scripts/*.js', { restore: true });
+    var indexHtmlFilter = $.filter(['client/scripts/*.js', 'client/styles/*.css', '!**/index.html'], { restore: true });
+
     return gulp
         .src(config.index)
         .pipe($.plumber({errorHandler: swallowError}))
         .pipe($.useref())
-        .pipe($.if('scripts/app.js', $.uglify()))
         .pipe($.replace(/http:\/\/localhost/g, 'http://persona.stirad.com'))
+        .pipe($.replace(/\.html"/g, '.html?v=' + (new Date()).getTime() + '"'))
+        .pipe(jsFilter)
+        .pipe($.uglify())             // Minify any javascript sources
+        .pipe(jsFilter.restore)
+        .pipe(indexHtmlFilter)
+        .pipe($.rev())                // Rename the concatenated files (but not index.html)
+        .pipe(indexHtmlFilter.restore)
+        .pipe($.revReplace())         // Substitute in new filenames
         .pipe(gulp.dest( config.dist ));
 
 });
@@ -140,11 +150,11 @@ gulp.task('serve', ['inject', 'sass'], function() {
 });
 
 gulp.task('build', ['optimize', 'copy'], function() {
-    startBrowserSync('dist');
+    
 })
 
 gulp.task('serve-dist', function() {
-    gulp.run('build');
+    startBrowserSync('dist');
 })
 
 gulp.task('serve-docs', ['jade-docs'], function() {
@@ -202,7 +212,7 @@ function startBrowserSync(opt) {
     switch(opt) {
         case 'dist':
             log('Serving dist app');
-            // serveDistApp();
+            serveDistApp();
             break;
         case 'docs':
             log('Serving docs');
