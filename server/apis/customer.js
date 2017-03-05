@@ -31,11 +31,13 @@ module.exports = function(router) {
 
             var query = {};
 
-            if(req.query.keyword) {
-                query = {
-                    name: new RegExp(req.query.keyword)
-                };
-            }
+            var preciseKeys = Object.keys(req.query).filter(function(key) {
+                return ['withTags', 'withoutTags', 'inGroup', 'notInGroup'].indexOf(key) === -1;
+            });
+
+            preciseKeys.forEach(function(key) {
+                query[key] = req.query[key];
+            });
 
             if(req.query.withTags) {
                 !query.tags && (query.tags = {});
