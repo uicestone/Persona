@@ -72,7 +72,7 @@
             <li>
                 <md-menu md-position-mode="target-right target">
                     <md-button class="header-btn" aria-label="menu" ng-click="$mdOpenMenu($event)">
-                        <img src="assets/images/g1.jpg" alt="" class="img-circle img30_30">
+                        <i><md-icon>account_circle</md-icon></i>
                     </md-button>
                     <md-menu-content class="top-header-dropdown" width="3">
                         <md-menu-item><md-button aria-label="menu" ng-href="#!/"><md-icon class="material-icons">assignment</md-icon><span data-translate="DASHBOARD"></span></md-button></md-menu-item>
@@ -81,20 +81,8 @@
                     </md-menu-content>
                 </md-menu>
             </li>
-            <li class="hidden-xs hidden-sm" data-ng-controller="LangCtrl as ctrl">
-                <md-menu md-position-mode="target-right target">
-                    <md-button class="active-flag" aria-label="menu"" ng-click="$mdOpenMenu($event)">
-                        <div class="flag flags-{{activeLang}}"></div>
-                    </md-button>
-                    <md-menu-content width="3" class="langs">
-                        <md-menu-item ng-repeat="lang in langs">
-                            <md-button ng-click="setLang(lang)">
-                                <div class="flag flags-{{lang}}"></div>
-                                <span class="lang-text" >{{lang}}</span>
-                            </md-button>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
+            <li class="hidden-xs hidden-sm">
+                <img src="assets/images/persona.png" alt="Persona" style="width:189px;margin:19px 10px 0" />
             </li>
         </ul>
     </div>
