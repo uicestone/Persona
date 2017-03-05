@@ -150,6 +150,11 @@
                                 <md-button class="md-default md-raised btn" href="#!/wizard/set-timing/{{ project._id}}?editing=true">修改节点</md-button>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <div class="actions text-center">
+                                <md-button class="md-default md-warn btn" ng-click="removeProject(project)">删除项目</md-button>
+                            </div>
+                        </div>
                     </md-content>
                 </md-tab>
                 <md-tab label="渠道监控">

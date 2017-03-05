@@ -37,6 +37,15 @@
             });
         };
 
+        $scope.removeProject = function(project) {
+            if(!confirm('确定要删除项目“' + project.name + '”吗？')) {
+                return;
+            }
+            project.$delete().then(function() {
+                $location.path('project/list');
+            });
+        };
+
         $scope.startDatePercentage = function(item) {
             var projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
             return (new Date(item.startDate) - new Date($scope.project.startDate)) / projectDuration * 100;
