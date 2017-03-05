@@ -31,6 +31,7 @@ module.exports = function(router) {
 
             var query = {};
 
+            // 精准搜索字段
             var preciseKeys = Object.keys(req.query).filter(function(key) {
                 return ['withTags', 'withoutTags', 'inGroup', 'notInGroup'].indexOf(key) === -1;
             });
@@ -39,16 +40,19 @@ module.exports = function(router) {
                 query[key] = req.query[key];
             });
 
+            // 包含标签
             if(req.query.withTags) {
                 !query.tags && (query.tags = {});
                 query.tags['$all'] = Array.isArray(req.query.withTags) ? req.query.withTags : [req.query.withTags];
             }
 
+            // 排除标签
             if(req.query.withoutTags) {
                 !query.tags && (query.tags = {});
                 query.tags['$nin'] = Array.isArray(req.query.withoutTags) ? req.query.withoutTags : [req.query.withoutTags];
             }
 
+            // 维度过滤
             ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'].forEach(function(attribute) {
                 if(req.query[attribute]) {
                     query[attribute] = {$lte: req.query[attribute] / 100, $gt: (req.query[attribute] - 10) / 100}

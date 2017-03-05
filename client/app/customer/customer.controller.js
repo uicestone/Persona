@@ -8,6 +8,7 @@
         
         $scope.query = $location.search();
 
+        // 检测query的变化并改变路由
         $scope.$watch('query', function(query) {
 
             $location.search(query);
@@ -18,8 +19,10 @@
             
         }, true);
 
+        // 除了这几个query字段，其他的被认为是精确字段
         $scope.arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup'];
 
+        // 初始化数组query字段
         $scope.arrayQueryParams.forEach(function(key) {
             if (!$scope.query[key]) {
                 $scope.query[key] = [];
@@ -29,6 +32,7 @@
             }
         });
 
+        // 访客字段
         $scope.customerKeys = [
             {key:'mobile', label:'手机号码', show:true},
             {key:'province', 'label':'居住城市', show:true},
@@ -50,16 +54,19 @@
 
         $scope.customerGroups = customerGroupService.query();
 
+        // 显示字段
         $scope.showKey = function(key) {
             key.show = true;
         }
 
+        // 自动完成时备选的显示字段
         $scope.getPossibleKeys = function(searchText) {
             return $scope.customerKeys.filter(function(key) {
                 return (!searchText || key.label.search(searchText) > -1) && !key.show;
             });
         }
 
+        // 自动完成时备选的标签
         $scope.getTags = function(searchText) {
             
             var possibleTags = [];
@@ -85,7 +92,8 @@
             return possibleTags;
         }
 
-        $scope.removePreciseQueryParams = function() {
+        // 将数组型query字段复制，清空其他的query字段
+        function removePreciseQueryParams() {
             
             var query = {};
             
@@ -94,11 +102,12 @@
             });
 
             $scope.query = query;
-        };
+        }
 
+        // 监听精准搜索框的改变，将其应用到query中
         $scope.$watch('preciseSearchText', function(preciseSearchText) {
             
-            $scope.removePreciseQueryParams();
+            removePreciseQueryParams();
             
             if(!preciseSearchText) {
                 return;
@@ -117,6 +126,7 @@
                 key = match[1]; value = match[2];
 
                 $scope.customerKeys.forEach(function(customerKey) {
+                    // 支持将搜索的中文key转化为对应的英文key
                     if(customerKey.label === key) {
                         key = customerKey.key;
                         $scope.query[key] = value;
@@ -129,6 +139,7 @@
             });
         });
 
+        // 由于inGroup和notInGroup不是简单数组，因此监听其改变，并同步到query中的简单数组
         $scope.$watch('inGroup', function(inGroup) {
             if(!inGroup) {
                 $scope.query.inGroup = null;
@@ -151,6 +162,7 @@
             }
         }, true);
 
+        // inGroup和notInGroup需要初始值
         if(!$scope.inGroup) {
             $scope.inGroup = [];
         }
@@ -159,14 +171,17 @@
             $scope.notInGroup = [];
         }
 
+        // 属于访客分组
         $scope.addInGroup = function(group) {
             $scope.inGroup.push(group);
         };
 
+        // 不属于访客分组
         $scope.addNotInGroup = function() {
             $scope.notInGroup.push(group);
         }
 
+        // 编辑分组
         $scope.editGroup = function(group) {
             if(!group) {
                 group = new customerGroupService();
