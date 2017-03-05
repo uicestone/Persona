@@ -6,8 +6,17 @@
 
     function customerCtrl($scope, $window, $location, $mdBottomSheet, customerService, customerGroupService) {
         
-        $scope.query = {withTags:[], withoutTags:[]};
-        
+        $scope.query = $location.search();
+
+        ['withTags', 'withoutTags', 'inGroup', 'notInGroup'].forEach(function(key) {
+            if (!$scope.query[key]) {
+                $scope.query[key] = [];
+            }
+            else if (!Array.isArray($scope.query[key])) {
+                $scope.query[key] = [$scope.query[key]];
+            }
+        });
+
         $scope.showKeys = [
             {key:'mobile', label:'手机号码', show:true},
             {key:'province', 'label':'居住城市', show:true},
@@ -31,10 +40,6 @@
         ];
 
         $scope.customerGroups = customerGroupService.query();
-
-        $scope.query = $location.search();
-        $scope.inGroup = [];
-        $scope.notInGroup = [];
 
         $scope.addShowKey = function(newShowKey) {
             if(!newShowKey) {
