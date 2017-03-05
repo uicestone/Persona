@@ -14,6 +14,7 @@
         .service('brandService', ['$resource', brandService])
         .service('channelService', ['$resource', channelService])
         .service('customerService', ['$resource', customerService])
+        .service('customerGroupService', ['$resource', customerGroupService])
         .service('projectService', ['$resource', projectService])
         .service('userService', ['$resource', userService]);
 
@@ -83,6 +84,29 @@
         }
         
         return customers;
+
+    }
+
+    function customerGroupService($resource) {
+
+        var customerGroups = $resource(api + 'customer-group/:id', {id: '@_id'}, {
+            query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
+            create: {method: 'POST'},
+            update: {method: 'PUT'}
+        });
+        
+        // Angular mix PUT and POST methot to $save,
+        // we seperate them to $create and $update here
+        customerGroups.prototype.$save = function (a, b, c, d) {
+            if (this._id) {
+                return this.$update(a, b, c, d);
+            }
+            else {
+                return this.$create(a, b, c, d);
+            }
+        }
+        
+        return customerGroups;
 
     }
 
