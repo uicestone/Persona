@@ -32,6 +32,7 @@
 
         $scope.customerGroups = customerGroupService.query();
 
+        $scope.query = $location.search();
         $scope.addShowKey = function(newShowKey) {
             if(!newShowKey) {
                 return;
@@ -49,8 +50,7 @@
             $scope.customers = customerService.query(query);
         }, true);
 
-        $scope.createGroup = function(group) {
-
+        $scope.editGroup = function(group) {
             if(!group) {
                 group = new customerGroupService();
                 group.showKeys = $scope.showKeys;
@@ -70,6 +70,19 @@
             group.$save();
             $mdBottomSheet.hide();
             $scope.group = undefined;
+        };
+
+        $scope.removeGroup = function(groupToRemove) {
+            
+            if(!confirm('确定要删除访客组"' + groupToRemove.name + '"？')) {
+                return;
+            }
+
+            $scope.customerGroups = $scope.customerGroups.filter(function(group) {
+                return groupToRemove._id !== group._id;
+            });
+            
+            groupToRemove.$delete();
         };
     }
     
