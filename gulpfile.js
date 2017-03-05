@@ -129,6 +129,7 @@ gulp.task('optimize', ['inject', 'sass-min'], function() {
         .pipe($.plumber({errorHandler: swallowError}))
         .pipe($.useref())
         .pipe($.if('scripts/app.js', $.uglify()))
+        .pipe($.replace(/http:\/\/localhost/g, 'http://persona.stirad.com'))
         .pipe(gulp.dest( config.dist ));
 
 });
