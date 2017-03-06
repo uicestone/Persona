@@ -23,7 +23,7 @@ module.exports = function(router) {
                         $nin: customerGroup.query.withoutTags,
                     }
                 }, {
-                    $set: {
+                    $addToSet: {
                         group: {
                             _id: customerGroup._id,
                             name: customerGroup.name
@@ -104,11 +104,24 @@ module.exports = function(router) {
         .delete(function(req, res) {
             CustomerGroup.remove({
                 _id: req.params.customerGroupId
-            }, function(err, customerGroup) {
+            }, function(err) {
                 if (err)
                     res.status(500).send(err);
 
                 res.end();
+
+                Customer.update({
+                    'group._id': req.params.customerGroupId
+                }, {
+                    $pull: {
+                        group: {
+                            _id: req.params.customerGroupId
+                        }
+                    }
+                }, {multi: true}).then(function(result) {
+                    console.log(result.nModified + ' customers removed from group: ' + req.params.customerGroupId);
+                });
+
             });
         });
 
