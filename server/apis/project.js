@@ -1,5 +1,6 @@
 var Project = require('../models/project.js');
 var Campaign = require('../models/campaign.js');
+var Types = require('mongoose').Types;
 
 module.exports = function(router) {
     // Project CURD
@@ -138,6 +139,8 @@ module.exports = function(router) {
 
     router.route('/project/:projectId/kpi-by-channels').get(function(req, res) {
         Campaign.aggregate([{
+            $match: {project: Types.ObjectId(req.params.projectId)}
+        },{
             $group: {
                 _id: "$fromChannel",
                 uv: {$sum: 1},
@@ -152,6 +155,8 @@ module.exports = function(router) {
 
     router.route('/project/:projectId/kpi-by-date').get(function(req, res) {
         Campaign.aggregate([{
+            $match: {project: Types.ObjectId(req.params.projectId)}
+        },{
             $group: {
                 _id: {$dateToString: {format: "%Y-%m-%d", date: "$accessedAt"}},
                 uv: {$sum: 1},
@@ -166,6 +171,8 @@ module.exports = function(router) {
 
     router.route('/project/:projectId/kpi-by-device').get(function(req, res) {
         Campaign.aggregate([{
+            $match: {project: Types.ObjectId(req.params.projectId)}
+        },{
             $group: {
                 _id: "$device",
                 uv: {$sum: 1},
@@ -178,6 +185,8 @@ module.exports = function(router) {
 
     router.route('/project/:projectId/kpi-by-region').get(function(req, res) {
         Campaign.aggregate([{
+            $match: {project: Types.ObjectId(req.params.projectId)}
+        },{
             $group: {
                 _id: "$province",
                 converts: {$sum: {$cond: {if: "$converted", then: 1, else: 0}}}
@@ -188,7 +197,7 @@ module.exports = function(router) {
     });
 
     router.route('/project/:projectId/campaign-record').get(function(req, res) {
-        Campaign.find().limit(200).then(function(campaignRecords) {
+        Campaign.find({project: req.params.projectId}).limit(200).then(function(campaignRecords) {
             res.send(campaignRecords);
         });
     });
