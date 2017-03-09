@@ -21,6 +21,7 @@
 
         // 除了这几个query字段，其他的被认为是精确字段
         $scope.arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup'];
+        $scope.advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
 
         // 初始化数组query字段
         $scope.arrayQueryParams.forEach(function(key) {
@@ -29,6 +30,13 @@
             }
             else if (!Array.isArray($scope.query[key])) {
                 $scope.query[key] = [$scope.query[key]];
+            }
+        });
+
+        // 初始化高级搜索query字段
+        $scope.advancedQueryParams.forEach(function(key) {
+            if($scope.query[key]) {
+                $scope.query[key] = Number($scope.query[key]);
             }
         });
 
@@ -57,14 +65,14 @@
         // 显示字段
         $scope.showKey = function(key) {
             key.show = true;
-        }
+        };
 
         // 自动完成时备选的显示字段
         $scope.getPossibleKeys = function(searchText) {
             return $scope.customerKeys.filter(function(key) {
                 return (!searchText || key.label.search(searchText) > -1) && !key.show;
             });
-        }
+        };
 
         // 自动完成时备选的标签
         $scope.getTags = function(searchText) {
@@ -90,7 +98,7 @@
             });
 
             return possibleTags;
-        }
+        };
 
         // 将数组型query字段复制，清空其他的query字段
         function removePreciseQueryParams() {
@@ -98,6 +106,10 @@
             var query = {};
             
             $scope.arrayQueryParams.forEach(function(key) {
+                query[key] = $scope.query[key];
+            });
+
+            $scope.advancedQueryParams.forEach(function(key) {
                 query[key] = $scope.query[key];
             });
 
