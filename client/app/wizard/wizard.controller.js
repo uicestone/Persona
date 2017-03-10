@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.wizard')
-    .controller('wizardCtrl', ['$scope', '$window', '$state', '$location', 'userService', 'channelService', 'projectService', wizardCtrl]);
+    .controller('wizardCtrl', ['$scope', '$window', '$state', '$location', '$mdToast', 'userService', 'channelService', 'projectService', wizardCtrl]);
 
-    function wizardCtrl($scope, $window, $state, $location, userService, channelService, projectService) {
+    function wizardCtrl($scope, $window, $state, $location, $mdToast, userService, channelService, projectService) {
 
         $scope.platforms = [
             '微信', '微博', 'QQ'
@@ -124,6 +124,10 @@
                 // we remove this channel from project
                 $scope.project.channels = $scope.project.channels.filter(function(currentChannel) { return currentChannel._id !== channel._id; });
             }
+        };
+
+        $scope.urlCopied = function() {
+            $mdToast.showSimple('链接已复制到剪贴板');
         };
     }
     

@@ -72,7 +72,7 @@
                             <tbody>
                                 <tr ng-repeat="channel in project.channels">
                                     <td>
-                                        {{ channel.name }}
+                                        <a href="" clipboard text="project.url+'?channel='+channel._id" on-copied="urlCopied()">{{ channel.name }}</a>
                                     </td>
                                     <td>
                                         <md-datepicker ng-model="channel.startDate" md-min-date="project.startDate" md-max-date="project.endDate" md-placeholder="开始时间" md-hide-icons="calendar"></md-datepicker>
