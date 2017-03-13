@@ -3,7 +3,8 @@
 
     angular.module('app.core')
         .factory('appConfig', [appConfig])
-        .config(['$mdThemingProvider', '$mdDateLocaleProvider', mdConfig]);
+        .config(['$mdThemingProvider', '$mdDateLocaleProvider', mdConfig])
+        .config(['$httpProvider', '$qProvider', httpConfig]);
 
     function appConfig() {
         var pageTransitionOpts = [
@@ -99,6 +100,12 @@
                 return '';
             }
         };
+    }
+
+    function httpConfig($httpProvider, $qProvider) {
+        // $locationPrivider.html5Mode(true);
+        $httpProvider.interceptors.push('httpInterceptorService');
+        $qProvider.errorOnUnhandledRejections(false);
     }
 
 })();

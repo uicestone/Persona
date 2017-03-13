@@ -11,12 +11,57 @@
     };
 
     angular.module('app')
+        .service('httpInterceptorService', ['$q', '$window', '$location', '$injector', httpInterceptorService])
         .service('brandService', ['$resource', brandService])
         .service('channelService', ['$resource', channelService])
         .service('customerService', ['$resource', customerService])
         .service('customerGroupService', ['$resource', customerGroupService])
         .service('projectService', ['$resource', projectService])
         .service('userService', ['$resource', userService]);
+
+    function httpInterceptorService($q, $window, $location, $injector) {
+        return {
+            request: function(config) {
+
+                if(config && config.cache === undefined){
+
+                    var token = $window.localStorage.getItem('token');
+
+                    if(token) {
+                        config.headers['Authorization'] = 'Bearer ' + token;
+                    }
+
+                    return config;
+                }
+
+                return config || $q.when(config);
+            },
+            requestError: function(rejection) {
+                return $q.reject(rejection);
+            },
+            response: function(response) {
+                return response || $q.when(response);
+            },
+            responseError: function(rejection) {
+
+                if(rejection.status === 401){
+                    $window.localStorage.removeItem('token');
+                    $location.path('/login');
+                }
+
+                var $mdToast = $injector.get('$mdToast');
+
+                if(rejection.data && rejection.data.message) {
+                    $mdToast.showSimple(rejection.data.message);
+                }
+                else {
+                    $mdToast.showSimple('网络错误');
+                }
+
+                return $q.reject(rejection);
+            }
+        };
+    }
 
     function brandService($resource) {
 
