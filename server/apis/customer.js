@@ -31,9 +31,12 @@ module.exports = function(router) {
 
             var query = {};
 
+            var arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
+            var advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
+            
             // 精准搜索字段
             var preciseKeys = Object.keys(req.query).filter(function(key) {
-                return ['withTags', 'withoutTags', 'inGroup', 'notInGroup'].indexOf(key) === -1;
+                return arrayQueryParams.indexOf(key) === -1;
             });
 
             preciseKeys.forEach(function(key) {
@@ -65,7 +68,7 @@ module.exports = function(router) {
             }
 
             // 维度过滤
-            ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'].forEach(function(attribute) {
+            advancedQueryParams.forEach(function(attribute) {
                 if(req.query[attribute]) {
                     query[attribute] = {$lte: req.query[attribute] / 100, $gt: (req.query[attribute] - 10) / 100}
                 }

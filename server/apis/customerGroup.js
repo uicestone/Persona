@@ -2,6 +2,10 @@ var CustomerGroup = require('../models/customerGroup.js');
 var Customer = require('../models/customer.js');
 
 module.exports = function(router) {
+
+    var arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
+    var advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
+
     // CustomerGroup CURD
     router.route('/customer-group')
 
@@ -17,12 +21,52 @@ module.exports = function(router) {
 
                 res.json(customerGroup);
 
-                Customer.update({
-                    tags: {
-                        $all: customerGroup.query.withTags,
-                        $nin: customerGroup.query.withoutTags,
+                var query = {};
+
+                var arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
+                var advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
+                
+                // 精准搜索字段
+                var preciseKeys = Object.keys(customerGroup.query).filter(function(key) {
+                    return arrayQueryParams.indexOf(key) === -1;
+                });
+
+                preciseKeys.forEach(function(key) {
+                    query[key] = customerGroup.query[key];
+                });
+
+                // 包含标签
+                if(customerGroup.query.withTags) {
+                    !query.tags && (query.tags = {});
+                    query.tags['$all'] = Array.isArray(customerGroup.query.withTags) ? customerGroup.query.withTags : [customerGroup.query.withTags];
+                }
+
+                // 排除标签
+                if(customerGroup.query.withoutTags) {
+                    !query.tags && (query.tags = {});
+                    query.tags['$nin'] = Array.isArray(customerGroup.query.withoutTags) ? customerGroup.query.withoutTags : [customerGroup.query.withoutTags];
+                }
+
+                // 在访客组
+                if(customerGroup.query.inGroup) {
+                    !query.group && (query['group._id'] = {});
+                    query['group._id']['$all'] = Array.isArray(customerGroup.query.inGroup) ? customerGroup.query.inGroup : [customerGroup.query.inGroup];
+                }
+
+                // 不在访客组
+                if(customerGroup.query.notInGroup) {
+                    !query.group && (query['group._id'] = {});
+                    query['group._id']['$nin'] = Array.isArray(customerGroup.query.notInGroup) ? customerGroup.query.notInGroup : [customerGroup.query.notInGroup];
+                }
+
+                // 维度过滤
+                advancedQueryParams.forEach(function(attribute) {
+                    if(customerGroup.query[attribute]) {
+                        query[attribute] = {$lte: customerGroup.query[attribute] / 100, $gt: (customerGroup.query[attribute] - 10) / 100}
                     }
-                }, {
+                });
+
+                Customer.update(query, {
                     $addToSet: {
                         group: {
                             _id: customerGroup._id,
