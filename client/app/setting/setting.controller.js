@@ -45,7 +45,9 @@
         $scope.updateChannel = function(channel) {
             $mdBottomSheet.hide();
             channel.$save();
-            $scope.channels.push(channel);
+            if(!channel._id) {
+                $scope.channels.push(channel);
+            }
         };
 
     }
