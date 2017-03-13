@@ -25,7 +25,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="user in users | filter:userKeyword">
+                                <tr ng-repeat="user in users | filter:query.userKeyword">
                                 	<td>{{ user.name }}</td>
                                     <td>{{ user.email }}</td>
                                     <td>{{ user.company }}</td>
