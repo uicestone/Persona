@@ -29,7 +29,7 @@
                     var token = $window.localStorage.getItem('token');
 
                     if(token) {
-                        config.headers['Authorization'] = 'Bearer ' + token;
+                        config.headers['Authorization'] = token;
                     }
 
                     return config;

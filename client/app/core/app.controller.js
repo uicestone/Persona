@@ -21,11 +21,13 @@
             $location.search({intended:$location.url()}).path('signin');
         };
 
+        window.$scope = $scope;
+
         $scope.$watch('user', function(user) {
-            if(user.$resolved !== false && !user.id && $location.path() !== '/signin') {
+            if(user.$resolved !== false && !user._id && $location.path() !== '/signin') {
                 $location.search({intended:$location.url()}).path('signin');
             }
-            else if(user.id && $location.path() === '/signin') {
+            else if(user._id && $location.path() === '/signin') {
                 $location.url($location.search().intended || '/');
             }
         }, true);

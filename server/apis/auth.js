@@ -16,7 +16,7 @@ module.exports = function(router) {
                 return;
             }
 
-            User.findOne({username: req.body.username}).then(function(user) {
+            User.findOne({$or:[{email: req.body.username}, {username: req.body.username}]}).then(function(user) {
                 
                 if(!user) {
                     res.status(401).json({message: '用户不存在'});
