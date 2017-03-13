@@ -42,10 +42,10 @@
             template:'<span class="bar"></span>',
             link: function(scope, el, attrs) {        
                 el.addClass('preloaderbar hide');
-                scope.$on('$stateChangeStart', function(event) {
+                scope.$on('$routeChangeStart', function(event) {
                     el.removeClass('hide').addClass('active');
                 });
-                scope.$on('$stateChangeSuccess', function( event, toState, toParams, fromState ) {
+                scope.$on('$routeChangeSuccess', function( event, to, toParams, from ) {
                     event.targetScope.$watch('$viewContentLoaded', function(){
                         el.addClass('hide').removeClass('active');
                     })

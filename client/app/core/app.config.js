@@ -4,7 +4,7 @@
     angular.module('app.core')
         .factory('appConfig', [appConfig])
         .config(['$mdThemingProvider', '$mdDateLocaleProvider', mdConfig])
-        .config(['$httpProvider', '$qProvider', httpConfig]);
+        .config(['$httpProvider', '$qProvider', '$locationProvider', httpConfig]);
 
     function appConfig() {
         var pageTransitionOpts = [
@@ -102,8 +102,8 @@
         };
     }
 
-    function httpConfig($httpProvider, $qProvider) {
-        // $locationPrivider.html5Mode(true);
+    function httpConfig($httpProvider, $qProvider, $locationProvider) {
+        // $locationProvider.html5Mode(true);
         $httpProvider.interceptors.push('httpInterceptorService');
         $qProvider.errorOnUnhandledRejections(false);
     }

@@ -7,6 +7,7 @@
         ,'ngAria'
         ,'ngMessages'
         ,'ngResource'
+        ,'ngRoute'
 
         // Custom modules
         ,'app.layout'
@@ -15,7 +16,6 @@
         // 3rd Party Modules
         ,'oc.lazyLoad'
         ,'ngMaterial'
-        ,'ui.router'
         ,'duScroll'
         ,'angular-clipboard'
     ]);

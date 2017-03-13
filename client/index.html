@@ -70,7 +70,7 @@
             </aside>
 
             <div id="content" class="content-container">
-                <section data-ui-view
+                <section data-ng-view
                          class="view-container {{main.pageTransition.class}}"></section>
             </div>
 
@@ -84,7 +84,7 @@
         <script src="bower_components/angular-aria/angular-aria.min.js"></script>
         <script src="bower_components/angular-messages/angular-messages.min.js"></script>
         <script src="bower_components/angular-resource/angular-resource.min.js"></script>
-        <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+        <script src="bower_components/angular-route/angular-route.min.js"></script>
         <script src="bower_components/angular-clipboard/angular-clipboard.js"></script>
         <script src="bower_components/oclazyload/dist/ocLazyLoad.js"></script>
         <!-- endbuild -->
@@ -125,6 +125,7 @@
         <script src="app/chart/echarts.controller.js"></script>
         <script src="app/core/app.config.js"></script>
         <script src="app/core/app.controller.js"></script>
+        <script src="app/core/app.directive.js"></script>
         <script src="app/core/app.service.js"></script>
         <script src="app/core/config.lazyload.js"></script>
         <script src="app/core/config.route.js"></script>
@@ -139,7 +140,6 @@
         <script src="app/layout/loader.js"></script>
         <script src="app/layout/sidebar.directive.js"></script>
         <script src="app/page/page.controller.js"></script>
-        <script src="app/page/page.directive.js"></script>
         <script src="app/project/project.controller.js"></script>
         <script src="app/setting/setting.controller.js"></script>
         <script src="app/table/table.controller.js"></script>

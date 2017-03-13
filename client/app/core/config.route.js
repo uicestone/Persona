@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('app')
-        .config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
-                function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
+        .config(['$routeProvider', '$ocLazyLoadProvider',
+                function($routeProvider, $ocLazyLoadProvider) {
                 var routes, setRoutes;
 
                 routes = [
@@ -24,49 +24,39 @@
                     var config, url;
                     url = '/' + route;
                     config = {
-                        url: url,
                         templateUrl: 'app/' + route + '.html'
                     };
-                    $stateProvider.state(route, config);
-                    return $stateProvider;
+                    $routeProvider.when(url, config);
+                    return $routeProvider;
                 };
 
                 routes.forEach(function(route) {
                     return setRoutes(route);
                 });
 
-
-                $stateProvider
-                    .state('dashboard', {
-                        url: '/dashboard',
+                $routeProvider
+                    .when('/dashboard', {
                         templateUrl: 'app/dashboard/dashboard.html'
                     })
-                    .state('project/:id', {
-                        url: '/project/:id',
+                    .when('/project/:id', {
                         templateUrl: 'app/project/detail.html'
                     })
-                    .state('wizard/create-project', {
-                        url: '/wizard/create-project/:id?',
+                    .when('/wizard/create-project/:id?', {
                         templateUrl: 'app/wizard/create-project.html'
                     })
-                    .state('wizard/set-kpi', {
-                        url: '/wizard/set-kpi/:id?',
+                    .when('/wizard/set-kpi/:id?', {
                         templateUrl: 'app/wizard/set-kpi.html'
                     })
-                    .state('wizard/set-channel', {
-                        url: '/wizard/set-channel/:id?',
+                    .when('/wizard/set-channel/:id?', {
                         templateUrl: 'app/wizard/set-channel.html'
                     })
-                    .state('wizard/set-timing', {
-                        url: '/wizard/set-timing/:id?',
+                    .when('/wizard/set-timing/:id?', {
                         templateUrl: 'app/wizard/set-timing.html'
                     })
-                    .state('wizard/preview', {
-                        url: '/wizard/preview/:id?',
+                    .when('/wizard/preview/:id?', {
                         templateUrl: 'app/wizard/preview.html'
                     })
-                    .state('form/editor', {
-                        url: '/form/editor',
+                    .when('/form/editor', {
                         templateUrl: "app/form/editor.html",
                         resolve: {
                             deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -76,8 +66,7 @@
                             }]
                         }
                     })
-                    .state('form/wizard', {
-                        url: '/form/wizard',
+                    .when('/form/wizard', {
                         templateUrl: "app/form/wizard.html",
                         resolve: {
                             deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -87,8 +76,7 @@
                             }]
                         }
                     })
-                    .state('map/maps', {
-                        url: '/map/maps',
+                    .when('/map/maps', {
                         templateUrl: "app/map/maps.html",
                         resolve: {
                             deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -97,12 +85,10 @@
                                 ]);
                             }]
                         }
-                    });
-
-                $urlRouterProvider
-                    .when('', '/welcome')
-                    .when('/', '/welcome')
+                    })
+                    .when('/', {redirectTo: '/welcome'})
                     .otherwise('/404');
+                    
             }
         ]);
 

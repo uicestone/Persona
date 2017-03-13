@@ -3,7 +3,7 @@
 
     angular.module('app.page')
     .controller('invoiceCtrl', ['$scope', '$window', invoiceCtrl])
-    .controller('authCtrl', ['$scope', '$window', '$location', authCtrl]);
+    .controller('authCtrl', ['$scope', '$window', '$location', 'authService', authCtrl]);
 
     function invoiceCtrl($scope, $window) {
         var printContents, originalContents, popupWin;
@@ -18,11 +18,9 @@
         }
     }
 
-    function authCtrl($scope, $window, $location) {
+    function authCtrl($scope, $window, $location, authService) {
         $scope.login = function() {
-            $scope.$parent.$parent.isAdmin = ($scope.email && $scope.email.match(/admin/));
-            $scope.$parent.$parent.isGuest = ($scope.email && $scope.email.match(/guest/));
-            $location.url('/')
+            $scope.$parent.$parent.user = authService.login($scope.username, $scope.password);
         }
 
         $scope.signup = function() {

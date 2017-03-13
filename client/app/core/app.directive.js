@@ -1,20 +1,19 @@
 (function () {
     'use strict';
 
-    angular.module('app.page')
+    angular.module('app')
         .directive('customPage', customPage);
 
 
     // add class for specific pages to achieve fullscreen, custom background etc.
     function customPage() {
-        var directive = {
+
+        return {
             restrict: 'A',
-            controller: ['$scope', '$element', '$location', customPageCtrl]
+            controller: ['$scope', '$element', '$location', '$rootScope', customPageCtrl]
         };
 
-        return directive;
-
-        function customPageCtrl($scope, $element, $location) {
+        function customPageCtrl($scope, $element, $location, $rootScope) {
             var addBg, path;
 
             path = function() {
@@ -41,10 +40,7 @@
 
             addBg($location.path());
 
-            $scope.$watch(path, function(newVal, oldVal) {
-                if (newVal === oldVal) {
-                    return;
-                }
+            $rootScope.$on('$routeChangeSuccess', function() {
                 return addBg($location.path());
             });
         }        

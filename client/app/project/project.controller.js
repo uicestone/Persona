@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.project')
-    .controller('projectCtrl', ['$scope', '$window', '$location', '$state', 'userService', 'projectService', projectCtrl]);
+    .controller('projectCtrl', ['$scope', '$window', '$location', 'userService', 'projectService', projectCtrl]);
 
-    function projectCtrl($scope, $window, $location, $state, userService, projectService) {
+    function projectCtrl($scope, $window, $location, userService, projectService) {
 
         $scope.platforms = [
             '微信', '微博', 'QQ'
@@ -18,8 +18,8 @@
 
         $scope.users = userService.query();
 
-        if($state.params.id) {
-            $scope.project = projectService.get({id:$state.params.id});
+        if($route.current.params.id) {
+            $scope.project = projectService.get({id:$route.current.params.id});
         }
         else {
             $scope.projects = projectService.query();
@@ -59,11 +59,11 @@
         // 渠道监控图表数据
         if($scope.project) {
             
-            $scope.kpiByChannels = projectService.getKpiByChannels({id:$state.params.id});
-            $scope.campaignRecords = projectService.getCampaignRecords({id:$state.params.id});
-            $scope.kpiByDate = projectService.getKpiByDate({id:$state.params.id});
-            $scope.kpiByRegion = projectService.getKpiByRegion({id:$state.params.id});
-            $scope.kpiByDevice = projectService.getKpiByDevice({id:$state.params.id});
+            $scope.kpiByChannels = projectService.getKpiByChannels({id:$route.current.params.id});
+            $scope.campaignRecords = projectService.getCampaignRecords({id:$route.current.params.id});
+            $scope.kpiByDate = projectService.getKpiByDate({id:$route.current.params.id});
+            $scope.kpiByRegion = projectService.getKpiByRegion({id:$route.current.params.id});
+            $scope.kpiByDevice = projectService.getKpiByDevice({id:$route.current.params.id});
 
             $scope.kpiByChannelsTree = {};
 

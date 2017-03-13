@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.wizard')
-    .controller('wizardCtrl', ['$scope', '$window', '$state', '$location', '$mdToast', 'userService', 'channelService', 'projectService', wizardCtrl]);
+    .controller('wizardCtrl', ['$scope', '$window', '$location', '$mdToast', 'userService', 'channelService', 'projectService', wizardCtrl]);
 
-    function wizardCtrl($scope, $window, $state, $location, $mdToast, userService, channelService, projectService) {
+    function wizardCtrl($scope, $window, $location, $mdToast, userService, channelService, projectService) {
 
         $scope.platforms = [
             '微信', '微博', 'QQ'
@@ -22,14 +22,14 @@
 
         $scope.isEditing = $location.search().editing;
 
-        if($state.params.id) {
-            $scope.project = projectService.get({id:$state.params.id});
+        if($route.current.params.id) {
+            $scope.project = projectService.get({id:$route.current.params.id});
         }
         else {
             $scope.project = new projectService();
         }
         
-        if($state.current.name === 'wizard/set-timing') {
+        if($route.current.name === 'wizard/set-timing') {
             $scope.$watch('project.channels', function(channels) {
                 if(!channels) {
                     return;

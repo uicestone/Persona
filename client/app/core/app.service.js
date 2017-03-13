@@ -12,6 +12,7 @@
 
     angular.module('app')
         .service('httpInterceptorService', ['$q', '$window', '$location', '$injector', httpInterceptorService])
+        .service('authService', ['$window', 'userService', authService])
         .service('brandService', ['$resource', brandService])
         .service('channelService', ['$resource', channelService])
         .service('customerService', ['$resource', customerService])
@@ -46,7 +47,7 @@
 
                 if(rejection.status === 401){
                     $window.localStorage.removeItem('token');
-                    $location.path('/login');
+                    $location.path('/signin');
                 }
 
                 var $mdToast = $injector.get('$mdToast');
@@ -61,6 +62,30 @@
                 return $q.reject(rejection);
             }
         };
+    }
+
+    function authService($window, userService) {
+
+        var user = new userService();
+
+        this.login = function(username, password) {
+            return userService.login({username: username, password: password}, function(user) {
+                $window.localStorage.setItem('token', user.token);
+            });
+        };
+
+        this.logout = function() {
+            return userService.logout();
+        };
+
+        this.user = function() {
+            if(!$window.localStorage.getItem('token')) {
+                user.$resolved = true;
+                return user;
+            }
+
+            return userService.auth();
+        }
     }
 
     function brandService($resource) {
@@ -217,7 +242,10 @@
         var user = $resource(api + 'user/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST'},
-            update: {method: 'PUT'}
+            update: {method: 'PUT'},
+            auth: {method: 'GET', url: api + 'auth/user'},
+            login: {method: 'POST', url: api + 'auth/login'},
+            logout: {method: 'GET', 'url': api + 'auth/logout'}
         });
         
         // Angular mix PUT and POST methot to $save,
