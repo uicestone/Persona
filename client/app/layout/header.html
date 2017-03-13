@@ -74,13 +74,14 @@
             </li>
             <li>
                 <md-menu md-position-mode="target-right target">
-                    <md-button class="header-btn" aria-label="menu" ng-click="$mdOpenMenu($event)">
+                    <md-button class="header-btn" aria-label="menu" ng-click="$mdMenu.open($event)">
+                        {{ user.name }}
                         <i><md-icon>account_circle</md-icon></i>
                     </md-button>
                     <md-menu-content class="top-header-dropdown" width="3">
                         <md-menu-item><md-button aria-label="menu" ng-href="#!/"><md-icon class="material-icons">assignment</md-icon><span data-translate="DASHBOARD"></span></md-button></md-menu-item>
                         <md-menu-item><md-button aria-label="menu" ng-href="#!/profile"><md-icon class="material-icons">lock_outline</md-icon><span data-translate="MY_PROFILE"></span></md-button></md-menu-item>
-                        <md-menu-item><md-button aria-label="menu" ng-href="#!/signin"><md-icon class="material-icons">keyboard_tab</md-icon><span data-translate="LOG_OUT"></span></md-button></md-menu-item>
+                        <md-menu-item><md-button aria-label="menu" ng-click="logout()"><md-icon class="material-icons">keyboard_tab</md-icon><span data-translate="LOG_OUT"></span></md-button></md-menu-item>
                     </md-menu-content>
                 </md-menu>
             </li>

@@ -43,6 +43,11 @@ module.exports = function(router) {
             });
         });
 
+    router.route('/auth/logout')
+        .get(function(req, res) {
+            res.end();
+        });
+
     router.route('/auth/user')
         .get(function(req, res) {
             res.json(req.user);

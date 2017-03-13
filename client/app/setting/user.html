@@ -1,10 +1,46 @@
-<div class="page">
+<div class="page" ng-controller="settingCtrl">
 
     <div class="row ui-section">
-        <div class="col-lg-8 clearfix">
-            <h2 class="section-header">Blank</h2>
-        </div>
         <div class="col-md-12">
+            <div class="panel panel-default project-list">
+                <div class="panel-heading">
+                    <div class="panel-title">用户管理</div>
+                </div>
+                <div class="panel-body">
+                    <div class="filters" layout="row">
+                        <md-input-container flex>
+                            <label>搜索用户</label>
+                            <input ng-model="query.userKeyword">
+                        </md-input-container>
+                    </div>
+                    <md-content md-whiteframe="2" style="background:white">
+                        <table class="table" style="margin-bottom:0">
+                            <thead>
+                                <tr>
+                                    <th>名称</th>
+                                    <th>邮箱</th>
+                                    <th>公司</th>
+                                    <th>品牌</th>
+                                    <th>角色</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="user in users | filter:userKeyword">
+                                	<td>{{ user.name }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.company }}</td>
+                                    <td>{{ user.brand }}</td>
+                                    <td>{{ user.roles }}</td>
+                                    <td><md-icon class="md-primary" ng-click="editUser(user)">edit</md-icon> <md-icon class="md-primary" ng-click="removeUser(user)">delete</md-icon></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-content>
+                    <div class="actions text-right" style="margin-top:20px">
+                        <md-button ng-click="editUser()" class="md-raised md-primary">添加用户</md-button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

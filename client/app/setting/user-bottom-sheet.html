@@ -1,0 +1,38 @@
+<md-bottom-sheet class="md-list md-has-header">
+    <md-subheader ng-cloak>编辑用户</md-subheader>
+    <div layout="row">
+        <div flex="30" layout="column">
+            <md-input-container>
+                <label>名称</label>
+                <input ng-model="user.name">
+            </md-input-container>
+            <md-input-container>
+                <label>邮箱</label>
+                <input ng-model="user.email">
+            </md-input-container>
+            <md-input-container>
+                <label>重置密码</label>
+                <input type="password" ng-model="user.password">
+            </md-input-container>
+        </div>
+        <div flex="30" layout="column">
+            <md-input-container>
+                <label>公司</label>
+                <input ng-model="user.company">
+            </md-input-container>
+            <md-input-container>
+                <label>品牌</label>
+                <input ng-model="user.brand.name">
+            </md-input-container>
+            <md-input-container>
+                <label>权限</label>
+                <md-select ng-model="user.roles">
+                    <md-option ng-repeat="role in roles" value="{{ role.name }}">{{ role.label }}</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+        <div flex layout="row" layout-align="end start">
+            <div><md-button ng-click="updateUser(user)">保存</md-button></div>
+        </div>
+    </div>
+</md-bottom-sheet>

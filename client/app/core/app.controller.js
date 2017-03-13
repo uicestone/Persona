@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app')
-        .controller('AppCtrl', [ '$scope', '$rootScope', '$location', '$document', 'appConfig', 'authService', AppCtrl]); // overall control
+        .controller('AppCtrl', [ '$scope', '$rootScope', '$location', '$window', '$document', 'appConfig', 'authService', AppCtrl]); // overall control
     
-    function AppCtrl($scope, $rootScope, $location, $document, appConfig, authService) {
+    function AppCtrl($scope, $rootScope, $location, $window, $document, appConfig, authService) {
 
         $scope.pageTransitionOpts = appConfig.pageTransitionOpts;
         $scope.main = appConfig.main;
@@ -20,8 +20,6 @@
 
             $location.search({intended:$location.url()}).path('signin');
         };
-
-        window.$scope = $scope;
 
         $scope.$watch('user', function(user) {
             if(user.$resolved !== false && !user._id && $location.path() !== '/signin') {

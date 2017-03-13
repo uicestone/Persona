@@ -42,6 +42,11 @@ module.exports = function(router) {
             .exec()
             .then(result => {
 
+                result.forEach(user => {
+                    delete user.token;
+                    delete user.password;
+                });
+
                 if(skip + result.length > User.totalCount) {
                     User.totalCount = skip + result.length;
                 }
