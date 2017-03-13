@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.wizard')
-    .controller('wizardCtrl', ['$scope', '$window', '$location', '$mdToast', 'userService', 'channelService', 'projectService', wizardCtrl]);
+    .controller('wizardCtrl', ['$scope', '$window', '$location', '$route', '$mdToast', 'userService', 'channelService', 'projectService', wizardCtrl]);
 
-    function wizardCtrl($scope, $window, $location, $mdToast, userService, channelService, projectService) {
+    function wizardCtrl($scope, $window, $location, $route, $mdToast, userService, channelService, projectService) {
 
         $scope.platforms = [
             '微信', '微博', 'QQ'
@@ -28,8 +28,8 @@
         else {
             $scope.project = new projectService();
         }
-        
-        if($route.current.name === 'wizard/set-timing') {
+
+        if($location.path().match(/wizard\/set-timing/)) {
             $scope.$watch('project.channels', function(channels) {
                 if(!channels) {
                     return;

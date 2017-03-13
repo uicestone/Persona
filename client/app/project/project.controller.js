@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.project')
-    .controller('projectCtrl', ['$scope', '$window', '$location', 'userService', 'projectService', projectCtrl]);
+    .controller('projectCtrl', ['$scope', '$window', '$location', '$route', 'userService', 'projectService', projectCtrl]);
 
-    function projectCtrl($scope, $window, $location, userService, projectService) {
+    function projectCtrl($scope, $window, $location, $route, userService, projectService) {
 
         $scope.platforms = [
             '微信', '微博', 'QQ'
