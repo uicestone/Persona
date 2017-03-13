@@ -3,7 +3,11 @@ var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
     name: String,
-    roles: [String]
+    roles: [String],
+    username: String,
+    password: String,
+    email: String,
+    token: String
 });
 
 userSchema.index({name:1}, {unique:true});

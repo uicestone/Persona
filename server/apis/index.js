@@ -1,3 +1,6 @@
+var authenticate = require('../middlewares/authenticate');
+var cors = require('cors');
+
 module.exports = function(app, router) {
     // register routes
     router = require('./brand.js')(router);
@@ -6,5 +9,6 @@ module.exports = function(app, router) {
     router = require('./customerGroup.js')(router);
     router = require('./project.js')(router);
     router = require('./user.js')(router);
-    app.use('/api', router);
+    router = require('./auth.js')(router);
+    app.use('/api', cors(), authenticate, router);
 };

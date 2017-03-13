@@ -4,7 +4,6 @@ var express     = require('express');
 var bodyParser  = require('body-parser');
 var mongoose    = require('mongoose');
 var http        = require('http');
-var cors        = require('cors');
 
 var app         = express();
 var router      = express.Router();
@@ -16,7 +15,6 @@ mongoose.connect(process.env.DATABASE_URL || 'mongodb://localhost/persona');
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.json());
-app.use(cors());
 
 require('./server/apis')(app, router);
 
