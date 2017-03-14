@@ -1,25 +1,61 @@
 
-<div class="page page-profile">
+<div class="page page-profile" ng-controller="authCtrl">
 
     <header class="profile-header">
         <div class="profile-img">
-            <img alt="" src="assets/images/g1.jpg" class="img-circle">
+            <md-icon style="color:white;font-size:100px;width:100px;height:100px">account_circle</md-icon>
         </div>
 
-        <div class="profile-social">
+        <!-- <div class="profile-social">
             <a href="javascript:;" class="btn-icon btn-icon-round btn-facebook"><i class="fa fa-wechat"></i></a>
             <a href="javascript:;" class="btn-icon btn-icon-round btn-twitter"><i class="fa fa-weibo"></i></a>
             <a href="javascript:;" class="btn-icon btn-icon-round btn-instagram"><i class="fa fa-qq"></i></a>
-        </div>
+        </div> -->
 
         <div class="profile-info">
             <ul class="list-unstyled list-inline">
-            <li><i class="fa fa-video-camera"></i> 品牌 <span class="text-muted">(1)</span></li>
-            <li><i class="fa fa-image"></i> 项目 <span class="text-muted">(2)</span></li>
-            <li><i class="fa fa-bookmark"></i> 用户 <span class="text-muted">(3)</span></li>
-            <li><i class="fa fa-check"></i> 访客 <span class="text-muted">(10876)</span></li>
+            <li><i class="fa fa-video-camera"></i> 品牌 <span class="text-muted">(?)</span></li>
+            <li><i class="fa fa-image"></i> 项目 <span class="text-muted">(?)</span></li>
+            <li><i class="fa fa-bookmark"></i> 用户 <span class="text-muted">(?)</span></li>
+            <li><i class="fa fa-check"></i> 访客 <span class="text-muted">(?)</span></li>
             </ul>
         </div>
     </header>
+
+    <md-content class="md-padding">
+        <div layout="row">
+            <div flex layout="column">
+                <md-input-container>
+                    <label>姓名</label>
+                    <input type="text" ng-model="user.name">
+                </md-input-container>
+                <md-input-container>
+                    <label>邮箱</label>
+                    <input type="text" ng-model="user.email">
+                </md-input-container>
+                <md-input-container>
+                    <label>修改密码</label>
+                    <input type="password" ng-model="user.password">
+                </md-input-container>
+            </div>
+            <div flex layout="column">
+                <md-input-container class="md-input-has-value">
+                    <label>公司</label>
+                    <p style="height:30px;line-height:30px;margin-bottom:23px">{{ user.company }}</p>
+                </md-input-container>
+                <md-input-container class="md-input-has-value">
+                    <label>品牌</label>
+                    <p style="height:30px;line-height:30px;margin-bottom:23px">{{ user.brand.name }}</p>
+                </md-input-container>
+                <md-input-container class="md-input-has-value">
+                    <label>角色</label>
+                    <p style="height:30px;line-height:30px;margin-bottom:23px">{{ user.roles }}</p>
+                </md-input-container>
+            </div>
+        </div>
+        <div>
+            <md-button ng-click="updateUser(user)">保存</md-button>
+        </div>
+    </md-content>
     
 </div>

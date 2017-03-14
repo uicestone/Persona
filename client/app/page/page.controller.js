@@ -19,6 +19,7 @@
     }
 
     function authCtrl($scope, $window, $location, authService) {
+
         $scope.login = function() {
             $scope.$parent.$parent.user = authService.login($scope.username, $scope.password);
         }
@@ -34,6 +35,10 @@
         $scope.unlock =    function() {
             $location.url('/')
         }     
+
+        $scope.updateUser = function(user) {
+            user.$save();
+        };
     }
 
 })(); 
