@@ -27,6 +27,14 @@
                 margin-left: -10px;
             }
 
+            &.project label {
+                position: absolute;
+                bottom: -7px;
+                left: 4px;
+                z-index: 1;
+                white-space: pre;
+            }
+
             .channel-endpoint {
                 background-color: #c5eab1;
                 width: 30px;

@@ -18,6 +18,9 @@
 
         $scope.users = userService.query();
 
+        $scope.startOfYear = new Date((new Date()).getFullYear() + '-01-01');
+        $scope.endOfYear = new Date((new Date()).getFullYear() + '-12-31');
+
         if($route.current.params.id) {
             $scope.project = projectService.get({id:$route.current.params.id});
         }
@@ -46,13 +49,13 @@
             });
         };
 
-        $scope.startDatePercentage = function(item) {
-            var projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
-            return (new Date(item.startDate) - new Date($scope.project.startDate)) / projectDuration * 100;
+        $scope.startDatePercentage = function(item, timelineStartDate, timelineEndDate) {
+            var projectDuration = (timelineEndDate || new Date($scope.project.endDate)) - (timelineStartDate || new Date($scope.project.startDate)) + 86400000;
+            return (new Date(item.startDate) - (timelineStartDate || new Date($scope.project.startDate))) / projectDuration * 100;
         };
 
-        $scope.durationPercentage = function(item) {
-            var projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
+        $scope.durationPercentage = function(item, timelineStartDate, timelineEndDate) {
+            var projectDuration = (timelineEndDate || new Date($scope.project.endDate)) - (timelineStartDate || new Date($scope.project.startDate)) + 86400000;
             return (new Date(item.endDate) - new Date(item.startDate)) / projectDuration * 100;
         };
 

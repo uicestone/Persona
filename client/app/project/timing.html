@@ -8,7 +8,25 @@
                 </div>
                 <div class="panel-body">
                 	<md-content class="md-padding">
-                    	<img src="assets/images/timing.png" alt="项目排期" width="100%" />
+                        <div layout="row" layout-align="center end" class="timeline-channels">
+                            <div class="endpoint" flex="10">
+                                <p>{{ startOfYear | date:'y/M/d' }}</p>
+                            </div>
+                            <div class="baseline" flex layout="column">
+                                <div ng-repeat="project in projects" class="channel project" layout="row" layout-align="center end" style="margin-left:{{ startDatePercentage(project, startOfYear, endOfYear) }}%;width:{{ durationPercentage(project, startOfYear, endOfYear) }}%">
+                                    <div class="channel-endpoint" flex="1" style="left:-15px">
+                                        <div class="date">{{ project.startDate | date:'M/d' }}</div>
+                                    </div>
+                                    <label flex>{{ project.name }}</label>
+                                    <div class="channel-endpoint" flex="1" style="left:15px">
+                                        <div class="date">{{ project.endDate | date:'M/d' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="endpoint" flex="10">
+                                <p>{{ endOfYear | date:'y/M/d' }}</p>
+                            </div>
+                        </div>
                 	</md-content>
                 </div>
             </div>
