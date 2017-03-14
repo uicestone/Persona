@@ -16,7 +16,7 @@
 
         $scope.channelTopics = ['星座','娱乐','时尚','母婴'];
 
-        $scope.roles = [{name:'project_admin', label:'项目管理员'}, {name:'brand_admin', label:'品牌管理员'}, {name:'admin', label:'平台管理员'}];
+        $scope.roles = [{name:'project_admin', label:'品牌执行者'}, {name:'brand_admin', label:'品牌管理者'}, {name:'admin', label:'平台管理者'}];
 
         $scope.users = userService.query();
 
