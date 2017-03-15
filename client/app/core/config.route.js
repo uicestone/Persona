@@ -8,7 +8,6 @@
 
                 routes = [
                     'project/list', 'project/timing',
-                    'customer/image',
                     'setting/data', 'setting/user', 'setting/channel',
                     'welcome', 'get-sdk', '404', '500', 'forgot-password', 'lock-screen', 'profile', 'signin', 'signup',
                     
@@ -55,6 +54,10 @@
                     })
                     .when('/wizard/preview/:id?', {
                         templateUrl: 'app/wizard/preview.html'
+                    })
+                    .when('/customer/image', {
+                        templateUrl: 'app/customer/image.html',
+                        reloadOnSearch: false
                     })
                     .when('/form/editor', {
                         templateUrl: "app/form/editor.html",
