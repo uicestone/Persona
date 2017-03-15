@@ -6,6 +6,7 @@ module.exports = function(app, router) {
     router = require('./brand.js')(router);
     router = require('./channel.js')(router);
     router = require('./customer.js')(router);
+    router = require('./customerField.js')(router);
     router = require('./customerGroup.js')(router);
     router = require('./project.js')(router);
     router = require('./user.js')(router);

@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.setting')
-    .controller('settingCtrl', ['$scope', '$window', '$mdBottomSheet', '$mdToast', 'channelService', 'userService', settingCtrl]);
+    .controller('settingCtrl', ['$scope', '$window', '$mdBottomSheet', '$mdToast', 'channelService', 'userService', 'customerFieldService', settingCtrl]);
 
-    function settingCtrl($scope, $window, $mdBottomSheet, $mdToast, channelService, userService) {
+    function settingCtrl($scope, $window, $mdBottomSheet, $mdToast, channelService, userService, customerFieldService) {
         
         $scope.platforms = [
             '微信', '微博', 'QQ'
@@ -21,6 +21,8 @@
         $scope.users = userService.query();
 
         $scope.channels = channelService.query();
+
+        $scope.customerFields = customerFieldService.query();
 
         $scope.editChannel = function(channel) {
             
@@ -49,6 +51,36 @@
             channel.$save();
             if(!channel._id) {
                 $scope.channels.push(channel);
+            }
+        };
+
+        $scope.editCustomerField = function(customerField) {
+            
+            if(!customerField) {
+                customerField = new customerFieldService();
+            }
+
+            $scope.customerField = customerField;
+
+            $mdBottomSheet.show({
+                templateUrl: 'app/setting/customer-field-bottom-sheet.html',
+                scope: $scope,
+                preserveScope: true
+            });
+        };
+
+        $scope.removeCustomerField = function(customerFieldToRemove) {
+            customerFieldToRemove.$delete();
+            $scope.customerFields = $scope.customerFields.filter(function(customerField) {
+                return customerField._id !== customerFieldToRemove._id;
+            });
+        };
+
+        $scope.updateCustomerField = function(customerField) {
+            $mdBottomSheet.hide();
+            customerField.$save();
+            if(!customerField._id) {
+                $scope.customerFields.push(customerField);
             }
         };
 

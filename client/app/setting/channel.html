@@ -25,7 +25,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="channel in channels | filter:channelKeyword">
+                                <tr ng-repeat="channel in channels | filter:query.channelKeyword">
                                     <td>{{ channel.name }}</td>
                                     <td>{{ channel.topic }}</td>
                                     <td>{{ channel.rank }}</td>
