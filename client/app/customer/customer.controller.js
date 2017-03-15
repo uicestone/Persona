@@ -6,12 +6,12 @@
 
     function customerCtrl($scope, $window, $location, $mdBottomSheet, customerService, customerGroupService) {
         
-        $scope.query = $location.search();
+        $scope.query = {};
 
         // 检测query的变化并改变路由
         $scope.$watch('query', function(query) {
 
-            $location.search(query);
+            // $location.search(query);
             
             customerService.query(query).$promise.then(function(customers) {
                 $scope.customers = customers;
