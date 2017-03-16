@@ -21,6 +21,4 @@ var customerSchema = new Schema({
     group: [{_id: Schema.Types.ObjectId, name: String}]
 });
 
-customerSchema.index({name:1}, {unique:true});
-
 module.exports = mongoose.model('Customer', customerSchema);
