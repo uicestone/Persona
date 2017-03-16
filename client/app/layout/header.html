@@ -11,8 +11,7 @@
                      'bg-warning': ['15','25','35'].indexOf(main.skin) >= 0,
                      'bg-danger': ['16','26','36'].indexOf(main.skin) >= 0 }">
         <a href="#!/">
-            <span class="logo-icon material-icons">dashboard</span>
-            <span class="logo-text">{{main.brand}}</span>
+            <img src="assets/images/persona-white.png" alt="Persona" style="width:189px" />
         </a>
     </div>
 
@@ -69,14 +68,11 @@
         </ul> 
 
         <ul class="nav-right pull-right list-unstyled">
-            <li class="hidden-xs hidden-sm">
-                <img src="assets/images/persona.png" alt="Persona" style="width:189px;margin:19px 10px 0" />
-            </li>
             <li>
                 <md-menu md-position-mode="target-right target">
-                    <md-button class="header-btn" aria-label="menu" ng-click="$mdMenu.open($event)">
-                        {{ user.name }}
+                    <md-button class="header-btn" aria-label="menu" ng-click="$mdMenu.open($event)" style="text-transform:none;padding:0 15px">
                         <i><md-icon>account_circle</md-icon></i>
+                        {{ user.name }}
                     </md-button>
                     <md-menu-content class="top-header-dropdown" width="3">
                         <md-menu-item><md-button aria-label="menu" ng-href="#!/"><md-icon class="material-icons">assignment</md-icon><span data-translate="DASHBOARD"></span></md-button></md-menu-item>
