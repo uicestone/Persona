@@ -1,5 +1,6 @@
 var Project = require('../models/project.js');
 var Campaign = require('../models/campaign.js');
+var Channel = require('../models/channel.js');
 var Types = require('mongoose').Types;
 
 module.exports = function(router) {
@@ -15,7 +16,7 @@ module.exports = function(router) {
             // save the project and check for errors
             project.save(function(err) {
                 if (err)
-                    res.status(500).send(err);
+                    return res.status(500).send(err);
 
                 res.json(project);
             });
@@ -103,22 +104,20 @@ module.exports = function(router) {
         .get(function(req, res) {
             Project.findById(req.params.projectId, function(err, project) {
                 if (err)
-                    res.status(500).send(err);
+                    return res.status(500).send(err);
+
                 res.json(project);
             });
         })
 
         .put(function(req, res) {
             Project.where({_id: req.params.projectId}).update(req.body, function(err, raw) {
-                if (err) {
-                    res.status(500).send(err);
-                    
-                    return;
-                }
+                if (err)
+                    return res.status(500).send(err);
 
                 Project.findById(req.params.projectId, function(err, project) {
                     if (err)
-                        res.status(500).send(err);
+                        return res.status(500).send(err);
                     
                     res.json(project);
                 });
@@ -131,7 +130,7 @@ module.exports = function(router) {
                 _id: req.params.projectId
             }, function(err, project) {
                 if (err)
-                    res.status(500).send(err);
+                    return res.status(500).send(err);
 
                 res.json({ message: 'Successfully deleted' });
             });
@@ -196,11 +195,56 @@ module.exports = function(router) {
         });
     });
 
-    router.route('/project/:projectId/campaign-record').get(function(req, res) {
-        Campaign.find({project: req.params.projectId}).limit(200).then(function(campaignRecords) {
-            res.send(campaignRecords);
+    router.route('/project/:projectId/campaign-record')
+
+        .get(function(req, res) {
+            Campaign.find({project: req.params.projectId}).limit(200).then(function(campaignRecords) {
+                res.send(campaignRecords);
+            });
+        })
+
+        .post(function(req, res) {
+
+            var record = new Campaign(req.body);      // create a new instance of the CampaignRecord model
+            var channelId = req.query.channel;
+
+            if(Object.keys(req.body).length === 0) {
+                return res.status(400).send({message: 'Empty input.'});
+            }
+
+            record.createdAt = record.createdAt ? new Date(record.createdAt) : new Date();
+            record.project = req.params.projectId;
+
+            Channel.findOne({_id:channelId})
+            .then(function(channel) {
+                if(!channel)
+                    throw '';
+                record.fromChannel = {_id: channel._id, name: channel.name};
+            })
+            .catch(function() {
+                throw 'Invalid channel id.'
+            })
+
+            .then(function() {
+                return Project.findOne({_id: record.project});
+            })
+            .then(function(project) {
+                if(!project)
+                    throw '';
+                return record.save();
+            })
+            .catch(function() {
+                throw 'Invalid project id.'
+            })
+
+            .then(function(record) {
+                res.json(record);
+            })
+            .catch(function(err) {
+                return res.status(400).send({message: err});
+            });
+
         });
-    });
 
     return router;
 }

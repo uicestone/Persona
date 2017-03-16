@@ -12,8 +12,11 @@ var campaignSchema = new Schema({
     converted: Boolean,
     stayedFor: Number,
     shared: Boolean,
-    fromChannel: Number,
-    project: Schema.Types.ObjectId
+    fromChannel: {_id: Schema.Types.ObjectId, name: String},
+    project: Schema.Types.ObjectId,
+    createdAt: Date
+}, {
+    strict: false
 });
 
 campaignSchema.index({fromChannel:1});
