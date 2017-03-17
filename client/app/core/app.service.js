@@ -19,7 +19,12 @@
         .service('customerFieldService', ['$resource', customerFieldService])
         .service('customerGroupService', ['$resource', customerGroupService])
         .service('projectService', ['$resource', projectService])
-        .service('userService', ['$resource', userService]);
+        .service('userService', ['$resource', 'userRolesConstant', userService])
+        .constant('userRolesConstant', [
+            {name: 'admin', label: '平台管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'set-channel', 'set-data', 'set-user']},
+            {name: 'brand_admin', label: '品牌管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'set-data']},
+            {name: 'project_admin', label: '品牌执行者', abilities: ['list-project', 'timing-project', 'image-customer', 'set-data']}
+        ]);
 
     function httpInterceptorService($q, $window, $location, $injector) {
         return {
@@ -261,7 +266,7 @@
 
     }
 
-    function userService($resource) {
+    function userService($resource, userRolesConstant) {
 
         var user = $resource(api + 'user/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
@@ -281,6 +286,26 @@
             else {
                 return this.$create(a, b, c, d);
             }
+        }
+
+        var roles = userRolesConstant;
+
+        user.prototype.can = function(ability) {
+            
+            var abilities;
+            var _self = this;
+
+            if(!this.roles) {
+                return false;
+            }
+
+            abilities = roles.filter(function(role) {
+                return _self.roles.indexOf(role.name) > -1;
+            }).reduce(function(previous, current) {
+                return previous.concat(current.abilities);
+            }, []);
+
+            return abilities.indexOf(ability) > -1;
         }
         
         return user;

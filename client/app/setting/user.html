@@ -30,7 +30,7 @@
                                     <td>{{ user.email }}</td>
                                     <td>{{ user.company }}</td>
                                     <td>{{ user.brand }}</td>
-                                    <td>{{ user.roles }}</td>
+                                    <td>{{ getRolesLabel(user.roles) }}</td>
                                     <td><md-icon class="md-primary" ng-click="editUser(user)">edit</md-icon> <md-icon class="md-primary" ng-click="removeUser(user)">delete</md-icon></td>
                                 </tr>
                             </tbody>

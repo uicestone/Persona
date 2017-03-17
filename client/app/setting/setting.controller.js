@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.setting')
-    .controller('settingCtrl', ['$scope', '$window', '$mdBottomSheet', '$mdToast', 'channelService', 'userService', 'customerFieldService', settingCtrl]);
+    .controller('settingCtrl', ['$scope', '$window', '$mdBottomSheet', '$mdToast', 'channelService', 'userService', 'customerFieldService', 'userRolesConstant', settingCtrl]);
 
-    function settingCtrl($scope, $window, $mdBottomSheet, $mdToast, channelService, userService, customerFieldService) {
+    function settingCtrl($scope, $window, $mdBottomSheet, $mdToast, channelService, userService, customerFieldService, userRolesConstant) {
         
         $scope.platforms = [
             '微信', '微博', 'QQ'
@@ -16,7 +16,7 @@
 
         $scope.channelTopics = ['星座','娱乐','时尚','母婴'];
 
-        $scope.roles = [{name:'project_admin', label:'品牌执行者'}, {name:'brand_admin', label:'品牌管理者'}, {name:'admin', label:'平台管理者'}];
+        $scope.roles = userRolesConstant;
 
         $scope.users = userService.query();
 
@@ -114,6 +114,13 @@
             }
         };
 
+        $scope.getRolesLabel = function(roleNames) {
+            return userRolesConstant.filter(function(role) {
+                return roleNames.indexOf(role.name) > -1;
+            }).map(function(role) {
+                return role.label;
+            }).join(', ');
+        };
     }
     
 })(); 
