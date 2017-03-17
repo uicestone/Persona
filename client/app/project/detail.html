@@ -13,6 +13,11 @@
                                         <input ng-model="project.name">
                                     </md-input-container>
 
+                                    <md-input-container flex-gt-xs="15" disabled>
+                                        <label>品牌</label>
+                                        <input ng-model="project.brand.name">
+                                    </md-input-container>
+
                                     <md-input-container>
                                         <label>开始时间</label>
                                         <md-datepicker ng-model="project.startDate"></md-datepicker>
@@ -93,8 +98,8 @@
                                 </div>
                             </fieldset>
                             <div class="actions text-center" ng-if="$parent.user.can('edit-project')">
-                                <md-button class="md-default md-raised btn" ng-click="updateProject(project)">保存修改</md-button>
-                                <md-button class="md-default md-raised btn" href="#!/wizard/set-kpi/{{ project._id }}?editing=true"">修改KPI</md-button>
+                                <md-button class="md-default btn" ng-click="updateProject(project)">保存修改</md-button>
+                                <md-button class="md-default btn" href="#!/wizard/set-kpi/{{ project._id }}?editing=true"">修改KPI</md-button>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -121,7 +126,7 @@
                                 </div>
                             </div>
                             <div class="actions text-center" ng-if="$parent.user.can('edit-project')">
-                                <md-button class="md-default md-raised btn" href="#!/wizard/set-channel/{{ project._id }}?editing=true">添加渠道</md-button>
+                                <md-button class="md-default btn" href="#!/wizard/set-channel/{{ project._id }}?editing=true">添加渠道</md-button>
                             </div>
 
                             <!--各KPI关键节点-->
@@ -148,7 +153,7 @@
                                 </div>
                             </div>
                             <div class="actions text-center" ng-if="$parent.user.can('edit-project')">
-                                <md-button class="md-default md-raised btn" href="#!/wizard/set-timing/{{ project._id}}?editing=true">修改节点</md-button>
+                                <md-button class="md-default btn" href="#!/wizard/set-timing/{{ project._id}}?editing=true">修改节点</md-button>
                             </div>
                         </div>
                         <div class="col-md-12" ng-if="$parent.user.can('edit-project')">
