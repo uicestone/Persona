@@ -6,92 +6,93 @@
                     <md-content>
                         <h2 class="section-header">{{ project.name }}</h2>
                         <div class="col-md-offset-1 col-md-10">
-                            <div layout-gt-xs="row">
-                                <md-input-container class="md-block" flex-gt-xs>
-                                    <label>项目名称</label>
-                                    <input ng-model="project.name">
-                                </md-input-container>
-
-                                <md-input-container>
-                                    <label>开始时间</label>
-                                    <md-datepicker ng-model="project.startDate"></md-datepicker>
-                                </md-input-container>
-
-                                <md-input-container>
-                                    <label>结束时间</label>
-                                    <md-datepicker ng-model="project.endDate"></md-datepicker>
-                                </md-input-container>
-                            </div>
-
-                            <div layout-gt-sm="row">
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>备注</label>
-                                    <input ng-model="project.comment" md-maxlength="100">
-                                </md-input-container>
-                            </div>
-
-                            <div layout-gt-sm="row">
-
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>URL</label>
-                                    <input name="postalCode" ng-model="project.url" placeholder="https://www.example.com">
-                                </md-input-container>
-
-                                <md-input-container class="md-block" flex-gt-sm="25">
-                                    <label>投放平台</label>
-                                    <md-select ng-model="project.platform">
-                                        <md-option ng-repeat="platform in platforms" value="{{platform}}">
-                                            {{platform}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>
-
-                                <md-input-container class="md-block" flex-gt-sm="25">
-                                    <label>城市</label>
-                                    <md-select ng-model="project.city">
-                                        <md-option ng-repeat="city in cities" value="{{city}}">
-                                            {{city}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>
-                            </div>
-
-                            <div layout-gt-sm="row">
-
-                                <md-input-container class="md-block" flex-gt-sm="25">
-                                    <label>执行者</label>
-                                    <md-select ng-model="project.executive">
-                                        <md-option ng-repeat="user in users" value="{{user.name}}">
-                                            {{user.name}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>
-
-                                <md-input-container class="md-block" flex-gt-sm="25">
-                                    <label>管理者</label>
-                                    <input name="manager" ng-model="project.manager.name" disabled>
-                                </md-input-container>
-
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>APPID</label>
-                                    <input name="appid" ng-model="project.appid" disabled>
-                                </md-input-container>
-                            </div>
-
-                            <div>
-                                <div ng-repeat="kpi in project.kpis" layout-gt-sm="row">
-                                    <md-input-container class="md-block" flex-gt-sm="50">
-                                        <label>KPI类型</label>
-                                        <input ng-model="kpi.type" disabled>
+                            <fieldset disabled="!$parent.user.can('edit-project')">
+                                <div layout-gt-xs="row">
+                                    <md-input-container class="md-block" flex-gt-xs>
+                                        <label>项目名称</label>
+                                        <input ng-model="project.name">
                                     </md-input-container>
-                                    <md-input-container class="md-block" flex-gt-sm="50">
-                                        <label>数值</label>
-                                        <input ng-model="kpi.value">
+
+                                    <md-input-container>
+                                        <label>开始时间</label>
+                                        <md-datepicker ng-model="project.startDate"></md-datepicker>
+                                    </md-input-container>
+
+                                    <md-input-container>
+                                        <label>结束时间</label>
+                                        <md-datepicker ng-model="project.endDate"></md-datepicker>
                                     </md-input-container>
                                 </div>
-                            </div>
 
-                            <div class="actions text-center">
+                                <div layout-gt-sm="row">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>备注</label>
+                                        <input ng-model="project.comment" md-maxlength="100">
+                                    </md-input-container>
+                                </div>
+
+                                <div layout-gt-sm="row">
+
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>URL</label>
+                                        <input name="postalCode" ng-model="project.url" placeholder="https://www.example.com">
+                                    </md-input-container>
+
+                                    <md-input-container class="md-block" flex-gt-sm="25">
+                                        <label>投放平台</label>
+                                        <md-select ng-model="project.platform">
+                                            <md-option ng-repeat="platform in platforms" value="{{platform}}">
+                                                {{platform}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+
+                                    <md-input-container class="md-block" flex-gt-sm="25">
+                                        <label>城市</label>
+                                        <md-select ng-model="project.city">
+                                            <md-option ng-repeat="city in cities" value="{{city}}">
+                                                {{city}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+
+                                <div layout-gt-sm="row">
+
+                                    <md-input-container class="md-block" flex-gt-sm="25">
+                                        <label>执行者</label>
+                                        <md-select ng-model="project.executive">
+                                            <md-option ng-repeat="user in users" value="{{user.name}}">
+                                                {{user.name}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+
+                                    <md-input-container class="md-block" flex-gt-sm="25">
+                                        <label>管理者</label>
+                                        <input name="manager" ng-model="project.manager.name" disabled>
+                                    </md-input-container>
+
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>APPID</label>
+                                        <input name="appid" ng-model="project.appid" disabled>
+                                    </md-input-container>
+                                </div>
+
+                                <div>
+                                    <div ng-repeat="kpi in project.kpis" layout-gt-sm="row">
+                                        <md-input-container class="md-block" flex-gt-sm="50">
+                                            <label>KPI类型</label>
+                                            <input ng-model="kpi.type" disabled>
+                                        </md-input-container>
+                                        <md-input-container class="md-block" flex-gt-sm="50">
+                                            <label>数值</label>
+                                            <input ng-model="kpi.value">
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="actions text-center" ng-if="$parent.user.can('edit-project')">
                                 <md-button class="md-default md-raised btn" ng-click="updateProject(project)">保存修改</md-button>
                                 <md-button class="md-default md-raised btn" href="#!/wizard/set-kpi/{{ project._id }}?editing=true"">修改KPI</md-button>
                             </div>
@@ -119,7 +120,7 @@
                                     <p>{{ project.endDate | date:'y/M/d' }}</p>
                                 </div>
                             </div>
-                            <div class="actions text-center">
+                            <div class="actions text-center" ng-if="$parent.user.can('edit-project')">
                                 <md-button class="md-default md-raised btn" href="#!/wizard/set-channel/{{ project._id }}?editing=true">添加渠道</md-button>
                             </div>
 
@@ -146,11 +147,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="actions text-center">
+                            <div class="actions text-center" ng-if="$parent.user.can('edit-project')">
                                 <md-button class="md-default md-raised btn" href="#!/wizard/set-timing/{{ project._id}}?editing=true">修改节点</md-button>
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12" ng-if="$parent.user.can('edit-project')">
                             <div class="actions text-center">
                                 <md-button class="md-default md-warn btn" ng-click="removeProject(project)">删除项目</md-button>
                             </div>
