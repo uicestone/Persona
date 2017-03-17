@@ -101,7 +101,7 @@
 
         $scope.saveProject = function(project, then) {
             project.$save().then(function(project) {
-                if(then === true) {
+                if(then === true || $scope.isEditing) {
                     $location.path('project/' + project._id);
                 } else if(then) {
                     $location.path(then + '/' + project._id);

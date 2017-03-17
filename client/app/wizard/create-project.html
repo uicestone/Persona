@@ -39,22 +39,23 @@
             <br><br>
         </div>
         <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="col-md-3 col-lg-offset-1 text-center">
-                    <img src="/assets/images/wizard-create-project.png" style="width:100%">
-                </div>
-                <div class="col-md-7">
-                    <form name="userForm">
+            <form name="userForm" ng-submit="saveProject(project, 'wizard/set-kpi')">
+                <div class="panel-body">
+                    <div class="col-md-3 col-lg-offset-1 text-center">
+                        <img src="/assets/images/wizard-create-project.png" style="width:100%">
+                    </div>
+                    <div class="col-md-7">
 
                         <div layout-gt-xs="row">
                             <md-input-container class="md-block" flex-gt-xs>
                                 <label>项目名称</label>
-                                <input ng-model="project.name">
+                                <input ng-model="project.name" required>
+                                <div ng-messages=""></div>
                             </md-input-container>
 
                             <md-input-container>
                                 <label>开始时间</label>
-                                <md-datepicker ng-model="project.startDate" md-max-date="project.endDate"></md-datepicker>
+                                <md-datepicker ng-model="project.startDate" md-max-date="project.endDate" required></md-datepicker>
                             </md-input-container>
 
                             <md-input-container>
@@ -117,13 +118,13 @@
                                 <input name="appid" ng-model="project.appid">
                             </md-input-container>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-            <div class="wizard-actions text-center">
-                <md-button ng-if="!isEditing" ng-click="saveProject(project, 'wizard/set-kpi')" class="md-raised md-primary">下一步</md-button>
-                <md-button ng-if="isEditing" ng-click="saveProject(project, true)"class="md-raised md-default btn">保存</md-button>
-            </div>
+                <div class="wizard-actions text-center">
+                    <md-button type="submit" ng-if="!isEditing" class="md-raised md-primary">下一步</md-button>
+                    <md-button type="submit" ng-if="isEditing" class="md-raised md-default btn">保存</md-button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
