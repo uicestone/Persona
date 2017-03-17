@@ -15,7 +15,7 @@ mongoose.connect(process.env.DATABASE_URL || 'mongodb://localhost/persona');
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({extended: true}));
 
 require('./server/apis')(app, router);
 
