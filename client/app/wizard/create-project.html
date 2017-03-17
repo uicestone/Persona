@@ -103,9 +103,14 @@
                                 <span>{{ user.name }}</span>
                             </md-autocomplete>
 
-                            <md-autocomplete class="md-block" flex-gt-sm="25" md-floating-label="管理者" md-items="user in getUsers('brand_admin', searchManagerText)" md-search-text="searchManagerText" md-item-text="user.name" md-selected-item="project.manager" md-min-length="0">
+                            <md-autocomplete ng-if="$parent.user.can('set-user')" class="md-block" flex-gt-sm="25" md-floating-label="管理者" md-items="user in getUsers('brand_admin', searchManagerText)" md-search-text="searchManagerText" md-item-text="user.name" md-selected-item="project.manager" md-min-length="0">
                                 <span>{{ user.name }}</span>
                             </md-autocomplete>
+
+                            <md-input-container ng-if="!$parent.user.can('set-user')" class="md-block" flex-gt-sm>
+                                <label>管理者</label>
+                                <input name="appid" ng-model="project.manager.name" disabled>
+                            </md-input-container>
 
                             <md-input-container class="md-block" flex-gt-sm>
                                 <label>APPID</label>

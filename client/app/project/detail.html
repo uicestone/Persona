@@ -6,7 +6,7 @@
                     <md-content>
                         <h2 class="section-header">{{ project.name }}</h2>
                         <div class="col-md-offset-1 col-md-10">
-                            <fieldset disabled="!$parent.user.can('edit-project')">
+                            <fieldset ng-disabled="!$parent.user.can('edit-project')">
                                 <div layout-gt-xs="row">
                                     <md-input-container class="md-block" flex-gt-xs>
                                         <label>项目名称</label>
@@ -64,14 +64,9 @@
 
                                 <div layout-gt-sm="row">
 
-                                    <md-input-container class="md-block" flex-gt-sm="25">
-                                        <label>执行者</label>
-                                        <md-select ng-model="project.executive">
-                                            <md-option ng-repeat="user in users" value="{{user.name}}">
-                                                {{user.name}}
-                                            </md-option>
-                                        </md-select>
-                                    </md-input-container>
+                                    <md-autocomplete class="md-block" flex-gt-sm="25" md-floating-label="执行者" md-items="user in getUsers('project_admin', searchExecutiveText)" md-search-text="searchExecutiveText" md-item-text="user.name" md-selected-item="project.executive" md-min-length="0">
+                                        <span>{{ user.name }}</span>
+                                    </md-autocomplete>
 
                                     <md-input-container class="md-block" flex-gt-sm="25">
                                         <label>管理者</label>

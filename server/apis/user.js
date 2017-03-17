@@ -12,8 +12,7 @@ module.exports = function(router) {
             // save the user and check for errors
             user.save(function(err) {
                 if (err)
-                    res.status(500).send(err);
-
+                    return res.status(500).send(err);
                 res.json(user);
             });
             
@@ -70,7 +69,7 @@ module.exports = function(router) {
         .get(function(req, res) {
             User.findById(req.params.userId, function(err, user) {
                 if (err)
-                    res.status(500).send(err);
+                    return res.status(500).send(err);
                 res.json(user);
             });
         })
@@ -78,13 +77,12 @@ module.exports = function(router) {
         .put(function(req, res) {
             User.where({_id: req.params.userId}).update(req.body, function(err, raw) {
                 if (err) {
-                    res.status(500).send(err);
-                    return;
+                    return res.status(500).send(err);
                 }
 
                 User.findById(req.params.userId, function(err, user) {
                     if (err)
-                        res.status(500).send(err);
+                        return res.status(500).send(err);
                     
                     res.json(user);
                 });
@@ -97,8 +95,7 @@ module.exports = function(router) {
                 _id: req.params.userId
             }, function(err, user) {
                 if (err)
-                    res.status(500).send(err);
-
+                    return res.status(500).send(err);
                 res.end();
             });
         });

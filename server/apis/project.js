@@ -11,6 +11,7 @@ module.exports = function(router) {
         .post(function(req, res) {
             
             var project = new Project(req.body);      // create a new instance of the Project model
+            project.brand = req.body.manager.brand;
             project.createdAt = new Date();
 
             // save the project and check for errors
@@ -23,7 +24,7 @@ module.exports = function(router) {
             
         })
 
-        // get all the projects
+        // get all the projects for current user
         .get(function(req, res) {
             var limit = +req.query.limit || 20;
             var skip = +req.query.skip || 0;
@@ -33,6 +34,17 @@ module.exports = function(router) {
 
             if(!Project.totalCount){
                 queryPromises.push(Project.count().exec().then(value => Project.totalCount = value));
+            }
+
+            if (req.user.roles.indexOf('project_admin') > -1) {
+                query.find({
+                    'executive._id': req.user._id
+                });
+            }
+            else if (req.user.roles.indexOf('brand_admin') > -1) {
+                query.find({
+                    'brand.name': req.user.brand.name
+                });
             }
 
             if(req.query.keyword) {

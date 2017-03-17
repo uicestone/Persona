@@ -51,9 +51,12 @@
                     <div class="actions text-right" ng-if="projects.length>0">
                         <md-button href="#!/wizard/create-project/" class="md-raised md-primary" style="line-height:34px">创建项目</md-button>
                     </div>
-                    <div ng-if="projects.length==0" class="text-center" style="padding-top:100px">
-                        <h3 style="color:#7d7d7d;font-weight:normal">对不起，您暂时没有任何项目，您可以选择创建项目</h3>
-                        <div class="actions" style="margin-top:20px">
+                    <div ng-if="projects.length==0" class="text-center" style="padding:100px">
+                        <h3 style="color:#7d7d7d;font-weight:normal">
+                            对不起，您暂时没有任何项目
+                            <span ng-if="$parent.user.can('edit-project')">，您可以选择创建项目</span>
+                        </h3>
+                        <div ng-if="$parent.user.can('edit-project')" class="actions" style="margin-top:20px">
                             <md-button href="#!/wizard/create-project/" class="btn-lg btn-w-lg md-raised md-primary" style="line-height:34px">创建项目</md-button>
                         </div>
                     </div>

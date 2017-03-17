@@ -49,6 +49,10 @@
             });
         };
 
+        $scope.getUsers = function(roles, name) {
+            return userService.query({roles:roles, name: name}).$promise;
+        };
+
         $scope.startDatePercentage = function(item, timelineStartDate, timelineEndDate) {
             var projectDuration = (timelineEndDate || new Date($scope.project.endDate)) - (timelineStartDate || new Date($scope.project.startDate)) + 86400000;
             return (new Date(item.startDate) - (timelineStartDate || new Date($scope.project.startDate))) / projectDuration * 100;

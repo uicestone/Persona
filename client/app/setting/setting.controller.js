@@ -88,6 +88,7 @@
             
             if(!user) {
                 user = new userService();
+                user.roles = [];
             }
 
             $scope.user = user;

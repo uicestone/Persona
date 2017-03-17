@@ -25,15 +25,9 @@
         }
         else {
             $scope.project = new projectService();
-        }
-
-        if($location.path().match(/wizard\/set-timing/)) {
-            $scope.$watch('project.channels', function(channels) {
-                if(!channels) {
-                    return;
-                }
-
-            })
+            if(!$scope.$parent.user.can('set-user')) {
+                $scope.project.manager = $scope.$parent.user;
+            }
         }
 
         // check items in channel list which are already in project.channels
