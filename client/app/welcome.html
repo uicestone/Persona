@@ -7,7 +7,8 @@
         </div>
 
         <div class="welcome-body">
-            <md-button href="/#!/wizard/create-project/" class="md-raised md-primary btn-lg btn-w-lg" aria-label="Start"><span data-translate="START"></span></md-button>
+            <md-button ng-if="$parent.user.can('edit-project')" href="/#!/wizard/create-project/" class="md-raised md-primary btn-lg btn-w-lg" aria-label="Start"><span data-translate="START"></span></md-button>
+            <md-button ng-if="!$parent.user.can('edit-project')" href="/#!/project/list" class="md-raised md-primary btn-lg btn-w-lg" aria-label="Start"><span data-translate="START"></span></md-button>
         </div>
     </div>
 </div>
