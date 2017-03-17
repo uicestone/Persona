@@ -16,8 +16,6 @@
 
         $scope.kpiNames = ['PV', 'UV', '转化数', '转化率', '获取用户数', '平均停留时间', '分享率'];
 
-        $scope.users = userService.query();
-
         $scope.channels = channelService.query();
 
         $scope.isEditing = $location.search().editing;
@@ -128,6 +126,10 @@
 
         $scope.urlCopied = function() {
             $mdToast.showSimple('链接已复制到剪贴板');
+        };
+
+        $scope.getUsers = function(roles, name) {
+            return userService.query({roles:roles, name: name}).$promise;
         };
     }
     

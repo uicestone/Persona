@@ -99,19 +99,13 @@
 
                         <div layout-gt-sm="row">
 
-                            <md-input-container class="md-block" flex-gt-sm="25">
-                                <label>执行者</label>
-                                <md-select ng-model="project.executive">
-                                    <md-option ng-repeat="user in users" value="{{ user }}">
-                                        {{ user.name }}
-                                    </md-option>
-                                </md-select>
-                            </md-input-container>
+                            <md-autocomplete class="md-block" flex-gt-sm="25" md-floating-label="执行者" md-items="user in getUsers('project_admin', searchExecutiveText)" md-search-text="searchExecutiveText" md-item-text="user.name" md-selected-item="project.executive" md-min-length="0">
+                                <span>{{ user.name }}</span>
+                            </md-autocomplete>
 
-                            <md-input-container class="md-block" flex-gt-sm="25">
-                                <label>管理者</label>
-                                <input name="manager" ng-model="project.manager.name">
-                            </md-input-container>
+                            <md-autocomplete class="md-block" flex-gt-sm="25" md-floating-label="管理者" md-items="user in getUsers('brand_admin', searchManagerText)" md-search-text="searchManagerText" md-item-text="user.name" md-selected-item="project.manager" md-min-length="0">
+                                <span>{{ user.name }}</span>
+                            </md-autocomplete>
 
                             <md-input-container class="md-block" flex-gt-sm>
                                 <label>APPID</label>

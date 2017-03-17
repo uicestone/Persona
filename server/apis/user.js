@@ -36,6 +36,10 @@ module.exports = function(router) {
                 };
             }
 
+            if(req.query.roles) {
+                query.roles = req.query.roles;
+            }
+
             User.find(query)
             .limit(limit)
             .skip(skip)
