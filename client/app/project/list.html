@@ -27,6 +27,7 @@
                         <thead>
                             <tr>
                                 <th>项目名称</th>
+                                <th ng-if="$parent.user.can('set-user')">品牌</th>
                                 <th>投放平台</th>
                                 <th>管理者</th>
                                 <th>创建时间</th>
@@ -38,6 +39,7 @@
                         <tbody>
                             <tr ng-repeat="project in projects" ng-click="showProjectDetail(project)">
                                 <td>{{ project.name }}</td>
+                                <td ng-if="$parent.user.can('set-user')">{{ project.brand.name }}</td>
                                 <td>{{ project.platform }}</td>
                                 <td>{{ project.manager.name }}</td>
                                 <td>{{ project.createdAt | date:'y/M/d' }}</td>
