@@ -27,20 +27,29 @@ module.exports = function(router) {
             var limit = +req.query.limit || 20;
             var skip = +req.query.skip || 0;
 
-            var query = {};
+            var query = User.find();
+
+            // user can only list users from the same brand
+
+            if(req.user.roles.indexOf('admin') === -1) {
+                query.find({
+                    'brand.name': req.user.brand.name
+                });
+            }
 
             if(req.query.keyword) {
-                query = {
+                query.find({
                     name: new RegExp(req.query.keyword)
-                };
+                });
             }
 
             if(req.query.roles) {
-                query.roles = req.query.roles;
+                query.find({
+                    roles: req.query.roles
+                });
             }
 
-            User.find(query)
-            .limit(limit)
+            query.limit(limit)
             .skip(skip)
             .exec()
             .then(result => {
