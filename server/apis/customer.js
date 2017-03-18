@@ -74,6 +74,11 @@ module.exports = function(router) {
                 }
             });
 
+            // 非平台管理员只能看到本品牌的访客
+            if(req.user.roles.indexOf('admin') === -1) {
+                query.brand = req.user.brand.name;
+            }
+
             Customer.find(query)
             .limit(limit)
             .skip(skip)

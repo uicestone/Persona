@@ -18,7 +18,8 @@ var customerSchema = new Schema({
     annualSalary: String,
     lastConsumedAt: Date,
     tags: [String],
-    group: [{_id: Schema.Types.ObjectId, name: String}]
+    group: [{_id: Schema.Types.ObjectId, name: String}],
+    brand: String
 });
 
 module.exports = mongoose.model('Customer', customerSchema);

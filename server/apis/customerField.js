@@ -9,6 +9,7 @@ module.exports = function(router) {
             
             var customerField = new CustomerField(req.body); // create a new instance of the CustomerField model
 
+            // 为非管理员新增的访客字段设置品牌
             if(req.user.roles.indexOf('admin') === -1) {
                 customerField.brand = req.user.brand.name;
             }

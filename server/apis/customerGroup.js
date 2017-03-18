@@ -14,6 +14,11 @@ module.exports = function(router) {
             
             var customerGroup = new CustomerGroup(req.body);      // create a new instance of the CustomerGroup model
 
+            // 为非管理员新增的访客分组设置品牌
+            if(req.user.roles.indexOf('admin') === -1) {
+                customerGroup.brand = req.user.brand.name;
+            }
+            
             // save the customer group and check for errors
             customerGroup.save(function(err) {
                 if (err)
@@ -66,6 +71,10 @@ module.exports = function(router) {
                     }
                 });
 
+                if(req.user.roles.indexOf('admin') === -1) {
+                    query.brand = req.user.brand.name;
+                }
+                
                 Customer.update(query, {
                     $addToSet: {
                         group: {
@@ -98,6 +107,10 @@ module.exports = function(router) {
                 };
             }
 
+            if(req.user.roles.indexOf('admin') === -1) {
+                query.brand = req.user.brand.name;
+            }
+            
             CustomerGroup.find(query)
             .limit(limit)
             .skip(skip)
