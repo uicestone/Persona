@@ -9,19 +9,20 @@ module.exports = function(router) {
             
             var customerField = new CustomerField(req.body); // create a new instance of the CustomerField model
 
+            if(req.user.roles.indexOf('admin') === -1) {
+                customerField.brand = req.user.brand.name;
+            }
+
             // save the customer field and check for errors
             customerField.save(function(err) {
-                if (err) {
-                    res.status(500).send(err);
-                    return;
-                }
-
+                if (err)
+                    return res.status(500).send(err);
                 res.json(customerField);
             });
             
         })
 
-        // get all the customer fields
+        // get common and brand specified customer fields
         .get(function(req, res) {
             if(!CustomerField.totalCount){
                 CustomerField.count().exec().then(value => CustomerField.totalCount = value);
@@ -30,18 +31,30 @@ module.exports = function(router) {
             var limit = +req.query.limit || 20;
             var skip = +req.query.skip || 0;
 
-            var query = {};
+            var query = CustomerField.find();
 
             if(req.query.keyword) {
-                query.name = new RegExp(req.query.keyword);
+                query.find({
+                    name: new RegExp(req.query.keyword)}
+                );
             }
 
             if(req.query.type) {
-                query.type = req.query.type;
+                query.find({
+                    type: req.query.type
+                });
             }
 
-            CustomerField.find(query)
-            .limit(limit)
+            if(req.user.roles.indexOf('admin') === -1) {
+                query.find({
+                    $or: [
+                        {reserved: true},
+                        {brand: req.user.brand.name}
+                    ]
+                });
+            }
+
+            query.limit(limit)
             .skip(skip)
             .exec()
             .then(result => {

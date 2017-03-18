@@ -27,8 +27,10 @@
                                     <td>{{ field.key }}</td>
                                     <td>{{ field.label }}</td>
                                     <td>
-                                        <md-icon class="md-primary" ng-click="editCustomerField(field)" ng-if="!field.reserved">edit</md-icon>
-                                        <md-icon class="md-primary" ng-click="removeCustomerField(field)" ng-if="!field.reserved">delete</md-icon>
+                                        <div class="label label-primary" ng-if="field.brand">{{ field.brand }}</div>
+                                        <div class="label label-default" ng-if="field.reserved">保留字段</div>
+                                        <md-icon class="md-primary" ng-click="editCustomerField(field)" ng-if="$parent.user.can('set-user') || !field.reserved">edit</md-icon>
+                                        <md-icon class="md-primary" ng-click="removeCustomerField(field)" ng-if="$parent.user.can('set-user') || !field.reserved">delete</md-icon>
                                     </td>
                                 </tr>
                             </tbody>
