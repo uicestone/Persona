@@ -30,7 +30,13 @@ module.exports = function(router) {
             var skip = +req.query.skip || 0;
 
             var queryPromises = [];
-            var query = Project.find().limit(limit).skip(skip);
+            var query = Project.find();
+
+            if(req.query.page && !skip) {
+                skip = (req.query.page - 1) * limit;
+            }
+
+            query.limit(limit).skip(skip);
 
             if(!Project.totalCount){
                 queryPromises.push(Project.count().exec().then(value => Project.totalCount = value));

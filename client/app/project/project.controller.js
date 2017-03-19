@@ -25,8 +25,19 @@
             $scope.project = projectService.get({id:$route.current.params.id});
         }
         else {
-            $scope.projects = projectService.query();
+
+            $scope.query = {page: 1};
+
+            $scope.projects = projectService.query($scope.query);
+
+            $scope.projectsPromise = $scope.projects.$promise;
         }
+
+        $scope.getProjects = function() {
+            $scope.projectsPromise = projectService.query($scope.query, function(projects) {
+                $scope.projects = projects;
+            }).$promise;
+        };
 
         $scope.showProjectDetail = function(project) {
             $location.path('project/' + project._id);

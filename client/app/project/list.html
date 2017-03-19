@@ -6,8 +6,8 @@
                 <div class="panel-heading">
                     <div class="panel-title">项目管理</div>
                 </div>
-                <div class="panel-body">
-                    <div class="filters" layout="row" ng-if="projects.length>0">
+                <div class="panel-body" ng-if="!projects.$resolved || projects.length>0">
+                    <div class="filters" layout="row">
                         <md-input-container flex="1">
                             <label>开始时间</label>
                             <md-datepicker ng-model="query.startDate" md-hide-icons="calendar"></md-datepicker>
@@ -23,44 +23,53 @@
                             </md-select>
                         </md-input-container>
                     </div>
-                    <table class="table table-striped table-hover" ng-if="projects.length>0" style="background:white">
-                        <thead>
-                            <tr>
-                                <th>项目名称</th>
-                                <th ng-if="$parent.user.can('set-user')">品牌</th>
-                                <th>投放平台</th>
-                                <th>管理者</th>
-                                <th>创建时间</th>
-                                <th>今日新增/累计用户</th>
-                                <th>综合KPI完成率</th>
-                                <th>状态</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="project in projects" ng-click="showProjectDetail(project)">
-                                <td>{{ project.name }}</td>
-                                <td ng-if="$parent.user.can('set-user')">{{ project.brand.name }}</td>
-                                <td>{{ project.platform }}</td>
-                                <td>{{ project.manager.name }}</td>
-                                <td>{{ project.createdAt | date:'y/M/d' }}</td>
-                                <td></td>
-                                <td></td>
-                                <td>{{ project.status }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <md-card>
+                        <md-table-container>
+                            <table md-table md-progress="projectsPromise" style="background:white">
+                                <thead md-head md-order="query.order" md-on-reorder="getProjects">
+                                    <tr md-row>
+                                        <th md-column>项目名称</th>
+                                        <th md-column ng-if="$parent.user.can('set-user')">品牌</th>
+                                        <th md-column>投放平台</th>
+                                        <th md-column>管理者</th>
+                                        <th md-column>创建时间</th>
+                                        <th md-column>今日新增/累计用户</th>
+                                        <th md-column>综合KPI完成率</th>
+                                        <th md-column>状态</th>
+                                    </tr>
+                                </thead>
+                                <tbody md-body>
+                                    <tr md-row ng-repeat="project in projects" ng-click="showProjectDetail(project)">
+                                        <td md-cell>{{ project.name }}</td>
+                                        <td md-cell ng-if="$parent.user.can('set-user')">{{ project.brand.name }}</td>
+                                        <td md-cell>{{ project.platform }}</td>
+                                        <td md-cell>{{ project.manager.name }}</td>
+                                        <td md-cell>{{ project.createdAt | date:'y/M/d' }}</td>
+                                        <td md-cell></td>
+                                        <td md-cell></td>
+                                        <td md-cell>{{ project.status }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+
+                        <md-table-pagination md-limit="query.limit || projects.$end - projects.start" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{ projects.$total }}" md-on-paginate="getProjects" md-page-select md-label="{of:'/', page:'页码', rowsPerPage:'每页条数'}"></md-table-pagination>
+                    </md-card>
+
                     <hr>
-                    <div class="actions text-right" ng-if="projects.length>0">
+
+                    <div class="actions text-right">
                         <md-button href="#!/wizard/create-project/" class="md-raised md-primary" style="line-height:34px">创建项目</md-button>
                     </div>
-                    <div ng-if="projects.length==0" class="text-center" style="padding:100px">
-                        <h3 style="color:#7d7d7d;font-weight:normal">
-                            对不起，您暂时没有任何项目
-                            <span ng-if="$parent.user.can('edit-project')">，您可以选择创建项目</span>
-                        </h3>
-                        <div ng-if="$parent.user.can('edit-project')" class="actions" style="margin-top:20px">
-                            <md-button href="#!/wizard/create-project/" class="btn-lg btn-w-lg md-raised md-primary" style="line-height:34px">创建项目</md-button>
-                        </div>
+
+                </div>
+                <div class="panel-body text-center" ng-if="projects.$resolved && projects.length==0" style="padding:100px">
+                    <h3 style="color:#7d7d7d;font-weight:normal">
+                        对不起，您暂时没有任何项目
+                        <span ng-if="$parent.user.can('edit-project')">，您可以选择创建项目</span>
+                    </h3>
+                    <div ng-if="$parent.user.can('edit-project')" class="actions" style="margin-top:20px">
+                        <md-button href="#!/wizard/create-project/" class="btn-lg btn-w-lg md-raised md-primary" style="line-height:34px">创建项目</md-button>
                     </div>
                 </div>
             </div>
