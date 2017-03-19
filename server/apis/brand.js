@@ -30,6 +30,10 @@ module.exports = function(router) {
 
             var query = {};
 
+            if(req.query.page && !skip) {
+                skip = (req.query.page - 1) * limit;
+            }
+
             if(req.query.keyword) {
                 query.name = new RegExp(req.query.keyword);
             }

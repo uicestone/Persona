@@ -34,6 +34,10 @@ module.exports = function(router) {
 
             var query = CustomerField.find();
 
+            if(req.query.page && !skip) {
+                skip = (req.query.page - 1) * limit;
+            }
+
             if(req.query.keyword) {
                 query.find({
                     name: new RegExp(req.query.keyword)}

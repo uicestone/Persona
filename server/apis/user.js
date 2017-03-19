@@ -29,6 +29,10 @@ module.exports = function(router) {
 
             var query = User.find();
 
+            if(req.query.page && !skip) {
+                skip = (req.query.page - 1) * limit;
+            }
+
             // user can only list users from the same brand
 
             if(req.user.roles.indexOf('admin') === -1) {

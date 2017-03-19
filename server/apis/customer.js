@@ -39,6 +39,10 @@ module.exports = function(router) {
                 return arrayQueryParams.indexOf(key) === -1;
             });
 
+            if(req.query.page && !skip) {
+                skip = (req.query.page - 1) * limit;
+            }
+
             preciseKeys.forEach(function(key) {
                 query[key] = req.query[key];
             });
