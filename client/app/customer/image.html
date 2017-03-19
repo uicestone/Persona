@@ -112,15 +112,20 @@
                 </md-tab>
                 <md-tab label="精准搜索">
                     <md-content class="md-padding">
-                        <div layout="row">
-                            <md-input-container flex="100">
-                                <label>搜索具体用户信息</label>
-                                <input ng-model="preciseSearchText">
-                                <div class="hint" style="color:#CCC">
-                                    格式：{key}={value}&amp;{key}={value}
-                                </div>
-                            </md-input-container>
-                        </div>
+                        <form ng-submit="preciseSearch(preciseSearchText)">
+                            <div layout="row">
+                                <md-input-container flex="100">
+                                    <label>搜索具体用户信息</label>
+                                    <input ng-model="preciseSearchText">
+                                    <div class="hint" style="color:#CCC">
+                                        格式：{key}={value}&amp;{key}={value}
+                                    </div>
+                                </md-input-container>
+                                <md-input-container>
+                                    <md-button type="submit" flex="1" class="md-primary md-raised" style="min-height:29px;min-width:70px"><md-icon>search</md-icon></md-button>
+                                </md-input-container>
+                            </div>
+                        </form>
                         <br>
                         <div layout="row" layout-align="start start">
                             <md-input-container ng-repeat="key in customerKeys" ng-if="key.show">

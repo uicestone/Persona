@@ -116,8 +116,8 @@
             $scope.query = query;
         }
 
-        // 监听精准搜索框的改变，将其应用到query中
-        $scope.$watch('preciseSearchText', function(preciseSearchText) {
+        // 精确搜索表单，将其应用到query中
+        $scope.preciseSearch = function(preciseSearchText) {
             
             removePreciseQueryParams();
             
@@ -149,7 +149,7 @@
                 });
 
             });
-        });
+        };
 
         // 由于inGroup和notInGroup不是简单数组，因此监听其改变，并同步到query中的简单数组
         $scope.$watch('inGroup', function(inGroup) {
