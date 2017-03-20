@@ -32,7 +32,7 @@ module.exports = function(router) {
             
             // 精准搜索字段
             var preciseKeys = Object.keys(req.query).filter(function(key) {
-                return arrayQueryParams.indexOf(key) === -1 && ['limit', 'page', 'skip'].indexOf(key) === -1;
+                return arrayQueryParams.indexOf(key) === -1 && advancedQueryParams.indexOf(key) === -1 && ['limit', 'page', 'skip'].indexOf(key) === -1;
             });
 
             if(req.query.page && !skip) {

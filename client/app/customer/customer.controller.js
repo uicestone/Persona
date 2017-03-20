@@ -13,7 +13,7 @@
 
             $location.search(query);
             
-            customerService.query(query).$promise.then(function(customers) {
+            $scope.promise = customerService.query(query).$promise.then(function(customers) {
                 $scope.customers = customers;
             });
             
@@ -61,6 +61,8 @@
         ];
 
         $scope.customerGroups = customerGroupService.query();
+
+        $scope.getCustomers = function() {};
 
         // 显示字段
         $scope.showKey = function(key) {
