@@ -92,43 +92,42 @@ module.exports = function(router) {
         // get all the customer groups
         .get(function(req, res) {
             
-            if(!CustomerGroup.totalCount){
-                CustomerGroup.count().exec().then(value => CustomerGroup.totalCount = value);
-            }
-
             var limit = +req.query.limit || 20;
             var skip = +req.query.skip || 0;
 
-            var query = {};
+            var query = CustomerGroup.find();
 
             if(req.query.page && !skip) {
                 skip = (req.query.page - 1) * limit;
             }
 
             if(req.query.keyword) {
-                query = {
+                query.find({
                     name: new RegExp(req.query.keyword)
-                };
+                });
             }
 
             if(req.user.roles.indexOf('admin') === -1) {
-                query.brand = req.user.brand.name;
+                query.find({
+                    brand: req.user.brand.name
+                });
             }
             
-            CustomerGroup.find(query)
-            .limit(limit)
-            .skip(skip)
-            .exec()
-            .then(result => {
+            query.count()
+            .then(function(total) {
+                return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
+            })
+            .then(function(result) {
+                let [total, page] = result;
 
-                if(skip + result.length > CustomerGroup.totalCount) {
-                    CustomerGroup.totalCount = skip + result.length;
+                if(skip + page.length > total) {
+                    total = skip + page.length;
                 }
 
-                res.set('Items-Total', CustomerGroup.totalCount)
-                .set('Items-Start', skip + 1)
-                .set('Items-End', Math.min(skip + limit, CustomerGroup.totalCount))
-                .json(result);
+                res.set('items-total', total)
+                .set('items-start', Math.min(skip + 1, total))
+                .set('items-end', Math.min(skip + limit, total))
+                .json(page);
             });
         });
 

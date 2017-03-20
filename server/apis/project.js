@@ -29,7 +29,6 @@ module.exports = function(router) {
             var limit = +req.query.limit || 20;
             var skip = +req.query.skip || 0;
 
-            var queryPromises = [];
             var query = Project.find();
 
             if(req.query.page && !skip) {
@@ -37,10 +36,6 @@ module.exports = function(router) {
             }
 
             query.limit(limit).skip(skip);
-
-            if(!Project.totalCount){
-                queryPromises.push(Project.count().exec().then(value => Project.totalCount = value));
-            }
 
             if (req.user.roles.indexOf('project_admin') > -1) {
                 query.find({
@@ -94,24 +89,22 @@ module.exports = function(router) {
                 });
             }
 
-            Promise.all(queryPromises)
-
-            .then(() => {
-                return query.exec();
+            query.count()
+            .then(function(total) {
+                return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
             })
+            .then(function(result) {
+                let [total, page] = result;
 
-            .then(result => {
-
-                if(skip + result.length > Project.totalCount) {
-                    Project.totalCount = skip + result.length;
+                if(skip + page.length > total) {
+                    total = skip + page.length;
                 }
 
-                res.set('Items-Total', Project.totalCount)
-                .set('Items-Start', skip + 1)
-                .set('Items-End', Math.min(skip + limit, Project.totalCount))
-                .json(result);
+                res.set('items-total', total)
+                .set('items-start', Math.min(skip + 1, total))
+                .set('items-end', Math.min(skip + limit, total))
+                .json(page);
             });
-
         });
 
     // on routes that end in /project/:projectId

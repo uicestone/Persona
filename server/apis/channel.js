@@ -21,41 +21,43 @@ module.exports = function(router) {
 
         // get all the channels
         .get(function(req, res) {
-            if(!Channel.totalCount){
-                Channel.count().exec().then(value => Channel.totalCount = value);
-            }
 
             var limit = +req.query.limit || 20;
             var skip = +req.query.skip || 0;
 
-            var query = {};
+            var query = Channel.find();
 
             if(req.query.page && !skip) {
                 skip = (req.query.page - 1) * limit;
             }
 
             if(req.query.keyword) {
-                query.name = new RegExp(req.query.keyword);
+                query.find({
+                    name: new RegExp(req.query.keyword)
+                });
             }
 
             if(req.query.type) {
-                query.type = req.query.type;
+                query.find({
+                    type: req.query.type
+                });
             }
 
-            Channel.find(query)
-            .limit(limit)
-            .skip(skip)
-            .exec()
-            .then(result => {
+            query.count()
+            .then(function(total) {
+                return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
+            })
+            .then(function(result) {
+                let [total, page] = result;
 
-                if(skip + result.length > Channel.totalCount) {
-                    Channel.totalCount = skip + result.length;
+                if(skip + page.length > total) {
+                    total = skip + page.length;
                 }
 
-                res.set('Items-Total', Channel.totalCount)
-                .set('Items-Start', skip + 1)
-                .set('Items-End', Math.min(skip + limit, Channel.totalCount))
-                .json(result);
+                res.set('items-total', total)
+                .set('items-start', Math.min(skip + 1, total))
+                .set('items-end', Math.min(skip + limit, total))
+                .json(page);
             });
         });
 

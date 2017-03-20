@@ -20,9 +20,6 @@ module.exports = function(router) {
 
         // get all the users
         .get(function(req, res) {
-            if(!User.totalCount){
-                User.count().exec().then(value => User.totalCount = value);
-            }
 
             var limit = +req.query.limit || 20;
             var skip = +req.query.skip || 0;
@@ -53,24 +50,21 @@ module.exports = function(router) {
                 });
             }
 
-            query.limit(limit)
-            .skip(skip)
-            .exec()
-            .then(result => {
+            query.count()
+            .then(function(total) {
+                return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
+            })
+            .then(function(result) {
+                let [total, page] = result;
 
-                result.forEach(user => {
-                    delete user.token;
-                    delete user.password;
-                });
-
-                if(skip + result.length > User.totalCount) {
-                    User.totalCount = skip + result.length;
+                if(skip + page.length > total) {
+                    total = skip + page.length;
                 }
 
-                res.set('Items-Total', User.totalCount)
-                .set('Items-Start', skip + 1)
-                .set('Items-End', Math.min(skip + limit, User.totalCount))
-                .json(result);
+                res.set('items-total', total)
+                .set('items-start', Math.min(skip + 1, total))
+                .set('items-end', Math.min(skip + limit, total))
+                .json(page);
             });
         });
 

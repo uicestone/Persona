@@ -25,9 +25,6 @@ module.exports = function(router) {
 
         // get common and brand specified customer fields
         .get(function(req, res) {
-            if(!CustomerField.totalCount){
-                CustomerField.count().exec().then(value => CustomerField.totalCount = value);
-            }
 
             var limit = +req.query.limit || 20;
             var skip = +req.query.skip || 0;
@@ -40,8 +37,11 @@ module.exports = function(router) {
 
             if(req.query.keyword) {
                 query.find({
-                    name: new RegExp(req.query.keyword)}
-                );
+                    $or:[
+                        {key: new RegExp(req.query.keyword)},
+                        {label: new RegExp(req.query.keyword)}
+                    ]
+                });
             }
 
             if(req.query.type) {
@@ -59,19 +59,21 @@ module.exports = function(router) {
                 });
             }
 
-            query.limit(limit)
-            .skip(skip)
-            .exec()
-            .then(result => {
+            query.count()
+            .then(function(total) {
+                return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
+            })
+            .then(function(result) {
+                let [total, page] = result;
 
-                if(skip + result.length > CustomerField.totalCount) {
-                    CustomerField.totalCount = skip + result.length;
+                if(skip + page.length > total) {
+                    total = skip + page.length;
                 }
 
-                res.set('Items-Total', CustomerField.totalCount)
-                .set('Items-Start', skip + 1)
-                .set('Items-End', Math.min(skip + limit, CustomerField.totalCount))
-                .json(result);
+                res.set('items-total', total)
+                .set('items-start', Math.min(skip + 1, total))
+                .set('items-end', Math.min(skip + limit, total))
+                .json(page);
             });
         });
 

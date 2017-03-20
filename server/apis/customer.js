@@ -22,21 +22,17 @@ module.exports = function(router) {
         // get all the customers
         .get(function(req, res) {
             
-            if(!Customer.totalCount){
-                Customer.count().exec().then(value => Customer.totalCount = value);
-            }
-
             var limit = +req.query.limit || 20;
             var skip = +req.query.skip || 0;
 
-            var query = {};
+            var query = Customer.find();
 
             var arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
             var advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
             
             // 精准搜索字段
             var preciseKeys = Object.keys(req.query).filter(function(key) {
-                return arrayQueryParams.indexOf(key) === -1;
+                return arrayQueryParams.indexOf(key) === -1 && ['limit', 'page', 'skip'].indexOf(key) === -1;
             });
 
             if(req.query.page && !skip) {
@@ -44,59 +40,78 @@ module.exports = function(router) {
             }
 
             preciseKeys.forEach(function(key) {
-                query[key] = req.query[key];
+                query.find({
+                    [key]: req.query[key]
+                });
             });
 
             // 包含标签
             if(req.query.withTags) {
-                !query.tags && (query.tags = {});
-                query.tags['$all'] = Array.isArray(req.query.withTags) ? req.query.withTags : [req.query.withTags];
+                query.find({
+                    tags: {
+                        $all: Array.isArray(req.query.withTags) ? req.query.withTags : [req.query.withTags]
+                    }
+                });
             }
 
             // 排除标签
             if(req.query.withoutTags) {
-                !query.tags && (query.tags = {});
-                query.tags['$nin'] = Array.isArray(req.query.withoutTags) ? req.query.withoutTags : [req.query.withoutTags];
+                query.find({
+                    tags: {
+                        $nin: Array.isArray(req.query.withoutTags) ? req.query.withoutTags : [req.query.withoutTags]
+                    }
+                });
             }
 
             // 在访客组
             if(req.query.inGroup) {
-                !query.group && (query['group._id'] = {});
-                query['group._id']['$all'] = Array.isArray(req.query.inGroup) ? req.query.inGroup : [req.query.inGroup];
+                query.find({
+                    'group._id': {
+                        $all: Array.isArray(req.query.inGroup) ? req.query.inGroup : [req.query.inGroup]
+                    }
+                });
             }
 
             // 不在访客组
             if(req.query.notInGroup) {
-                !query.group && (query['group._id'] = {});
-                query['group._id']['$nin'] = Array.isArray(req.query.notInGroup) ? req.query.notInGroup : [req.query.notInGroup];
+                query.find({
+                    'group._id': {
+                        $nin: Array.isArray(req.query.notInGroup) ? req.query.notInGroup : [req.query.notInGroup]
+                    }
+                });
             }
 
             // 维度过滤
             advancedQueryParams.forEach(function(attribute) {
                 if(req.query[attribute]) {
-                    query[attribute] = {$lte: req.query[attribute] / 100, $gt: (req.query[attribute] - 10) / 100}
+                    query.find({
+                        [attribute]: {$lte: req.query[attribute] / 100, $gt: (req.query[attribute] - 10) / 100}
+                    });
                 }
             });
 
             // 非平台管理员只能看到本品牌的访客
             if(req.user.roles.indexOf('admin') === -1) {
-                query.brand = req.user.brand.name;
+                query.find({
+                    brand: req.user.brand.name
+                });
             }
 
-            Customer.find(query)
-            .limit(limit)
-            .skip(skip)
-            .exec()
-            .then(result => {
+            query.count()
+            .then(function(total) {
+                return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
+            })
+            .then(function(result) {
+                let [total, page] = result;
 
-                if(skip + result.length > Customer.totalCount) {
-                    Customer.totalCount = skip + result.length;
+                if(skip + page.length > total) {
+                    total = skip + page.length;
                 }
 
-                res.set('Items-Total', Customer.totalCount)
-                .set('Items-Start', skip + 1)
-                .set('Items-End', Math.min(skip + limit, Customer.totalCount))
-                .json(result);
+                res.set('items-total', total)
+                .set('items-start', Math.min(skip + 1, total))
+                .set('items-end', Math.min(skip + limit, total))
+                .json(page);
             });
         });
 
