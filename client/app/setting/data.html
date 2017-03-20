@@ -7,35 +7,42 @@
                     <div class="panel-title">数据设置</div>
                 </div>
                 <div class="panel-body">
-                    <div class="filters" layout="row">
+                    <form ng-submit="getCustomerFields()" class="filters" layout="row">
                         <md-input-container flex>
                             <label>搜索字段</label>
-                            <input ng-model="query.customerFieldKeyword">
+                            <input ng-model="query.keyword">
                         </md-input-container>
-                    </div>
-                    <md-content md-whiteframe="2" style="background:white">
-                        <table class="table" style="margin-bottom:0">
-                            <thead>
-                                <tr>
-                                    <th>字段名</th>
-                                    <th>字段标签</th>
-                                    <th>操作</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="field in customerFields | filter:query.customerFieldKeyword">
-                                    <td>{{ field.key }}</td>
-                                    <td>{{ field.label }}</td>
-                                    <td>
-                                        <div class="label label-primary" ng-if="field.brand">{{ field.brand }}</div>
-                                        <div class="label label-default" ng-if="field.reserved">保留字段</div>
-                                        <md-icon class="md-primary" ng-click="editCustomerField(field)" ng-if="$parent.user.can('set-user') || !field.reserved">edit</md-icon>
-                                        <md-icon class="md-primary" ng-click="removeCustomerField(field)" ng-if="$parent.user.can('set-user') || !field.reserved">delete</md-icon>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </md-content>
+                        <md-input-container>
+                            <md-button type="submit" flex="1" class="md-primary md-raised" style="min-height:29px;min-width:70px"><md-icon>search</md-icon></md-button>
+                        </md-input-container>
+                    </form>
+                    <md-card>
+                        <md-table-container>
+                            <table md-table md-progress="promiseCustomerFields" style="margin-bottom:0">
+                                <thead md-head>
+                                    <tr md-row>
+                                        <th md-column>字段名</th>
+                                        <th md-column>字段标签</th>
+                                        <th md-column>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody md-body>
+                                    <tr md-row ng-repeat="field in customerFields">
+                                        <td md-cell>{{ field.key }}</td>
+                                        <td md-cell>{{ field.label }}</td>
+                                        <td md-cell>
+                                            <div class="label label-primary" ng-if="field.brand">{{ field.brand }}</div>
+                                            <div class="label label-default" ng-if="field.reserved">保留字段</div>
+                                            <md-icon class="md-primary" ng-click="editCustomerField(field)" ng-if="$parent.user.can('set-user') || !field.reserved">edit</md-icon>
+                                            <md-icon class="md-primary" ng-click="removeCustomerField(field)" ng-if="$parent.user.can('set-user') || !field.reserved">delete</md-icon>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                        <md-table-pagination md-limit="query.limit" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{ customerFields.$total }}" md-on-paginate="getCustomerFields" md-page-select md-label="{of:'/', page:'页码', rowsPerPage:'每页条数'}"></md-table-pagination>
+
+                    </md-card>
                     <div class="actions text-right" style="margin-top:20px">
                         <md-button ng-click="editCustomerField()" class="md-raised md-primary">添加字段</md-button>
                     </div>

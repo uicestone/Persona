@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.setting')
-    .controller('settingCtrl', ['$scope', '$window', '$mdBottomSheet', '$mdToast', 'channelService', 'userService', 'customerFieldService', 'userRolesConstant', settingCtrl]);
+    .controller('settingCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', '$mdToast', 'channelService', 'userService', 'customerFieldService', 'userRolesConstant', settingCtrl]);
 
-    function settingCtrl($scope, $window, $mdBottomSheet, $mdToast, channelService, userService, customerFieldService, userRolesConstant) {
+    function settingCtrl($scope, $window, $location, $mdBottomSheet, $mdToast, channelService, userService, customerFieldService, userRolesConstant) {
         
         $scope.platforms = [
             '微信', '微博', 'QQ'
@@ -18,11 +18,34 @@
 
         $scope.roles = userRolesConstant;
 
-        $scope.users = userService.query();
+        $scope.query = {page: 1, limit: 20};
 
-        $scope.channels = channelService.query();
+        $scope.getChannels = function() {
+            $scope.promise = channelService.query($scope.query).$promise
+                .then(function(channels) {
+                    $scope.channels = channels;
+                });
+        };
 
-        $scope.customerFields = customerFieldService.query();
+        $scope.getCustomerFields = function() {
+            $scope.promise = customerFieldService.query($scope.query).$promise
+                .then(function(channels) {
+                    $scope.customerFields = channels;
+                });
+        };
+
+        $scope.getUsers = function() {
+            $scope.promise = userService.query($scope.query).$promise
+                .then(function(channels) {
+                    $scope.users = channels;
+                });
+        };
+
+        switch ($location.path()) {
+            case '/setting/data': $scope.getCustomerFields(); break;
+            case '/setting/channel': $scope.getChannels(); break;
+            case '/setting/user': $scope.getUsers(); break;
+        }
 
         $scope.editChannel = function(channel) {
             

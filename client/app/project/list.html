@@ -53,7 +53,7 @@
                             </table>
                         </md-table-container>
 
-                        <md-table-pagination md-limit="query.limit || projects.$end - projects.start" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{ projects.$total }}" md-on-paginate="getProjects" md-page-select md-label="{of:'/', page:'页码', rowsPerPage:'每页条数'}"></md-table-pagination>
+                        <md-table-pagination md-limit="query.limit" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{ projects.$total }}" md-on-paginate="getProjects" md-page-select md-label="{of:'/', page:'页码', rowsPerPage:'每页条数'}"></md-table-pagination>
                     </md-card>
 
                     <hr>

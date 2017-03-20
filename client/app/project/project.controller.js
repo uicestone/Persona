@@ -26,7 +26,7 @@
         }
         else {
 
-            $scope.query = {page: 1};
+            $scope.query = {page: 1, limit: 20};
 
             $scope.projects = projectService.query($scope.query);
 

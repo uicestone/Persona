@@ -10,31 +10,34 @@
                     <div class="filters" layout="row">
                         <md-input-container flex>
                             <label>搜索渠道</label>
-                            <input ng-model="query.channelKeyword">
+                            <input ng-model="query.keyword">
                         </md-input-container>
                     </div>
-                    <md-content md-whiteframe="2" style="background:white">
-                        <table class="table" style="margin-bottom:0">
-                            <thead>
-                                <tr>
-                                    <th>渠道名称</th>
-                                    <th>渠道分类</th>
-                                    <th>渠道评分</th>
-                                    <th>SPID</th>
-                                    <th>操作</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="channel in channels | filter:query.channelKeyword">
-                                    <td>{{ channel.name }}</td>
-                                    <td>{{ channel.topic }}</td>
-                                    <td>{{ channel.rank }}</td>
-                                    <td>{{ channel.spid }}</td>
-                                    <td><md-icon class="md-primary" ng-click="editChannel(channel)">edit</md-icon> <md-icon class="md-primary" ng-click="removeChannel(channel)">delete</md-icon></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </md-content>
+                    <md-card>
+                        <md-table-container>
+                            <table md-table md-progress="promise" style="margin-bottom:0">
+                                <thead md-head>
+                                    <tr md-row>
+                                        <th md-column>渠道名称</th>
+                                        <th md-column>渠道分类</th>
+                                        <th md-column>渠道评分</th>
+                                        <th md-column>SPID</th>
+                                        <th md-column>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody md-body>
+                                    <tr md-row ng-repeat="channel in channels | filter:query.keyword">
+                                        <td md-cell>{{ channel.name }}</td>
+                                        <td md-cell>{{ channel.topic }}</td>
+                                        <td md-cell>{{ channel.rank }}</td>
+                                        <td md-cell>{{ channel.spid }}</td>
+                                        <td md-cell><md-icon class="md-primary" ng-click="editChannel(channel)">edit</md-icon> <md-icon class="md-primary" ng-click="removeChannel(channel)">delete</md-icon></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                        <md-table-pagination md-limit="query.limit" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{ channels.$total }}" md-on-paginate="getChannels" md-page-select md-label="{of:'/', page:'页码', rowsPerPage:'每页条数'}"></md-table-pagination>
+                    </md-card>
                     <div class="actions text-right" style="margin-top:20px">
                         <md-button ng-click="editChannel()" class="md-raised md-primary">添加渠道</md-button>
                     </div>
