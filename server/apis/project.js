@@ -15,9 +15,12 @@ module.exports = function(router) {
             project.createdAt = new Date();
 
             // save the project and check for errors
-            project.save(function(err) {
+            project.save(function(err, project) {
                 if (err)
                     return res.status(500).send(err);
+
+                project.appid = project._id;
+                project.save();
 
                 res.json(project);
             });
