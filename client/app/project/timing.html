@@ -7,27 +7,29 @@
                     <div class="panel-title">项目排期</div>
                 </div>
                 <div class="panel-body">
-                	<md-content class="md-padding">
-                        <div layout="row" layout-align="center end" class="timeline-channels">
-                            <div class="endpoint" flex="10">
-                                <p>{{ startOfYear | date:'y/M/d' }}</p>
-                            </div>
-                            <div class="baseline" flex layout="column">
-                                <div ng-repeat="project in projects" class="channel project" layout="row" layout-align="center end" style="margin-left:{{ startDatePercentage(project, startOfYear, endOfYear) }}%;width:{{ durationPercentage(project, startOfYear, endOfYear) }}%">
-                                    <div class="channel-endpoint" flex="1" style="left:-15px">
-                                        <div class="date">{{ project.startDate | date:'M/d' }}</div>
-                                    </div>
-                                    <label flex>{{ project.name }}</label>
-                                    <div class="channel-endpoint" flex="1" style="left:15px">
-                                        <div class="date">{{ project.endDate | date:'M/d' }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="endpoint" flex="10">
-                                <p>{{ endOfYear | date:'y/M/d' }}</p>
+                    <div>
+                        <md-button ng-class="{'md-primary':timelineStartDate.quarter()==1}" ng-click="timelineQuarter(1)">Q1</md-button>
+                        <md-button ng-class="{'md-primary':timelineStartDate.quarter()==2}" ng-click="timelineQuarter(2)">Q2</md-button>
+                        <md-button ng-class="{'md-primary':timelineStartDate.quarter()==3}" ng-click="timelineQuarter(3)">Q3</md-button>
+                        <md-button ng-class="{'md-primary':timelineStartDate.quarter()==4}" ng-click="timelineQuarter(4)">Q4</md-button>
+                    </div>
+                    <md-card class="md-padding">
+                        <div class="month" layout="row" style="border-bottom:1px dashed #ddd">
+                            <div ng-repeat="month in timelineMonths" flex style="padding:5px; border-left:1px solid #ddd;max-width:{{ (month.endDate - month.startDate) / (timelineEndDate - timelineStartDate) * 100 }}%">
+                                <span style="margin-left:10px">{{ month.date.format('MMM')}}</span>
                             </div>
                         </div>
-                	</md-content>
+                        <div class="week" layout="row">
+                            <div ng-repeat="week in timelineWeeks" flex style="padding:5px;{{ week.inPreviousTimeline ? '' : 'border-left:1px solid #ddd;' }}max-width:{{ (week.endDate - week.startDate) / (timelineEndDate - timelineStartDate) * 100 }}%">
+                                <span ng-if="!week.inPreviousTimeline">{{ week.date.format('w') }}</span>
+                            </div>
+                        </div>
+                        <div class="projects" layout="column" style="overflow:hidden">
+                            <div ng-repeat="project in projects" flex style="height:30px;padding:5px 10px;margin-top:5px;border-radius:15px;max-width:{{ durationPercentage(project, timelineStartDate, timelineEndDate) }}%;margin-left:{{ startDatePercentage(project, timelineStartDate, timelineEndDate) }}%;background:{{ colors[$index%6] }}">
+                                <span>{{ project.name }}</span>
+                            </div>
+                        </div>
+                    </md-card>
                 </div>
             </div>
         </div>

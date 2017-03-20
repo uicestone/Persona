@@ -18,6 +18,34 @@
 
         $scope.users = userService.query();
 
+        $scope.timelineStartDate = moment().startOf('year');
+
+        $scope.$watch('timelineStartDate', function(timelineStartDate) {
+            
+            $scope.timelineEndDate = timelineStartDate.clone().endOf('quarter');
+
+            $scope.timelineMonths = [];
+
+            for (let d = timelineStartDate.clone(); d <= $scope.timelineEndDate; d.add(1, 'M')) {
+                $scope.timelineMonths.push({
+                    startDate: d.clone().startOf('month'),
+                    endDate: d.clone().endOf('month'),
+                    date: d.clone()
+                });
+            }
+
+            $scope.timelineWeeks = [];
+            
+            for (let d = timelineStartDate.clone(); d <= $scope.timelineEndDate; d.add(1, 'w')) {
+                $scope.timelineWeeks.push({
+                    inPreviousTimeline: d.clone().startOf('week') < timelineStartDate,
+                    startDate: Math.max(d.clone().startOf('week'), timelineStartDate),
+                    endDate: d.clone().endOf('week'),
+                    date: d.clone()
+                });
+            }
+        });
+
         $scope.startOfYear = new Date((new Date()).getFullYear() + '-01-01');
         $scope.endOfYear = new Date((new Date()).getFullYear() + '-12-31');
 
@@ -25,13 +53,16 @@
             $scope.project = projectService.get({id:$route.current.params.id});
         }
         else {
-
             $scope.query = {page: 1, limit: 20};
-
             $scope.projects = projectService.query($scope.query);
-
             $scope.projectsPromise = $scope.projects.$promise;
         }
+
+        $scope.colors = ['#F88', '#8F8', '#88F', '#8FF', '#F8F', '#FF8']
+
+        $scope.timelineQuarter = function(quarter) {
+            $scope.timelineStartDate = moment(moment().year() + 'Q' + quarter, 'Y[Q]Q');
+        };
 
         $scope.getProjects = function() {
             $scope.projectsPromise = projectService.query($scope.query, function(projects) {
