@@ -26,7 +26,7 @@
 
             $scope.timelineMonths = [];
 
-            for (let d = timelineStartDate.clone(); d <= $scope.timelineEndDate; d.add(1, 'M')) {
+            for (var d = timelineStartDate.clone(); d <= $scope.timelineEndDate; d.add(1, 'M')) {
                 $scope.timelineMonths.push({
                     startDate: d.clone().startOf('month'),
                     endDate: d.clone().endOf('month'),
@@ -36,7 +36,7 @@
 
             $scope.timelineWeeks = [];
             
-            for (let d = timelineStartDate.clone(); d <= $scope.timelineEndDate; d.add(1, 'w')) {
+            for (var d = timelineStartDate.clone(); d <= $scope.timelineEndDate; d.add(1, 'w')) {
                 $scope.timelineWeeks.push({
                     inPreviousTimeline: d.clone().startOf('week') < timelineStartDate,
                     startDate: Math.max(d.clone().startOf('week'), timelineStartDate),
