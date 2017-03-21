@@ -21,7 +21,6 @@
         $scope.timelineStartDate = moment().startOf('year');
 
         $scope.$watch('timelineStartDate', function(timelineStartDate) {
-            
             $scope.timelineEndDate = timelineStartDate.clone().endOf('quarter');
 
             $scope.timelineMonths = [];
@@ -44,7 +43,9 @@
                     date: d.clone()
                 });
             }
-        });
+        }, true);
+
+        $scope.now = moment();
 
         $scope.startOfYear = new Date((new Date()).getFullYear() + '-01-01');
         $scope.endOfYear = new Date((new Date()).getFullYear() + '-12-31');
@@ -60,8 +61,8 @@
 
         $scope.colors = ['#F88', '#8F8', '#88F', '#8FF', '#F8F', '#FF8']
 
-        $scope.timelineQuarter = function(quarter) {
-            $scope.timelineStartDate = moment(moment().year() + 'Q' + quarter, 'Y[Q]Q');
+        $scope.navigateQuarter = function(offset) {
+            $scope.timelineStartDate.add(offset, 'quarters');
         };
 
         $scope.getProjects = function() {

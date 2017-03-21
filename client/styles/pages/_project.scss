@@ -34,3 +34,59 @@ md-tabs.project-detail {
         margin: 30px auto;
     }
 }
+
+.project-timing {
+
+    .toolbar label {
+        font-size: 12px;
+    }
+
+    .card {
+        margin: 1px;
+        border-radius: 0;
+        position: relative;
+        
+        .navigator {
+            position: absolute;
+            top: 10px;
+            &.previous {
+                left: 0;
+            }
+            &.next {
+                right: 0;
+            }
+        }
+    }
+
+    .month, .week {
+        text-align: center;
+    }
+
+    .months {
+        border-bottom: 1px dashed #ddd;
+
+        .month {
+            padding: 5px;
+            border-left: 1px solid #ddd;
+            &:first-child {
+                border-left: none;
+            }
+        }
+    }
+
+    .weeks {
+        .week {
+            padding: 5px;
+            &:last-child {
+                border-right: 1px solid #ddd;
+            }
+        }
+    }
+
+    .projects {
+        .project {
+            background-color: $brand-primary;
+            color: $white;
+        }
+    }
+}
