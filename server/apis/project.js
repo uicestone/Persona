@@ -212,8 +212,30 @@ module.exports = function(router) {
     router.route('/project/:projectId/campaign-record')
 
         .get(function(req, res) {
-            Campaign.find({project: req.params.projectId}).limit(200).then(function(campaignRecords) {
-                res.send(campaignRecords);
+            var limit = +req.query.limit || 20;
+            var skip = +req.query.skip || 0;
+
+            var query = Campaign.find({project: req.params.projectId});
+
+            if(req.query.page && !skip) {
+                skip = (req.query.page - 1) * limit;
+            }
+
+            query.count()
+            .then(function(total) {
+                return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
+            })
+            .then(function(result) {
+                let [total, page] = result;
+
+                if(skip + page.length > total) {
+                    total = skip + page.length;
+                }
+
+                res.set('items-total', total)
+                .set('items-start', Math.min(skip + 1, total))
+                .set('items-end', Math.min(skip + limit, total))
+                .json(page);
             });
         })
 

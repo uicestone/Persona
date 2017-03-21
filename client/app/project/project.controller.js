@@ -110,7 +110,17 @@
         if($scope.project) {
             
             $scope.kpiByChannels = projectService.getKpiByChannels({id:$route.current.params.id});
-            $scope.campaignRecords = projectService.getCampaignRecords({id:$route.current.params.id});
+            
+            $scope.queryCampaignRecords = {page: 1, limit: 10, id: $route.current.params.id};
+            
+            $scope.getCampaignRecords = function() {
+                $scope.promiseCampaignRecords = projectService.getCampaignRecords($scope.queryCampaignRecords).$promise.then(function(campaignRecords) {
+                    $scope.campaignRecords = campaignRecords;
+                });
+            };
+
+            $scope.getCampaignRecords();
+
             $scope.kpiByDate = projectService.getKpiByDate({id:$route.current.params.id});
             $scope.kpiByRegion = projectService.getKpiByRegion({id:$route.current.params.id});
             $scope.kpiByDevice = projectService.getKpiByDevice({id:$route.current.params.id});

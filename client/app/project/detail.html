@@ -271,34 +271,37 @@
                             </md-input-container>
                         </div>
                         <div>
-                            <md-content layout="row" style="height:40vh">
-                                <table flex="100" class="table table-hover table-bordered" style="background:white">
-                                    <thead>
-                                        <tr>
-                                            <th>访问时间</th>
-                                            <th>访问设备</th>
-                                            <th>OpenID</th>
-                                            <th>手机号</th>
-                                            <th>电邮</th>
-                                            <th>是否转化</th>
-                                            <th>停留时间</th>
-                                            <th>是否分享</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="record in campaignRecords">
-                                            <td>{{ record.accessedAt | date:'y-MM-dd' }}</td>
-                                            <td>{{ record.device }}</td>
-                                            <td>{{ record._id | limitTo:10 }}</td>
-                                            <td>{{ record.mobile }}</td>
-                                            <td>{{ record.email }}</td>
-                                            <td>{{ record.converted ? '是' : '否' }}</td>
-                                            <td>{{ record.stayedFor }}</td>
-                                            <td>{{ record.shared ? '是' : '否' }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </md-content>
+                            <md-card>
+                                <md-table-container>
+                                    <table md-table md-progress="promiseCampaignRecords">
+                                        <thead md-head>
+                                            <tr md-row>
+                                                <th md-column>访问时间</th>
+                                                <th md-column>访问设备</th>
+                                                <th md-column>OpenID</th>
+                                                <th md-column>手机号</th>
+                                                <th md-column>电邮</th>
+                                                <th md-column>是否转化</th>
+                                                <th md-column>停留时间</th>
+                                                <th md-column>是否分享</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                            <tr md-row ng-repeat="record in campaignRecords">
+                                                <td md-cell>{{ record.accessedAt | date:'y-MM-dd' }}</td>
+                                                <td md-cell>{{ record.device }}</td>
+                                                <td md-cell>{{ record._id | limitTo:10 }}</td>
+                                                <td md-cell>{{ record.mobile }}</td>
+                                                <td md-cell>{{ record.email }}</td>
+                                                <td md-cell>{{ record.converted ? '是' : '否' }}</td>
+                                                <td md-cell>{{ record.stayedFor }}</td>
+                                                <td md-cell>{{ record.shared ? '是' : '否' }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </md-table-container>
+                                <md-table-pagination md-limit="queryCampaignRecords.limit" md-limit-options="[10, 50, 100]" md-page="queryCampaignRecords.page" md-total="{{ campaignRecords.$total }}" md-on-paginate="getCampaignRecords" md-page-select md-label="{of:'/', page:'页码', rowsPerPage:'每页条数'}"></md-table-pagination>
+                            </md-card>
                         </div>
                         <hr>
                         <div class="row">

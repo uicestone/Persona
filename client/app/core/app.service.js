@@ -250,7 +250,7 @@
             getKpiByDate: {method: 'GET', url: api + 'project/:id/kpi-by-date', isArray: true},
             getKpiByDevice: {method: 'GET', url: api + 'project/:id/kpi-by-device', isArray: true},
             getKpiByRegion: {method: 'GET', url: api + 'project/:id/kpi-by-region', isArray: true},
-            getCampaignRecords: {method: 'GET', url: api + 'project/:id/campaign-record', isArray: true}
+            getCampaignRecords: {method: 'GET', url: api + 'project/:id/campaign-record', isArray: true, interceptor: {response: responseInterceptor}}
         });
         
         // Angular mix PUT and POST methot to $save,
