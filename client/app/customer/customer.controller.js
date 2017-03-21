@@ -8,6 +8,14 @@
         
         $scope.query = $location.search();
 
+        if(!$scope.query.page) {
+            $scope.query.page = 1
+        }
+
+        if(!$scope.query.limit) {
+            $scope.query.limit = 20;
+        }
+
         // 检测query的变化并改变路由
         $scope.$watch('query', function(query) {
 
