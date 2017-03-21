@@ -46,4 +46,23 @@ var projectSchema = new Schema({
 
 projectSchema.index({name:1}, {unique:true});
 
+projectSchema.virtual('status')
+.get(function() {
+    var now = new Date();
+    if (this.startDate > now) {
+        return '未开始';
+    }
+    else if (this.endDate < now) {
+        return '已结束';
+    }
+    else if(this.startDate < now && this.endDate > now) {
+        return '进行中';
+    }
+    else {
+        return null;
+    }
+});
+
+projectSchema.set('toJSON', { getters: true, virtuals: true });
+
 module.exports = mongoose.model('Project', projectSchema);

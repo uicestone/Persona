@@ -84,9 +84,22 @@ md-tabs.project-detail {
     }
 
     .projects {
+
+        overflow: hidden;
+
         .project {
-            background-color: $brand-primary;
-            color: $white;
+            height: 30px;
+            padding: 5px 10px;
+            margin-top: 5px;
+            border-radius: 15px;
+
+            background-color: #eee;
+            color: $brand-primary;
+
+            &.in-progress {
+                background-color: $brand-primary;
+                color: $white;
+            }
         }
     }
 }
