@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var customerReachingSchema = new Schema({
+	brand: String,
 	type: String,
 	content: String,
 	group: {_id: Schema.Types.ObjectId, name: String},
