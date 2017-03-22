@@ -7,7 +7,7 @@ module.exports = function(req, res, next) {
         return;
     }
 
-    var token = req.get('authorization');
+    var token = req.get('authorization') || req.query.token;
 
     if(!token) {
         res.status(401).json({message:'无效登录，请重新登录'});

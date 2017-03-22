@@ -275,6 +275,25 @@
             });
         };
 
+        $scope.exportToXlsx = function() {
+
+            var queryString = Object.keys($scope.query).filter(function(key) {
+                return key !== 'page' && key !== 'limit';
+            }).map(function(key) {
+                return key + '=' + $scope.query[key];
+            }).join('&');
+
+            var fieldsString = $scope.showingCustomerFields.map(function(field) {
+                return field.key;
+            }).join(',');
+
+            $window.location.href = 'http://localhost:8080/api/customer?token='
+                + $window.localStorage.getItem('token')
+                + '&export=xlsx'
+                + '&fields=' + fieldsString
+                + '&' + queryString;
+        };
+
     }
     
 })(); 

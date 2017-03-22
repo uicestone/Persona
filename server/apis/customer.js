@@ -1,4 +1,6 @@
 var Customer = require('../models/customer.js');
+var CustomerField = require('../models/customerField.js');
+var xlsx = require('node-xlsx').default;
 
 module.exports = function(router) {
     // Customer CURD
@@ -29,10 +31,13 @@ module.exports = function(router) {
 
             var arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
             var advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
+            var utilQueryParams = ['token', 'export', 'fields', 'limit', 'page', 'skip'];
             
             // 精准搜索字段
             var preciseKeys = Object.keys(req.query).filter(function(key) {
-                return arrayQueryParams.indexOf(key) === -1 && advancedQueryParams.indexOf(key) === -1 && ['limit', 'page', 'skip'].indexOf(key) === -1;
+                return arrayQueryParams.indexOf(key) === -1
+                    && advancedQueryParams.indexOf(key) === -1
+                    && utilQueryParams.indexOf(key) === -1;
             });
 
             if(req.query.page && !skip) {
@@ -97,22 +102,54 @@ module.exports = function(router) {
                 });
             }
 
-            query.count()
-            .then(function(total) {
-                return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
-            })
-            .then(function(result) {
-                let [total, page] = result;
+            if(req.query.export === 'xlsx') {
 
-                if(skip + page.length > total) {
-                    total = skip + page.length;
-                }
+                Promise.all([
+                    query.find(),
+                    CustomerField.find({key: req.query.fields.split(',')})
+                ]).then(function(result) {
+                    let [customers, fields] = result;
+                    let data = [];
 
-                res.set('items-total', total)
-                .set('items-start', Math.min(skip + 1, total))
-                .set('items-end', Math.min(skip + limit, total))
-                .json(page);
-            });
+                    let head = fields.map(field => field.label);
+                    head.unshift('NUID');
+                    head.push('标签');
+
+                    data.push(head);
+
+                    customers.forEach(customer => {
+                        let line = fields.map(field => customer[field.key]);
+                        line.unshift(customer._id);
+                        line.push(customer.tags.join(' '));
+                        data.push(line);
+                    });
+
+                    res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                        .set('Content-Disposition', 'attachment; filename=Customers.xlsx')
+                        .send(xlsx.build([{name: "Customers", data: data}]));
+                });
+
+            }
+
+            else {
+                query.count()
+                .then(function(total) {
+                    return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
+                })
+                .then(function(result) {
+                    let [total, page] = result;
+
+                    if(skip + page.length > total) {
+                        total = skip + page.length;
+                    }
+
+                    res.set('items-total', total)
+                    .set('items-start', Math.min(skip + 1, total))
+                    .set('items-end', Math.min(skip + limit, total))
+                    .json(page);
+                });
+            }
+            
         });
 
     // on routes that end in /customer/:customerId
