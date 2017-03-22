@@ -135,12 +135,16 @@
                         </form>
                         <br>
                         <div layout="row" layout-align="start start">
-                            <div as-sortable ng-model="showingCustomerFields">
-                                <label as-sortable-item as-sortable-item-handle ng-repeat="field in showingCustomerFields" class="label label-primary">
-                                    {{ field.label }}
-                                    <span ng-click="hideCustomerField(field)">x</span>
-                                </label>
-                            </div>
+                            <ul as-sortable ng-model="showingCustomerFields" class="list-inline showing-fields">
+                                <li as-sortable-item ng-repeat="field in showingCustomerFields" style="padding:0">
+                                    <label as-sortable-item-handle class="label label-primary" style="margin-right:5px">
+                                        {{ field.label }}
+                                        <span ng-click="hideCustomerField(field)">
+                                            <md-icon class="close-button">close</md-icon>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
                             <div flex layout="row" layout-align="end center">
                                 <md-autocomplete placeholder="新增显示字段" md-items="field in getPossibleFields(searchOtherFieldsText)" md-search-text="searchOtherFieldsText" md-item-text="field.label" md-selected-item="newShowField" md-min-length="0" md-no-cache="true" md-selected-item-change="showCustomerField(newShowField)">
                                     <span>{{ field.label }}</span>
