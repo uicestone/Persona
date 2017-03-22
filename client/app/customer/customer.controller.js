@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.customer')
-    .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', 'customerService', 'customerGroupService', customerCtrl]);
+    .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', 'customerService', 'customerGroupService', 'customerFieldService', customerCtrl]);
 
-    function customerCtrl($scope, $window, $location, $mdBottomSheet, customerService, customerGroupService) {
+    function customerCtrl($scope, $window, $location, $mdBottomSheet, customerService, customerGroupService, customerFieldService) {
         
         $scope.query = $location.search();
 
@@ -49,38 +49,36 @@
         });
 
         // 访客字段
-        $scope.customerKeys = [
-            {key:'mobile', label:'手机号码', show:true},
-            {key:'province', 'label':'居住城市', show:true},
-            {key:'sex', 'label':'性别', show:true},
-            {key:'tags', 'label':'标签', show:true},
-            {key:'nuid', label:'NUID'},
-            {key:'carrier', label:'手机号运营商'},
-            {key:'mobileAge', label:'手机号入网年限'},
-            {key:'studyCity', label:'就学城市'},
-            {key:'workingCity', label:'工作城市'},
-            {key:'sexualOrientation', label:'性取向'},
-            {key:'creditCards', label:'信用卡数量'},
-            {key:'hasChild', label:'有孩子'},
-            {key:'annualSalary', label:'年收入'},
-            {key:'education', label:'学历'},
-            {key:'age', label:'年龄'},
-            {key:'marriage', label:'婚否'}
-        ];
+        $scope.customerFields = customerFieldService.query();
 
         $scope.customerGroups = customerGroupService.query();
 
         $scope.getCustomers = function() {};
 
+        $scope.showingCustomerFields = [];
+
         // 显示字段
-        $scope.showKey = function(key) {
-            key.show = true;
+        $scope.showCustomerField = function(field) {
+            
+            if(!field || $scope.showingCustomerFields.indexOf(field) > -1) {
+                return;
+            }
+
+            $scope.showingCustomerFields.push(field);
+            $scope.searchOtherFieldsText = null;
         };
 
+        $scope.hideCustomerField = function(fieldToRemove) {
+            $scope.showingCustomerFields = $scope.showingCustomerFields.filter(function(field) {
+                return field.key !== fieldToRemove.key;
+            });
+        }
+
         // 自动完成时备选的显示字段
-        $scope.getPossibleKeys = function(searchText) {
-            return $scope.customerKeys.filter(function(key) {
-                return (!searchText || key.label.search(searchText) > -1) && !key.show;
+        $scope.getPossibleFields = function(searchText) {
+            return $scope.customerFields.filter(function(field) {
+                return (!searchText || field.label.search(searchText) > -1)
+                    && $scope.showingCustomerFields.map(function(field) { return field.key; }).indexOf(field.key) === -1;
             });
         };
 
@@ -147,13 +145,13 @@
 
                 key = match[1]; value = match[2];
 
-                $scope.customerKeys.forEach(function(customerKey) {
+                $scope.customerFields.forEach(function(customerField) {
                     // 支持将搜索的中文key转化为对应的英文key
-                    if(customerKey.label === key) {
-                        key = customerKey.key;
+                    if(customerField.label === key) {
+                        key = customerField.key;
                         $scope.query[key] = value;
                     }
-                    else if(customerKey.key === key) {
+                    else if(customerField.key === key) {
                         $scope.query[key] = value;
                     }
                 });
@@ -207,9 +205,7 @@
         $scope.editGroup = function(group) {
             if(!group) {
                 group = new customerGroupService();
-                group.showKeys = $scope.customerKeys.filter(function(key) {
-                    return key.show;
-                });
+                group.fields = $scope.showingCustomerFields;
                 group.query = $scope.query;
             }
 

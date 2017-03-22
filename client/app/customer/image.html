@@ -32,14 +32,19 @@
                         </div>
                         <br>
                         <div layout="row" layout-align="start start">
-                            <div as-sortable ng-model="customerKeys">
-                                <md-input-container as-sortable-item ng-repeat="key in customerKeys | filter:{show:true}" class="show-key-item">
-                                    <md-checkbox ng-model="key.show" as-sortable-item-handle>{{ key.label }}</md-checkbox>
-                                </md-input-container>
-                            </div>
+                            <ul as-sortable ng-model="showingCustomerFields" class="list-inline showing-fields">
+                                <li as-sortable-item ng-repeat="field in showingCustomerFields" style="padding:0">
+                                    <label as-sortable-item-handle class="label label-primary" style="margin-right:5px">
+                                        {{ field.label }}
+                                        <span ng-click="hideCustomerField(field)">
+                                            <md-icon class="close-button">close</md-icon>
+                                        </span>
+                                    </label>
+                                </li>
+                            </ul>
                             <div flex layout="row" layout-align="end center">
-                                <md-autocomplete placeholder="新增显示字段" md-items="key in getPossibleKeys(searchOtherKeysText)" md-search-text="searchOtherKeysText" md-item-text="key.label" md-selected-item="newShowKey" md-min-length="0" md-no-cache="true" md-selected-item-change="showKey(newShowKey)">
-                                    <span>{{ key.label }}</span>
+                                <md-autocomplete placeholder="新增显示字段" md-items="field in getPossibleFields(searchOtherFieldsText)" md-search-text="searchOtherFieldsText" md-item-text="field.label" md-selected-item="newShowField" md-min-length="0" md-no-cache="true" md-selected-item-change="showCustomerField(newShowField)">
+                                    <span>{{ field.label }}</span>
                                 </md-autocomplete>
                             </div>
                         </div>
@@ -130,14 +135,15 @@
                         </form>
                         <br>
                         <div layout="row" layout-align="start start">
-                            <div as-sortable ng-model="customerKeys">
-                                <md-input-container as-sortable-item ng-repeat="key in customerKeys | filter:{show:true}" class="show-key-item">
-                                    <md-checkbox ng-model="key.show" as-sortable-item-handle>{{ key.label }}</md-checkbox>
-                                </md-input-container>
+                            <div as-sortable ng-model="showingCustomerFields">
+                                <label as-sortable-item as-sortable-item-handle ng-repeat="field in showingCustomerFields" class="label label-primary">
+                                    {{ field.label }}
+                                    <span ng-click="hideCustomerField(field)">x</span>
+                                </label>
                             </div>
                             <div flex layout="row" layout-align="end center">
-                                <md-autocomplete placeholder="新增显示字段" md-items="key in getPossibleKeys(searchOtherKeysText)" md-search-text="searchOtherKeysText" md-item-text="key.label" md-selected-item="newShowKey" md-min-length="0" md-no-cache="true" md-selected-item-change="showKey(newShowKey)">
-                                    <span>{{ key.label }}</span>
+                                <md-autocomplete placeholder="新增显示字段" md-items="field in getPossibleFields(searchOtherFieldsText)" md-search-text="searchOtherFieldsText" md-item-text="field.label" md-selected-item="newShowField" md-min-length="0" md-no-cache="true" md-selected-item-change="showCustomerField(newShowField)">
+                                    <span>{{ field.label }}</span>
                                 </md-autocomplete>
                             </div>
                         </div>
@@ -178,16 +184,19 @@
                     <table md-table md-progress="promise" class="campaign-data-table" style="background:white">
                         <thead md-head>
                             <tr md-row>
-                                <th md-column ng-repeat="key in customerKeys" ng-if="key.show">{{ key.label }}</th>
+                                <th md-column>NUID</th>
+                                <th md-column ng-repeat="field in showingCustomerFields">{{ field.label }}</th>
+                                <th md-column>标签</th>
                             </tr>
                         </thead>
                         <tbody md-body>
                             <tr md-row ng-repeat="customer in customers">
-                                <td md-cell ng-repeat="key in customerKeys" ng-if="key.show">
-                                    <span ng-if="key.key!='tags'">{{ customer[key.key] }}</span>
-                                    <div ng-if="key.key=='tags'">
-                                        <label ng-repeat="tag in customer[key.key]" class="label label-primary"> {{ tag }} </label>
-                                    </div>
+                                <td md-cell>{{ customer._id }}</td>
+                                <td md-cell ng-repeat="field in showingCustomerFields">
+                                    {{ customer[field.key] }}
+                                </td>
+                                <td md-cell>
+                                    <label ng-repeat="tag in customer.tags" class="label label-primary"> {{ tag }} </label>
                                 </td>
                             </tr>
                         </tbody>

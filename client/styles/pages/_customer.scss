@@ -1,39 +1,48 @@
 .customer-image {
-	md-autocomplete {
-		height: 35px;
-		width: 200px;
+    md-autocomplete {
+        height: 35px;
+        width: 200px;
 
-		md-autocomplete-wrap {
-			height: 35px;
-		}
+        md-autocomplete-wrap {
+            height: 35px;
+        }
 
-		input:not(.md-input) {
-			height: 35px;
-			line-height: 35px;
-		}
-	}
-	.filters>.with-tags md-chip {
-		background: $brand-primary;
-		color: $white;
+        input:not(.md-input) {
+            height: 35px;
+            line-height: 35px;
+        }
+    }
+    .filters>.with-tags md-chip {
+        background: $brand-primary;
+        color: $white;
 
-		md-icon {
-			color: $white;
-		}
-	}
-	md-chips-wrap {
-		height: 48px;
-		md-icon {
-			font-size: 21px;
-		}
-	}
-	.as-sortable-placeholder {
-	    display: inline-block !important;
-	}
+        md-icon {
+            color: $white;
+        }
+    }
+    md-chips-wrap {
+        height: 48px;
+        md-icon {
+            font-size: 21px;
+        }
+    }
+    .as-sortable-placeholder {
+        display: inline-block !important;
+    }
 
-	.as-sortable-drag {
-	    /*position: absolute;*/
-	}
+    .close-button {
+        color: white;
+        font-size: 16px;
+        line-height: 22px;
+        width: 14px;
+        min-width: 14px;
+    }
 }
 .campaign-data-table .label {
-	margin-right: 5px;
+    margin-right: 5px;
 }
+
+.as-sortable-dragging {
+    /*position: absolute;*/
+}
+
