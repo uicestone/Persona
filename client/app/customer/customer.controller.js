@@ -178,6 +178,14 @@
                 $scope.query.inGroup = inGroup.map(function(group) {
                     return group._id;
                 });
+
+                inGroup.forEach(function(group) {
+                    group.fields.forEach(function(field) {
+                        if($scope.showingCustomerFields.indexOf(field) === -1) {
+                            $scope.showingCustomerFields.push(field);
+                        }
+                    });
+                });
             }
         }, true);
 
@@ -216,7 +224,12 @@
             if(!group) {
                 group = new customerGroupService();
                 group.fields = $scope.showingCustomerFields;
-                group.query = $scope.query;
+                group.query = {};
+                Object.keys($scope.query).forEach(function(key) {
+                    if(key !== 'page' && key !== 'limit') {
+                        group.query[key] = $scope.query[key];
+                    }
+                });
             }
 
             $scope.group = group;

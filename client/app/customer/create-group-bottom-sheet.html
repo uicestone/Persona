@@ -9,7 +9,7 @@
             <md-input-container class="md-input-has-value">
                 <label>显示字段</label>
                 <p style="line-height:30px">
-                    <span ng-repeat="key in group.showKeys"> {{ key.label }} </span>
+                    <span ng-repeat="field in group.fields" class="label label-info" style="margin-right:5px"> {{ field.label }} </span>
                 </p>
             </md-input-container>
             <md-input-container class="md-input-has-value">
