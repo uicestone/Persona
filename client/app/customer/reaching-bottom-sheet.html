@@ -1,0 +1,20 @@
+<md-bottom-sheet class="md-list md-has-header" style="position:fixed">
+    <md-content class="md-padding" style="margin-top:20px">
+        <div layout="row">
+            <md-input-container flex="40" flex-offset="10" class="md-input-has-value">
+                <label>短信内容</label>
+                <p>{{ customerReaching.content }}</p>
+            </md-input-container>
+            <div flex="40" layout="column">
+                <md-input-container class="md-input-has-value">
+                    <label>发送成功</label>
+                    <p class="md-primiry">{{ customerReaching.succeeded }} 人</p>
+                </md-input-container>
+                <md-input-container class="md-input-has-value">
+                    <label>发送失败</label>
+                    <p>{{ {{ customerReaching.failed }} }} 人</p>
+                </md-input-container>
+            </div>
+        </div>
+    </md-content>
+</md-bottom-sheet>

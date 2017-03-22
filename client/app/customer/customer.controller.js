@@ -249,6 +249,19 @@
             
             groupToRemove.$delete();
         };
+
+        // 查看触达详情
+        $scope.showCustomerReachingDetail = function(customerReaching) {
+
+            $scope.customerReaching = customerReaching;
+
+            $mdBottomSheet.show({
+                templateUrl: 'app/customer/reaching-bottom-sheet.html',
+                scope: $scope,
+                preserveScope: true
+            });
+        };
+
     }
     
 })(); 

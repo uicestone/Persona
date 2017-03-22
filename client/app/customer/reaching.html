@@ -7,15 +7,19 @@
                         <div layout="row">
                             <md-input-container flex="30">
                                 <label>用户组</label>
-                                <md-select ng-model="customerReaching.customerGroup">
+                                <md-select ng-model="newCustomerReaching.customerGroup">
                                     <md-option ng-repeat="customerGroup in customerGroups" value="customerGroup">{{ customerGroup.name }}</md-option>
                                 </md-select>
                             </md-input-container>
                         </div>
+                        <br>
                         <md-input-container>
                             <label>短信内容</label>
-                            <textarea rows="5" ng-model="customerReaching.content"></textarea>
+                            <textarea rows="5" ng-model="newCustomerReaching.content"></textarea>
                         </md-input-container>
+                        <div style="text-align:right">
+                            <md-button ng-click="send(customerReaching)" class="md-primary md-raised">发送短信</md-button>
+                        </div>
                     </md-content>
                 </md-tab>
                 <md-tab label="微信触达" ng-disabled="true">
@@ -47,7 +51,7 @@
                                 <td md-cell>{{ customerReaching.sendAt | date:'y-MM-dd HH:mm:ss' }}</td>
                                 <td md-cell>{{ customerReaching.content }}</td>
                                 <td md-cell>
-                                    <md-icon class="md-primary">info_outline</md-icon>
+                                    <md-icon class="md-primary" ng-click="showCustomerReachingDetail(customerReaching)">info_outline</md-icon>
                                     <md-icon class="md-primary">refresh</md-icon>
                                 </td>
                             </tr>
