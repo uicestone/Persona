@@ -20,11 +20,12 @@
         .service('customerService', ['$resource', customerService])
         .service('customerFieldService', ['$resource', customerFieldService])
         .service('customerGroupService', ['$resource', customerGroupService])
+        .service('customerReachingService', ['$resource', customerReachingService])
         .service('projectService', ['$resource', projectService])
         .service('userService', ['$resource', 'userRolesConstant', userService])
         .constant('userRolesConstant', [
-            {name: 'admin', label: '平台管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'set-channel', 'set-data', 'set-user']},
-            {name: 'brand_admin', label: '品牌管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'set-data']},
+            {name: 'admin', label: '平台管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'reach-customer', 'set-channel', 'set-data', 'set-user']},
+            {name: 'brand_admin', label: '品牌管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'reach-customer', 'set-data']},
             {name: 'project_admin', label: '品牌执行者', abilities: ['list-project', 'timing-project', 'image-customer', 'set-data']}
         ]);
 
@@ -208,6 +209,29 @@
         }
         
         return customerGroups;
+
+    }
+
+    function customerReachingService($resource) {
+
+        var customerReachings = $resource(api + 'customer-reaching/:id', {id: '@_id'}, {
+            query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
+            create: {method: 'POST'},
+            update: {method: 'PUT'}
+        });
+        
+        // Angular mix PUT and POST methot to $save,
+        // we seperate them to $create and $update here
+        customerReachings.prototype.$save = function (a, b, c, d) {
+            if (this._id) {
+                return this.$update(a, b, c, d);
+            }
+            else {
+                return this.$create(a, b, c, d);
+            }
+        }
+        
+        return customerReachings;
 
     }
 

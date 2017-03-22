@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var customerGroupSchema = new Schema({
 	name: String,
-    showKeys: [{label: String, key: String}],
+    fields: [{label: String, key: String}],
     query: Object
 });
 

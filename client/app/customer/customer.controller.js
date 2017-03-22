@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.customer')
-    .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', 'customerService', 'customerGroupService', 'customerFieldService', customerCtrl]);
+    .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', 'customerService', 'customerGroupService', 'customerFieldService', 'customerReachingService', customerCtrl]);
 
-    function customerCtrl($scope, $window, $location, $mdBottomSheet, customerService, customerGroupService, customerFieldService) {
+    function customerCtrl($scope, $window, $location, $mdBottomSheet, customerService, customerGroupService, customerFieldService, customerReachingService) {
         
         $scope.query = $location.search();
 
@@ -52,6 +52,16 @@
         $scope.customerFields = customerFieldService.query();
 
         $scope.customerGroups = customerGroupService.query();
+
+        $scope.queryCustomerReachings = {page: 1, limit: 20};
+        
+        $scope.getCustomerReachings = function() {
+            $scope.promiseCustomerReachings = customerReachingService.query($scope.queryCustomerReachings).$promise.then(function(customerReachings) {
+                $scope.customerReachings = customerReachings;
+            });
+        };
+
+        $scope.getCustomerReachings();
 
         $scope.getCustomers = function() {};
 

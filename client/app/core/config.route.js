@@ -7,6 +7,7 @@
                 var routes, setRoutes;
 
                 routes = [
+                    'customer/reaching',
                     'project/list', 'project/timing',
                     'setting/data', 'setting/user', 'setting/channel',
                     'welcome', 'get-sdk', '404', '500', 'forgot-password', 'lock-screen', 'profile', 'signin', 'signup',

@@ -8,6 +8,7 @@ module.exports = function(app, router) {
     router = require('./customer.js')(router);
     router = require('./customerField.js')(router);
     router = require('./customerGroup.js')(router);
+    router = require('./customerReaching.js')(router);
     router = require('./project.js')(router);
     router = require('./user.js')(router);
     router = require('./auth.js')(router);
