@@ -26,6 +26,13 @@
 			font-size: 21px;
 		}
 	}
+	.as-sortable-placeholder {
+	    display: inline-block !important;
+	}
+
+	.as-sortable-drag {
+	    /*position: absolute;*/
+	}
 }
 .campaign-data-table .label {
 	margin-right: 5px;

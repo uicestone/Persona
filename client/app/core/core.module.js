@@ -18,6 +18,7 @@
         ,'ngMaterial'
         ,'duScroll'
         ,'angular-clipboard'
+        ,'as.sortable'
     ]);
 
 })();

@@ -32,9 +32,11 @@
                         </div>
                         <br>
                         <div layout="row" layout-align="start start">
-                            <md-input-container ng-repeat="key in customerKeys" ng-if="key.show">
-                                <md-checkbox ng-model="key.show">{{ key.label }}</md-checkbox>
-                            </md-input-container>
+                            <div as-sortable ng-model="customerKeys">
+                                <md-input-container as-sortable-item ng-repeat="key in customerKeys | filter:{show:true}" class="show-key-item">
+                                    <md-checkbox ng-model="key.show" as-sortable-item-handle>{{ key.label }}</md-checkbox>
+                                </md-input-container>
+                            </div>
                             <div flex layout="row" layout-align="end center">
                                 <md-autocomplete placeholder="新增显示字段" md-items="key in getPossibleKeys(searchOtherKeysText)" md-search-text="searchOtherKeysText" md-item-text="key.label" md-selected-item="newShowKey" md-min-length="0" md-no-cache="true" md-selected-item-change="showKey(newShowKey)">
                                     <span>{{ key.label }}</span>
@@ -49,7 +51,7 @@
                             <md-input-container>
                                 <input flex type="number" ng-model="query.rank" aria-label="rank" aria-controls="">
                             </md-input-container>
-                            <md-slider ng-model="query.rank" min="10" max="100" step="10" aria-label="rank" min="10" max="100" step="10" id="" class="md-accent" md-vertical md-discrete md-range></md-slider>
+                            <md-slider ng-model="query.rank" min="10" max="100" step="10" aria-label="rank" min="10" max="100" step="10" id="" class="md-primary" md-vertical md-discrete></md-slider>
                             <h5>客户口碑度</h5>
                         </md-slider-container>
                         <md-slider-container flex>
@@ -128,9 +130,11 @@
                         </form>
                         <br>
                         <div layout="row" layout-align="start start">
-                            <md-input-container ng-repeat="key in customerKeys" ng-if="key.show">
-                                <md-checkbox ng-model="key.show">{{ key.label }}</md-checkbox>
-                            </md-input-container>
+                            <div as-sortable ng-model="customerKeys">
+                                <md-input-container as-sortable-item ng-repeat="key in customerKeys | filter:{show:true}" class="show-key-item">
+                                    <md-checkbox ng-model="key.show" as-sortable-item-handle>{{ key.label }}</md-checkbox>
+                                </md-input-container>
+                            </div>
                             <div flex layout="row" layout-align="end center">
                                 <md-autocomplete placeholder="新增显示字段" md-items="key in getPossibleKeys(searchOtherKeysText)" md-search-text="searchOtherKeysText" md-item-text="key.label" md-selected-item="newShowKey" md-min-length="0" md-no-cache="true" md-selected-item-change="showKey(newShowKey)">
                                     <span>{{ key.label }}</span>
