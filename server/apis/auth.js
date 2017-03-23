@@ -1,10 +1,10 @@
-var User = require('../models/user');
-var crypto = require('crypto');
+const User = require('../models/user');
+const crypto = require('crypto');
 
-module.exports = function(router) {
+module.exports = (router) => {
     
     router.route('/auth/login')
-        .post(function(req, res) {
+        .post((req, res) => {
             
             if(!req.body.username) {
                 res.status(400).json({message: '请输入用户名'});
@@ -16,7 +16,7 @@ module.exports = function(router) {
                 return;
             }
 
-            User.findOne({$or:[{email: req.body.username}, {username: req.body.username}]}).then(function(user) {
+            User.findOne({$or:[{email: req.body.username}, {username: req.body.username}]}).then((user) => {
                 
                 if(!user) {
                     res.status(401).json({message: '用户不存在'});
@@ -32,8 +32,8 @@ module.exports = function(router) {
                     res.send(user);
                 }
                 else {
-                    crypto.randomBytes(48, function(err, buffer) {
-                        var token = buffer.toString('hex');
+                    crypto.randomBytes(48, (err, buffer) => {
+                        const token = buffer.toString('hex');
                         user.token = token;
                         user.save();
                         res.json(user);
@@ -44,12 +44,12 @@ module.exports = function(router) {
         });
 
     router.route('/auth/logout')
-        .get(function(req, res) {
+        .get((req, res) => {
             res.end();
         });
 
     router.route('/auth/user')
-        .get(function(req, res) {
+        .get((req, res) => {
             res.json(req.user);
         });
 

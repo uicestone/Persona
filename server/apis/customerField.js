@@ -1,13 +1,13 @@
-var CustomerField = require('../models/customerField.js');
+const CustomerField = require('../models/customerField.js');
 
-module.exports = function(router) {
+module.exports = (router) => {
     // CustomerField CURD
     router.route('/customer-field')
 
         // create an customer field
-        .post(function(req, res) {
+        .post((req, res) => {
             
-            var customerField = new CustomerField(req.body); // create a new instance of the CustomerField model
+            let customerField = new CustomerField(req.body); // create a new instance of the CustomerField model
 
             // 为非管理员新增的访客字段设置品牌
             if(req.user.roles.indexOf('admin') === -1) {
@@ -15,7 +15,7 @@ module.exports = function(router) {
             }
 
             // save the customer field and check for errors
-            customerField.save(function(err) {
+            customerField.save((err) => {
                 if (err)
                     return res.status(500).send(err);
                 res.json(customerField);
@@ -24,12 +24,12 @@ module.exports = function(router) {
         })
 
         // get common and brand specified customer fields
-        .get(function(req, res) {
+        .get((req, res) => {
 
-            var limit = +req.query.limit || 20;
-            var skip = +req.query.skip || 0;
+            const limit = +req.query.limit || 20;
+            let skip = +req.query.skip || 0;
 
-            var query = CustomerField.find();
+            let query = CustomerField.find();
 
             if(req.query.page && !skip) {
                 skip = (req.query.page - 1) * limit;
@@ -60,10 +60,10 @@ module.exports = function(router) {
             }
 
             query.count()
-            .then(function(total) {
+            .then((total) => {
                 return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
             })
-            .then(function(result) {
+            .then((result) => {
                 let [total, page] = result;
 
                 if(skip + page.length > total) {
@@ -82,22 +82,22 @@ module.exports = function(router) {
     router.route('/customer-field/:customerFieldId')
 
         // get the customerField with that id
-        .get(function(req, res) {
-            CustomerField.findById(req.params.customerFieldId, function(err, customerField) {
+        .get((req, res) => {
+            CustomerField.findById(req.params.customerFieldId, (err, customerField) => {
                 if (err)
                     res.status(500).send(err);
                 res.json(customerField);
             });
         })
 
-        .put(function(req, res) {
-            CustomerField.where({_id: req.params.customerFieldId}).update(req.body, function(err, raw) {
+        .put((req, res) => {
+            CustomerField.where({_id: req.params.customerFieldId}).update(req.body, (err, raw) => {
                 if (err) {
                     res.status(500).send(err);
                     return;
                 }
 
-                CustomerField.findById(req.params.customerFieldId, function(err, customerField) {
+                CustomerField.findById(req.params.customerFieldId, (err, customerField) => {
                     if (err)
                         res.status(500).send(err);
 
@@ -107,10 +107,10 @@ module.exports = function(router) {
         })
 
         // delete the customer field with this id
-        .delete(function(req, res) {
+        .delete((req, res) => {
             CustomerField.remove({
                 _id: req.params.customerFieldId
-            }, function(err, customerField) {
+            }, (err, customerField) => {
                 if (err)
                     res.status(500).send(err);
 

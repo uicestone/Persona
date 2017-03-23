@@ -1,4 +1,4 @@
-var User = require('../models/user');
+const User = require('../models/user');
 
 module.exports = function(req, res, next) {
 
@@ -7,14 +7,14 @@ module.exports = function(req, res, next) {
         return;
     }
 
-    var token = req.get('authorization') || req.query.token;
+    const token = req.get('authorization') || req.query.token;
 
     if(!token) {
         res.status(401).json({message:'无效登录，请重新登录'});
         return;
     }
 
-    User.findOne({token: token}).then(function(user) {
+    User.findOne({token}).then((user) => {
         if(!user) {
             res.status(401).json({message:'无效登录，请重新登录'});
             return;

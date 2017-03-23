@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var customerFieldSchema = new Schema({
+const customerFieldSchema = new Schema({
 	key: String,
     label: String,
     reserved: Boolean,

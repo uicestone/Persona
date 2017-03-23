@@ -1,13 +1,13 @@
-var CustomerReaching = require('../models/customerReaching.js');
+const CustomerReaching = require('../models/customerReaching.js');
 
-module.exports = function(router) {
+module.exports = (router) => {
     // CustomerReaching CURD
     router.route('/customer-reaching')
 
         // create an customer reaching
-        .post(function(req, res) {
+        .post((req, res) => {
             
-            var customerReaching = new CustomerReaching(req.body); // create a new instance of the CustomerReaching model
+            let customerReaching = new CustomerReaching(req.body); // create a new instance of the CustomerReaching model
 
             // 为非管理员新增的访客字段设置品牌
             if(req.user.roles.indexOf('admin') === -1) {
@@ -15,7 +15,7 @@ module.exports = function(router) {
             }
 
             // save the customer reaching and check for errors
-            customerReaching.save(function(err) {
+            customerReaching.save((err) => {
                 if (err)
                     return res.status(500).send(err);
                 res.json(customerReaching);
@@ -24,12 +24,12 @@ module.exports = function(router) {
         })
 
         // get common and brand specified customer reachings
-        .get(function(req, res) {
+        .get((req, res) => {
 
-            var limit = +req.query.limit || 20;
-            var skip = +req.query.skip || 0;
+            const limit = +req.query.limit || 20;
+            let skip = +req.query.skip || 0;
 
-            var query = CustomerReaching.find();
+            let query = CustomerReaching.find();
 
             if(req.query.page && !skip) {
                 skip = (req.query.page - 1) * limit;
@@ -60,10 +60,10 @@ module.exports = function(router) {
             }
 
             query.count()
-            .then(function(total) {
+            .then((total) => {
                 return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
             })
-            .then(function(result) {
+            .then((result) => {
                 let [total, page] = result;
 
                 if(skip + page.length > total) {
@@ -82,22 +82,22 @@ module.exports = function(router) {
     router.route('/customer-reaching/:customerReachingId')
 
         // get the customerReaching with that id
-        .get(function(req, res) {
-            CustomerReaching.findById(req.params.customerReachingId, function(err, customerReaching) {
+        .get((req, res) => {
+            CustomerReaching.findById(req.params.customerReachingId, (err, customerReaching) => {
                 if (err)
                     res.status(500).send(err);
                 res.json(customerReaching);
             });
         })
 
-        .put(function(req, res) {
-            CustomerReaching.where({_id: req.params.customerReachingId}).update(req.body, function(err, raw) {
+        .put((req, res) => {
+            CustomerReaching.where({_id: req.params.customerReachingId}).update(req.body, (err, raw) => {
                 if (err) {
                     res.status(500).send(err);
                     return;
                 }
 
-                CustomerReaching.findById(req.params.customerReachingId, function(err, customerReaching) {
+                CustomerReaching.findById(req.params.customerReachingId, (err, customerReaching) => {
                     if (err)
                         res.status(500).send(err);
 
@@ -107,10 +107,10 @@ module.exports = function(router) {
         })
 
         // delete the customer reaching with this id
-        .delete(function(req, res) {
+        .delete((req, res) => {
             CustomerReaching.remove({
                 _id: req.params.customerReachingId
-            }, function(err, customerReaching) {
+            }, (err, customerReaching) => {
                 if (err)
                     res.status(500).send(err);
 

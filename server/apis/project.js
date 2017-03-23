@@ -1,21 +1,21 @@
-var Project = require('../models/project.js');
-var Campaign = require('../models/campaign.js');
-var Channel = require('../models/channel.js');
-var Types = require('mongoose').Types;
+const Project = require('../models/project.js');
+const Campaign = require('../models/campaign.js');
+const Channel = require('../models/channel.js');
+const Types = require('mongoose').Types;
 
-module.exports = function(router) {
+module.exports = (router) => {
     // Project CURD
     router.route('/project')
 
         // create a project
-        .post(function(req, res) {
+        .post((req, res) => {
             
-            var project = new Project(req.body);      // create a new instance of the Project model
+            let project = new Project(req.body);      // create a new instance of the Project model
             project.brand = req.body.manager.brand;
             project.createdAt = new Date();
 
             // save the project and check for errors
-            project.save(function(err, project) {
+            project.save((err, project) => {
                 if (err)
                     return res.status(500).send(err);
 
@@ -28,11 +28,11 @@ module.exports = function(router) {
         })
 
         // get all the projects for current user
-        .get(function(req, res) {
-            var limit = +req.query.limit || 20;
-            var skip = +req.query.skip || 0;
+        .get((req, res) => {
+            const limit = +req.query.limit || 20;
+            let skip = +req.query.skip || 0;
 
-            var query = Project.find();
+            let query = Project.find();
 
             if(req.query.page && !skip) {
                 skip = (req.query.page - 1) * limit;
@@ -68,9 +68,9 @@ module.exports = function(router) {
                 
                 if(req.query[property]) {
 
-                    var range = req.query[property].split(/[~_]/);
+                    const range = req.query[property].split(/[~_]/);
 
-                    var condition = {[property]:{}};
+                    let condition = {[property]:{}};
 
                     if(range[0] && !isNaN(range[0])) {
                         condition[property].$gte = Number(range[0]);
@@ -93,10 +93,10 @@ module.exports = function(router) {
             }
 
             query.count()
-            .then(function(total) {
+            .then((total) => {
                 return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
             })
-            .then(function(result) {
+            .then((result) => {
                 let [total, page] = result;
 
                 if(skip + page.length > total) {
@@ -115,8 +115,8 @@ module.exports = function(router) {
     router.route('/project/:projectId')
 
         // get the project with that id
-        .get(function(req, res) {
-            Project.findById(req.params.projectId, function(err, project) {
+        .get((req, res) => {
+            Project.findById(req.params.projectId, (err, project) => {
                 if (err)
                     return res.status(500).send(err);
 
@@ -124,12 +124,12 @@ module.exports = function(router) {
             });
         })
 
-        .put(function(req, res) {
-            Project.where({_id: req.params.projectId}).update(req.body, function(err, raw) {
+        .put((req, res) => {
+            Project.where({_id: req.params.projectId}).update(req.body, (err, raw) => {
                 if (err)
                     return res.status(500).send(err);
 
-                Project.findById(req.params.projectId, function(err, project) {
+                Project.findById(req.params.projectId, (err, project) => {
                     if (err)
                         return res.status(500).send(err);
                     
@@ -139,10 +139,10 @@ module.exports = function(router) {
         })
 
         // delete the project with this id
-        .delete(function(req, res) {
+        .delete((req, res) => {
             Project.remove({
                 _id: req.params.projectId
-            }, function(err, project) {
+            }, (err, project) => {
                 if (err)
                     return res.status(500).send(err);
 
@@ -150,7 +150,7 @@ module.exports = function(router) {
             });
         });
 
-    router.route('/project/:projectId/kpi-by-channels').get(function(req, res) {
+    router.route('/project/:projectId/kpi-by-channels').get((req, res) => {
         Campaign.aggregate([{
             $match: {project: Types.ObjectId(req.params.projectId)}
         },{
@@ -161,12 +161,12 @@ module.exports = function(router) {
                 timeStay: {$avg: "$stayedFor"},
                 shares: {$sum: {$cond: {if: "$shared", then: 1, else: 0}}}
             }
-        }]).then(function(result) {
+        }]).then((result) => {
             res.send(result);
         });
     });
 
-    router.route('/project/:projectId/kpi-by-date').get(function(req, res) {
+    router.route('/project/:projectId/kpi-by-date').get((req, res) => {
         Campaign.aggregate([{
             $match: {project: Types.ObjectId(req.params.projectId)}
         },{
@@ -177,12 +177,12 @@ module.exports = function(router) {
             }
         }, {
             $sort: {_id: 1}
-        }]).then(function(result) {
+        }]).then((result) => {
             res.send(result);
         });
     });
 
-    router.route('/project/:projectId/kpi-by-device').get(function(req, res) {
+    router.route('/project/:projectId/kpi-by-device').get((req, res) => {
         Campaign.aggregate([{
             $match: {project: Types.ObjectId(req.params.projectId)}
         },{
@@ -191,12 +191,12 @@ module.exports = function(router) {
                 uv: {$sum: 1},
                 converts: {$sum: {$cond: {if: "$converted", then: 1, else: 0}}}
             }
-        }]).then(function(result) {
+        }]).then((result) => {
             res.send(result);
         });
     });
 
-    router.route('/project/:projectId/kpi-by-region').get(function(req, res) {
+    router.route('/project/:projectId/kpi-by-region').get((req, res) => {
         Campaign.aggregate([{
             $match: {project: Types.ObjectId(req.params.projectId)}
         },{
@@ -204,28 +204,28 @@ module.exports = function(router) {
                 _id: "$province",
                 converts: {$sum: {$cond: {if: "$converted", then: 1, else: 0}}}
             }
-        }]).then(function(result) {
+        }]).then((result) => {
             res.send(result);
         });
     });
 
     router.route('/project/:projectId/campaign-record')
 
-        .get(function(req, res) {
-            var limit = +req.query.limit || 20;
-            var skip = +req.query.skip || 0;
+        .get((req, res) => {
+            const limit = +req.query.limit || 20;
+            let skip = +req.query.skip || 0;
 
-            var query = Campaign.find({project: req.params.projectId});
+            let query = Campaign.find({project: req.params.projectId});
 
             if(req.query.page && !skip) {
                 skip = (req.query.page - 1) * limit;
             }
 
             query.count()
-            .then(function(total) {
+            .then((total) => {
                 return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
             })
-            .then(function(result) {
+            .then((result) => {
                 let [total, page] = result;
 
                 if(skip + page.length > total) {
@@ -239,10 +239,10 @@ module.exports = function(router) {
             });
         })
 
-        .post(function(req, res) {
+        .post((req, res) => {
 
-            var record = new Campaign(req.body);      // create a new instance of the CampaignRecord model
-            var channelId = req.query.channel;
+            let record = new Campaign(req.body);      // create a new instance of the CampaignRecord model
+            const channelId = req.query.channel;
 
             if(Object.keys(req.body).length === 0) {
                 return res.status(400).send({message: 'Empty input.'});
@@ -252,31 +252,31 @@ module.exports = function(router) {
             record.project = req.params.projectId;
 
             Channel.findOne({_id:channelId})
-            .then(function(channel) {
+            .then((channel) => {
                 if(!channel)
                     throw '';
                 record.fromChannel = {_id: channel._id, name: channel.name};
             })
-            .catch(function() {
+            .catch(() => {
                 throw 'Invalid channel id.'
             })
 
-            .then(function() {
+            .then(() => {
                 return Project.findOne({_id: record.project});
             })
-            .then(function(project) {
+            .then((project) => {
                 if(!project)
                     throw '';
                 return record.save();
             })
-            .catch(function() {
+            .catch(() => {
                 throw 'Invalid project id.'
             })
 
-            .then(function(record) {
+            .then((record) => {
                 res.json(record);
             })
-            .catch(function(err) {
+            .catch((err) => {
                 return res.status(400).send({message: err});
             });
 

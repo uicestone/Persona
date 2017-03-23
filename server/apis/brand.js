@@ -1,16 +1,16 @@
-var Brand = require('../models/brand.js');
+const Brand = require('../models/brand.js');
 
-module.exports = function(router) {
+module.exports = (router) => {
     // Brand CURD
     router.route('/brand')
 
         // create an brand
-        .post(function(req, res) {
+        .post((req, res) => {
             
-            var brand = new Brand(req.body); // create a new instance of the Brand model
+            let brand = new Brand(req.body); // create a new instance of the Brand model
 
             // save the brand and check for errors
-            brand.save(function(err) {
+            brand.save((err) => {
                 if (err)
                     res.status(500).send(err);
 
@@ -20,12 +20,12 @@ module.exports = function(router) {
         })
 
         // get all the brands
-        .get(function(req, res) {
+        .get((req, res) =>{
 
-            var limit = +req.query.limit || 20;
-            var skip = +req.query.skip || 0;
+            const limit = +req.query.limit || 20;
+            let skip = +req.query.skip || 0;
 
-            var query = Brand.find();
+            let query = Brand.find();
 
             if(req.query.page && !skip) {
                 skip = (req.query.page - 1) * limit;
@@ -44,10 +44,10 @@ module.exports = function(router) {
             }
 
             query.count()
-            .then(function(total) {
+            .then((total) => {
                 return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
             })
-            .then(function(result) {
+            .then((result) => {
                 let [total, page] = result;
 
                 if(skip + page.length > total) {
@@ -66,22 +66,20 @@ module.exports = function(router) {
     router.route('/brand/:brandId')
 
         // get the brand with that id
-        .get(function(req, res) {
-            Brand.findById(req.params.brandId, function(err, brand) {
+        .get((req, res) =>{
+            Brand.findById(req.params.brandId, (err, brand) => {
                 if (err)
-                    res.status(500).send(err);
+                    return res.status(500).send(err);
                 res.json(brand);
             });
         })
 
-        .put(function(req, res) {
-            Brand.where({_id: req.params.brandId}).update(req.body, function(err, raw) {
-                if (err) {
-                    res.status(500).send(err);
-                    return;
-                }
+        .put((req, res) =>{
+            Brand.where({_id: req.params.brandId}).update(req.body, (err, raw) => {
+                if (err)
+                    return res.status(500).send(err);
 
-                Brand.findById(req.params.brandId, function(err, brand) {
+                Brand.findById(req.params.brandId, (err, brand) => {
                     if (err)
                         res.status(500).send(err);
 
@@ -91,10 +89,10 @@ module.exports = function(router) {
         })
 
         // delete the brand with this id
-        .delete(function(req, res) {
+        .delete((req, res) =>{
             Brand.remove({
                 _id: req.params.brandId
-            }, function(err, brand) {
+            }, (err, brand) => {
                 if (err)
                     res.status(500).send(err);
 

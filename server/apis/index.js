@@ -1,7 +1,7 @@
-var authenticate = require('../middlewares/authenticate');
-var cors = require('cors');
+const authenticate = require('../middlewares/authenticate');
+const cors = require('cors');
 
-module.exports = function(app, router) {
+module.exports = (app, router) => {
     // register routes
     router = require('./brand.js')(router);
     router = require('./channel.js')(router);

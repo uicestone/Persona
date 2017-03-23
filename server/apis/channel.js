@@ -1,16 +1,16 @@
-var Channel = require('../models/channel.js');
+const Channel = require('../models/channel.js');
 
-module.exports = function(router) {
+module.exports = (router) => {
     // Channel CURD
     router.route('/channel')
 
         // create an channel
-        .post(function(req, res) {
+        .post((req, res) => {
             
-            var channel = new Channel(req.body); // create a new instance of the Channel model
+            let channel = new Channel(req.body); // create a new instance of the Channel model
 
             // save the channel and check for errors
-            channel.save(function(err) {
+            channel.save((err) => {
                 if (err)
                     res.status(500).send(err);
 
@@ -20,12 +20,12 @@ module.exports = function(router) {
         })
 
         // get all the channels
-        .get(function(req, res) {
+        .get((req, res) => {
 
-            var limit = +req.query.limit || 20;
-            var skip = +req.query.skip || 0;
+            const limit = +req.query.limit || 20;
+            let skip = +req.query.skip || 0;
 
-            var query = Channel.find();
+            let query = Channel.find();
 
             if(req.query.page && !skip) {
                 skip = (req.query.page - 1) * limit;
@@ -44,10 +44,10 @@ module.exports = function(router) {
             }
 
             query.count()
-            .then(function(total) {
+            .then((total) => {
                 return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
             })
-            .then(function(result) {
+            .then((result) => {
                 let [total, page] = result;
 
                 if(skip + page.length > total) {
@@ -66,22 +66,22 @@ module.exports = function(router) {
     router.route('/channel/:channelId')
 
         // get the channel with that id
-        .get(function(req, res) {
-            Channel.findById(req.params.channelId, function(err, channel) {
+        .get((req, res) => {
+            Channel.findById(req.params.channelId, (err, channel) => {
                 if (err)
                     res.status(500).send(err);
                 res.json(channel);
             });
         })
 
-        .put(function(req, res) {
-            Channel.where({_id: req.params.channelId}).update(req.body, function(err, raw) {
+        .put((req, res) => {
+            Channel.where({_id: req.params.channelId}).update(req.body, (err, raw) => {
                 if (err) {
                     res.status(500).send(err);
                     return;
                 }
 
-                Channel.findById(req.params.channelId, function(err, channel) {
+                Channel.findById(req.params.channelId, (err, channel) => {
                     if (err)
                         res.status(500).send(err);
 
@@ -91,10 +91,10 @@ module.exports = function(router) {
         })
 
         // delete the channel with this id
-        .delete(function(req, res) {
+        .delete((req, res) => {
             Channel.remove({
                 _id: req.params.channelId
-            }, function(err, channel) {
+            }, (err, channel) => {
                 if (err)
                     res.status(500).send(err);
 

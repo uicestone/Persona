@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var projectSchema = new Schema({
+const projectSchema = new Schema({
     name: String,
     brand: {
     	_id: Schema.Types.ObjectId,
@@ -47,8 +47,8 @@ var projectSchema = new Schema({
 projectSchema.index({name:1}, {unique:true});
 
 projectSchema.virtual('status')
-.get(function() {
-    var now = new Date();
+.get(() => {
+    const now = new Date();
     if (this.startDate > now) {
         return '未开始';
     }

@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var customerSchema = new Schema({
+const customerSchema = new Schema({
 	nuid: Number,
     mobile: String,
     carrier: String,

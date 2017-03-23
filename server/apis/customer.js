@@ -1,18 +1,18 @@
-var Customer = require('../models/customer.js');
-var CustomerField = require('../models/customerField.js');
-var xlsx = require('node-xlsx').default;
+const Customer = require('../models/customer.js');
+const CustomerField = require('../models/customerField.js');
+const xlsx = require('node-xlsx').default;
 
-module.exports = function(router) {
+module.exports = (router) => {
     // Customer CURD
     router.route('/customer')
 
         // create a customer
-        .post(function(req, res) {
+        .post((req, res) => {
             
-            var customer = new Customer(req.body);      // create a new instance of the Customer model
+            let customer = new Customer(req.body);      // create a new instance of the Customer model
 
             // save the customer and check for errors
-            customer.save(function(err) {
+            customer.save((err) => {
                 if (err)
                     res.status(500).send(err);
 
@@ -22,19 +22,19 @@ module.exports = function(router) {
         })
 
         // get all the customers
-        .get(function(req, res) {
+        .get((req, res) => {
             
-            var limit = +req.query.limit || 20;
-            var skip = +req.query.skip || 0;
+            const limit = +req.query.limit || 20;
+            let skip = +req.query.skip || 0;
 
-            var query = Customer.find();
+            let query = Customer.find();
 
-            var arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
-            var advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
-            var utilQueryParams = ['token', 'export', 'fields', 'limit', 'page', 'skip'];
+            const arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
+            const advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
+            const utilQueryParams = ['token', 'export', 'fields', 'limit', 'page', 'skip'];
             
             // 精准搜索字段
-            var preciseKeys = Object.keys(req.query).filter(function(key) {
+            const preciseKeys = Object.keys(req.query).filter((key) => {
                 return arrayQueryParams.indexOf(key) === -1
                     && advancedQueryParams.indexOf(key) === -1
                     && utilQueryParams.indexOf(key) === -1;
@@ -44,7 +44,7 @@ module.exports = function(router) {
                 skip = (req.query.page - 1) * limit;
             }
 
-            preciseKeys.forEach(function(key) {
+            preciseKeys.forEach((key) => {
                 query.find({
                     [key]: req.query[key]
                 });
@@ -87,7 +87,7 @@ module.exports = function(router) {
             }
 
             // 维度过滤
-            advancedQueryParams.forEach(function(attribute) {
+            advancedQueryParams.forEach((attribute) => {
                 if(req.query[attribute]) {
                     query.find({
                         [attribute]: {$lte: req.query[attribute] / 100, $gt: (req.query[attribute] - 10) / 100}
@@ -107,7 +107,7 @@ module.exports = function(router) {
                 Promise.all([
                     query.find(),
                     CustomerField.find({key: req.query.fields.split(',')})
-                ]).then(function(result) {
+                ]).then((result) => {
                     let [customers, fields] = result;
                     let data = [];
 
@@ -133,10 +133,10 @@ module.exports = function(router) {
 
             else {
                 query.count()
-                .then(function(total) {
+                .then((total) => {
                     return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
                 })
-                .then(function(result) {
+                .then((result) => {
                     let [total, page] = result;
 
                     if(skip + page.length > total) {
@@ -157,22 +157,22 @@ module.exports = function(router) {
     router.route('/customer/:customerId')
 
         // get the customer with that id
-        .get(function(req, res) {
-            Customer.findById(req.params.customerId, function(err, customer) {
+        .get((req, res) => {
+            Customer.findById(req.params.customerId, (err, customer) => {
                 if (err)
                     res.status(500).send(err);
                 res.json(customer);
             });
         })
 
-        .put(function(req, res) {
-            Customer.where({_id: req.params.customerId}).update(req.body, function(err, raw) {
+        .put((req, res) => {
+            Customer.where({_id: req.params.customerId}).update(req.body, (err, raw) => {
                 if (err) {
                     res.status(500).send(err);
                     return;
                 }
 
-                Customer.findById(req.params.customerId, function(err, customer) {
+                Customer.findById(req.params.customerId, (err, customer) => {
                     if (err)
                         res.status(500).send(err);
                     
@@ -182,10 +182,10 @@ module.exports = function(router) {
         })
 
         // delete the customer with this id
-        .delete(function(req, res) {
+        .delete((req, res) => {
             Customer.remove({
                 _id: req.params.customerId
-            }, function(err, customer) {
+            }, (err, customer) => {
                 if (err)
                     res.status(500).send(err);
 

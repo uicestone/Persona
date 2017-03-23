@@ -1,16 +1,16 @@
-var User = require('../models/user.js');
+const User = require('../models/user.js');
 
-module.exports = function(router) {
+module.exports = (router) => {
     // User CURD
     router.route('/user')
 
         // create a user
-        .post(function(req, res) {
+        .post((req, res) => {
             
-            var user = new User(req.body);      // create a new instance of the User model
+            let user = new User(req.body);      // create a new instance of the User model
 
             // save the user and check for errors
-            user.save(function(err) {
+            user.save((err) => {
                 if (err)
                     return res.status(500).send(err);
                 res.json(user);
@@ -19,12 +19,12 @@ module.exports = function(router) {
         })
 
         // get all the users
-        .get(function(req, res) {
+        .get((req, res) => {
 
-            var limit = +req.query.limit || 20;
-            var skip = +req.query.skip || 0;
+            const limit = +req.query.limit || 20;
+            let skip = +req.query.skip || 0;
 
-            var query = User.find();
+            let query = User.find();
 
             if(req.query.page && !skip) {
                 skip = (req.query.page - 1) * limit;
@@ -51,10 +51,10 @@ module.exports = function(router) {
             }
 
             query.count()
-            .then(function(total) {
+            .then((total) => {
                 return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
             })
-            .then(function(result) {
+            .then((result) => {
                 let [total, page] = result;
 
                 if(skip + page.length > total) {
@@ -73,21 +73,21 @@ module.exports = function(router) {
     router.route('/user/:userId')
 
         // get the user with that id
-        .get(function(req, res) {
-            User.findById(req.params.userId, function(err, user) {
+        .get((req, res) => {
+            User.findById(req.params.userId, (err, user) => {
                 if (err)
                     return res.status(500).send(err);
                 res.json(user);
             });
         })
 
-        .put(function(req, res) {
-            User.where({_id: req.params.userId}).update(req.body, function(err, raw) {
+        .put((req, res) => {
+            User.where({_id: req.params.userId}).update(req.body, (err, raw) => {
                 if (err) {
                     return res.status(500).send(err);
                 }
 
-                User.findById(req.params.userId, function(err, user) {
+                User.findById(req.params.userId, (err, user) => {
                     if (err)
                         return res.status(500).send(err);
                     
@@ -97,10 +97,10 @@ module.exports = function(router) {
         })
 
         // delete the user with this id
-        .delete(function(req, res) {
+        .delete((req, res) => {
             User.remove({
                 _id: req.params.userId
-            }, function(err, user) {
+            }, (err, user) => {
                 if (err)
                     return res.status(500).send(err);
                 res.end();

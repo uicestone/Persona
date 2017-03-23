@@ -1,18 +1,18 @@
-var CustomerGroup = require('../models/customerGroup.js');
-var Customer = require('../models/customer.js');
+const CustomerGroup = require('../models/customerGroup.js');
+const Customer = require('../models/customer.js');
 
-module.exports = function(router) {
+module.exports = (router) => {
 
-    var arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
-    var advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
+    const arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
+    const advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
 
     // CustomerGroup CURD
     router.route('/customer-group')
 
         // create a customer group
-        .post(function(req, res) {
+        .post((req, res) => {
             
-            var customerGroup = new CustomerGroup(req.body);      // create a new instance of the CustomerGroup model
+            let customerGroup = new CustomerGroup(req.body);      // create a new instance of the CustomerGroup model
 
             // 为非管理员新增的访客分组设置品牌
             if(req.user.roles.indexOf('admin') === -1) {
@@ -20,23 +20,23 @@ module.exports = function(router) {
             }
             
             // save the customer group and check for errors
-            customerGroup.save(function(err) {
+            customerGroup.save((err) => {
                 if (err)
                     res.status(500).send(err);
 
                 res.json(customerGroup);
 
-                var query = {};
+                let query = {};
 
-                var arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
-                var advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
+                const arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
+                const advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
                 
                 // 精准搜索字段
-                var preciseKeys = Object.keys(customerGroup.query).filter(function(key) {
+                const preciseKeys = Object.keys(customerGroup.query).filter((key) => {
                     return arrayQueryParams.indexOf(key) === -1;
                 });
 
-                preciseKeys.forEach(function(key) {
+                preciseKeys.forEach((key) => {
                     query[key] = customerGroup.query[key];
                 });
 
@@ -65,7 +65,7 @@ module.exports = function(router) {
                 }
 
                 // 维度过滤
-                advancedQueryParams.forEach(function(attribute) {
+                advancedQueryParams.forEach((attribute) => {
                     if(customerGroup.query[attribute]) {
                         query[attribute] = {$lte: customerGroup.query[attribute] / 100, $gt: (customerGroup.query[attribute] - 10) / 100}
                     }
@@ -82,7 +82,7 @@ module.exports = function(router) {
                             name: customerGroup.name
                         }
                     }
-                }, {multi: true}).then(function(result) {
+                }, {multi: true}).then((result) => {
                     console.log(result.nModified + ' customers added to group: ' + customerGroup.name);
                 });
             });
@@ -90,12 +90,12 @@ module.exports = function(router) {
         })
 
         // get all the customer groups
-        .get(function(req, res) {
+        .get((req, res) => {
             
-            var limit = +req.query.limit || 20;
-            var skip = +req.query.skip || 0;
+            const limit = +req.query.limit || 20;
+            let skip = +req.query.skip || 0;
 
-            var query = CustomerGroup.find();
+            let query = CustomerGroup.find();
 
             if(req.query.page && !skip) {
                 skip = (req.query.page - 1) * limit;
@@ -114,10 +114,10 @@ module.exports = function(router) {
             }
             
             query.count()
-            .then(function(total) {
+            .then((total) => {
                 return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
             })
-            .then(function(result) {
+            .then((result) => {
                 let [total, page] = result;
 
                 if(skip + page.length > total) {
@@ -136,22 +136,22 @@ module.exports = function(router) {
     router.route('/customer-group/:customerGroupId')
 
         // get the customer group with that id
-        .get(function(req, res) {
-            CustomerGroup.findById(req.params.customerGroupId, function(err, customerGroup) {
+        .get((req, res) => {
+            CustomerGroup.findById(req.params.customerGroupId, (err, customerGroup) => {
                 if (err)
                     res.status(500).send(err);
                 res.json(customerGroup);
             });
         })
 
-        .put(function(req, res) {
-            CustomerGroup.where({_id: req.params.customerGroupId}).update(req.body, function(err, raw) {
+        .put((req, res) => {
+            CustomerGroup.where({_id: req.params.customerGroupId}).update(req.body, (err, raw) => {
                 if (err) {
                     res.status(500).send(err);
                     return;
                 }
 
-                CustomerGroup.findById(req.params.customerGroupId, function(err, customerGroup) {
+                CustomerGroup.findById(req.params.customerGroupId, (err, customerGroup) => {
                     if (err)
                         res.status(500).send(err);
                     
@@ -161,10 +161,10 @@ module.exports = function(router) {
         })
 
         // delete the customer group with this id
-        .delete(function(req, res) {
+        .delete((req, res) => {
             CustomerGroup.remove({
                 _id: req.params.customerGroupId
-            }, function(err) {
+            }, (err) => {
                 if (err)
                     res.status(500).send(err);
 
@@ -178,7 +178,7 @@ module.exports = function(router) {
                             _id: req.params.customerGroupId
                         }
                     }
-                }, {multi: true}).then(function(result) {
+                }, {multi: true}).then((result) => {
                     console.log(result.nModified + ' customers removed from group: ' + req.params.customerGroupId);
                 });
 
