@@ -34,7 +34,7 @@
             }
 
             $scope.timelineWeeks = [];
-            
+
             for (var d = timelineStartDate.clone().startOf('week'); d <= $scope.timelineEndDate; d.add(1, 'w')) {
                 $scope.timelineWeeks.push({
                     inPreviousTimeline: d.clone().startOf('week') < timelineStartDate,
@@ -71,6 +71,17 @@
             }).$promise;
         };
 
+        $scope.inTimeline = function(projects) {
+            return projects.filter(function(project) {
+                return project.endDate > $scope.timelineStartDate.toDate()
+                    && project.startDate < $scope.timelineEndDate.toDate()
+            }).map(function(project) {
+                project.startsBeforeTimeline = project.startDate < $scope.timelineStartDate.toDate();
+                project.endsAfterTimeline = project.endDate > $scope.timelineEndDate.toDate();
+                return project;
+            });
+        };
+
         $scope.showProjectDetail = function(project) {
             $location.path('project/' + project._id);
         };
@@ -99,7 +110,8 @@
 
         $scope.startDatePercentage = function(item, timelineStartDate, timelineEndDate) {
             var projectDuration = (timelineEndDate || new Date($scope.project.endDate)) - (timelineStartDate || new Date($scope.project.startDate)) + 86400000;
-            return (new Date(item.startDate) - (timelineStartDate || new Date($scope.project.startDate))) / projectDuration * 100;
+            var percentage =  (new Date(item.startDate) - (timelineStartDate || new Date($scope.project.startDate))) / projectDuration * 100;
+            return Math.max(0, percentage);
         };
 
         $scope.durationPercentage = function(item, timelineStartDate, timelineEndDate) {

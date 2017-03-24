@@ -106,6 +106,14 @@ md-tabs.project-detail {
                 color: $white;
             }
 
+            &.starts-before-timeline {
+                border-radius: 0 15px 15px 0;
+            }
+
+            &.ends-after-timeline {
+                border-radius: 15px 0 0 15px;
+            }
+
             .project-name {
                 text-overflow: ellipsis;
                 overflow: hidden;

@@ -237,9 +237,7 @@
 
     function projectService($resource) {
 
-        var projectResponseIntercepter = function(response) {
-            
-            project = response.resource;
+        var projectMutator = function(project) {
 
             project.startDate && (project.startDate = new Date(project.startDate));
             project.endDate && (project.endDate = new Date(project.endDate));
@@ -262,14 +260,25 @@
                 });
             }
 
-            return response.resource;
+            return project;
+        };
+
+        var projectResponseInterceptor = function(response) {
+            return projectMutator(response.resource);
         }
 
+        var projectsResponseInterceptor = function(response) {
+            responseInterceptor(response).forEach(function(project) {
+                return projectMutator(project);
+            });
+            return response.resource;
+        };
+
         var project = $resource(api + 'project/:id', {id: '@_id'}, {
-            query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
-            create: {method: 'POST', interceptor: {response: projectResponseIntercepter}},
-            update: {method: 'PUT', interceptor: {response: projectResponseIntercepter}},
-            get: {method: 'GET', interceptor: {response: projectResponseIntercepter}},
+            query: {method: 'GET', isArray: true, interceptor: {response: projectsResponseInterceptor}},
+            create: {method: 'POST', interceptor: {response: projectResponseInterceptor}},
+            update: {method: 'PUT', interceptor: {response: projectResponseInterceptor}},
+            get: {method: 'GET', interceptor: {response: projectResponseInterceptor}},
             getKpiByChannels: {method: 'GET', url: api + 'project/:id/kpi-by-channels', isArray: true},
             getKpiByDate: {method: 'GET', url: api + 'project/:id/kpi-by-date', isArray: true},
             getKpiByDevice: {method: 'GET', url: api + 'project/:id/kpi-by-device', isArray: true},
