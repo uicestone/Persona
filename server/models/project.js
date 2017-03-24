@@ -47,8 +47,9 @@ const projectSchema = new Schema({
 projectSchema.index({name:1}, {unique:true});
 
 projectSchema.virtual('status')
-.get(() => {
+.get(function() {
     const now = new Date();
+    
     if (this.startDate > now) {
         return '未开始';
     }

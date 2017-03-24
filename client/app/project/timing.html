@@ -14,7 +14,7 @@
                         </div>
                         <div flex layout="column">
                             <label>正在进行的项目数量</label>
-                            <strong>{{ projects.length }}</strong>
+                            <strong>{{ (projects | filter:{status:'进行中'}).length }}</strong>
                         </div>
                     </md-toolbar>
                     <md-card class="card md-padding">
