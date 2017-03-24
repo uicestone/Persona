@@ -1,9 +1,9 @@
-var gulp = require('gulp');
-var args = require('yargs').argv;
-var browserSync = require('browser-sync');
-var config = require('./gulp.config')();
-var del = require('del');
-var $ = require('gulp-load-plugins')({lazy: true});
+const gulp = require('gulp');
+const args = require('yargs').argv;
+const browserSync = require('browser-sync');
+const config = require('./gulp.config')();
+const del = require('del');
+const $ = require('gulp-load-plugins')({lazy: true});
 
 gulp.task('help', $.taskListing);
 gulp.task('default', ['help']);
@@ -21,18 +21,18 @@ gulp.task('vet', function() {
 });
 
 gulp.task('clean-tmp', function(done) {
-    var files = config.tmp;
+    const files = config.tmp;
     clean(files, done);
 });
 
 gulp.task('clean', function(done) {
-    var delconfig = [].concat(config.dist, config.tmp);
+    const delconfig = [].concat(config.dist, config.tmp);
     log('Cleaning ' + $.util.colors.blue(delconfig));
     del(delconfig, done);
 });
 
 gulp.task('clean-all', function(done) {
-    var delconfig = config.allToClean;
+    const delconfig = config.allToClean;
     log('Cleaning ' + $.util.colors.blue(delconfig));
     clean(delconfig, done);
 });
@@ -40,7 +40,7 @@ gulp.task('clean-all', function(done) {
 gulp.task('jade-docs', function() {
     log('Compiling docs jade --> html');
 
-    var options = {
+    const options = {
         pretty: false
     }
 
@@ -69,7 +69,7 @@ gulp.task('less-watcher', function() {
 gulp.task('sass', function() {
     log('Compiling Sass --> CSS');
 
-    var sassOptions = {
+    const sassOptions = {
         outputStyle: 'nested' // nested, expanded, compact, compressed
     };
 
@@ -86,7 +86,7 @@ gulp.task('sass', function() {
 gulp.task('sass-min', function() {
     log('Compiling Sass --> minified CSS');
 
-    var sassOptions = {
+    const sassOptions = {
         outputStyle: 'compressed' // nested, expanded, compact, compressed
     };
 
@@ -114,7 +114,7 @@ gulp.task('inject', function() {
 gulp.task('copy', function() {
     log('Copying assets');
 
-    var assets = [].concat(config.assetsLazyLoad, config.assetsToCopy);
+    const assets = [].concat(config.assetsLazyLoad, config.assetsToCopy);
 
     return gulp
         .src(assets, {base: config.client})
@@ -124,8 +124,8 @@ gulp.task('copy', function() {
 gulp.task('optimize', ['inject', 'sass-min'], function() {
     log('Optimizing the js, css, html');
 
-    var jsFilter = $.filter('client/scripts/*.js', { restore: true });
-    var indexHtmlFilter = $.filter(['client/scripts/*.js', 'client/styles/*.css', '!**/index.html'], { restore: true });
+    const jsFilter = $.filter('client/scripts/*.js', { restore: true });
+    const indexHtmlFilter = $.filter(['client/scripts/*.js', 'client/styles/*.css', '!**/index.html'], { restore: true });
 
     return gulp
         .src(config.index)
@@ -170,7 +170,7 @@ function clean(path, done) {
 
 function log(msg) {
     if (typeof(msg) === 'object') {
-        for (var item in msg) {
+        for (const item in msg) {
             if (msg.hasOwnProperty(item)) {
                 $.util.log($.util.colors.green(msg[item]));
             }
@@ -192,7 +192,7 @@ function startBrowserSync(opt) {
         return;
     }
 
-    var options = {
+    let options = {
         port: 3000,
         ghostMode: {
             clicks: false,
