@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <div class="projects" layout="column">
-                            <div ng-repeat="project in projects" flex class="project" ng-class="{'in-progress':project.status=='进行中'}" style="max-width:{{ durationPercentage(project, timelineStartDate, timelineEndDate) }}%;margin-left:{{ startDatePercentage(project, timelineStartDate, timelineEndDate) }}%">
+                            <div ng-repeat="project in projects" flex class="project" ng-click="showProjectDetail(project)" ng-class="{'in-progress':project.status=='进行中'}" style="max-width:{{ durationPercentage(project, timelineStartDate, timelineEndDate) }}%;margin-left:{{ startDatePercentage(project, timelineStartDate, timelineEndDate) }}%">
                                 <span>{{ project.name }}</span>
                             </div>
                         </div>
