@@ -19,7 +19,7 @@
         // 检测query的变化并改变路由
         $scope.$watch('query', function(query) {
 
-            $location.search(query);
+            $location.replace().search(query);
             
             $scope.promise = customerService.query(query).$promise.then(function(customers) {
                 $scope.customers = customers;
