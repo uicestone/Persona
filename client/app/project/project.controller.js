@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.project')
-    .controller('projectCtrl', ['$scope', '$window', '$location', '$route', 'userService', 'projectService', projectCtrl]);
+    .controller('projectCtrl', ['$scope', '$window', '$location', '$route', '$mdToast', 'userService', 'projectService', projectCtrl]);
 
-    function projectCtrl($scope, $window, $location, $route, userService, projectService) {
+    function projectCtrl($scope, $window, $location, $route, $mdToast, userService, projectService) {
 
         $scope.platforms = [
             '微信', '微博', 'QQ'
@@ -80,6 +80,7 @@
             .then(function(project) {
                 project.startDate && (project.startDate = new Date(project.startDate));
                 project.endDate && (project.endDate = new Date(project.endDate));
+                $mdToast.showSimple('项目概况已保存');
             });
         };
 
