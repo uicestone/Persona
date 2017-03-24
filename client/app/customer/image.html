@@ -32,7 +32,7 @@
                         </div>
                         <br>
                         <div layout="row" layout-align="start start">
-                            <ul as-sortable ng-model="showingCustomerFields" class="list-inline showing-fields">
+                            <ul flex as-sortable ng-model="showingCustomerFields" class="list-inline showing-fields">
                                 <li as-sortable-item ng-repeat="field in showingCustomerFields" style="padding:0">
                                     <label as-sortable-item-handle class="label label-info" style="margin-right:5px">
                                         {{ field.label }}
@@ -42,7 +42,7 @@
                                     </label>
                                 </li>
                             </ul>
-                            <div flex layout="row" layout-align="end center">
+                            <div flex="1" layout="row" layout-align="end center">
                                 <md-autocomplete placeholder="新增显示字段" md-items="field in getPossibleFields(searchOtherFieldsText)" md-search-text="searchOtherFieldsText" md-item-text="field.label" md-selected-item="newShowField" md-min-length="0" md-no-cache="true" md-selected-item-change="showCustomerField(newShowField)">
                                     <span>{{ field.label }}</span>
                                 </md-autocomplete>
@@ -135,7 +135,7 @@
                         </form>
                         <br>
                         <div layout="row" layout-align="start start">
-                            <ul as-sortable ng-model="showingCustomerFields" class="list-inline showing-fields">
+                            <ul flex as-sortable ng-model="showingCustomerFields" class="list-inline showing-fields">
                                 <li as-sortable-item ng-repeat="field in showingCustomerFields" style="padding:0">
                                     <label as-sortable-item-handle class="label label-info" style="margin-right:5px">
                                         {{ field.label }}
@@ -145,7 +145,7 @@
                                     </label>
                                 </li>
                             </ul>
-                            <div flex layout="row" layout-align="end center">
+                            <div flex="1" layout="row" layout-align="end center">
                                 <md-autocomplete placeholder="新增显示字段" md-items="field in getPossibleFields(searchOtherFieldsText)" md-search-text="searchOtherFieldsText" md-item-text="field.label" md-selected-item="newShowField" md-min-length="0" md-no-cache="true" md-selected-item-change="showCustomerField(newShowField)">
                                     <span>{{ field.label }}</span>
                                 </md-autocomplete>
@@ -210,8 +210,8 @@
             </md-card>
             <br>
             <div class="actions text-right">
-                <md-button ng-click="editGroup()" class="md-raised md-primary" style="line-height:34px">定义分组</md-button>
-                <md-button ng-click="exportToXlsx()" class="md-raised md-primary" style="line-height:34px">导出表格</md-button>
+                <md-button ng-click="editGroup()" class="md-raised md-primary btn">定义分组</md-button>
+                <md-button ng-click="exportToXlsx()" class="md-raised md-primary btn">导出表格</md-button>
             </div>
         </div>
     </div>
