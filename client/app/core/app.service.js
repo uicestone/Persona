@@ -6,9 +6,9 @@
     // add raw response as an attribute of resource,
     // so that we can get http status, header etc from resource in controllers
     var responseInterceptor = function (response) {
-        response.resource.$total = response.headers('items-total');
-        response.resource.$start = response.headers('items-start');
-        response.resource.$end = response.headers('items-end');
+        response.resource.$total = Number(response.headers('items-total'));
+        response.resource.$start = Number(response.headers('items-start'));
+        response.resource.$end = Number(response.headers('items-end'));
         return response.resource;
     };
 
