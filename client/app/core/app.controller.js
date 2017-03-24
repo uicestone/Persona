@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app')
-        .controller('AppCtrl', [ '$scope', '$rootScope', '$location', '$window', '$document', 'appConfig', 'authService', AppCtrl]); // overall control
+        .controller('AppCtrl', [ '$scope', '$rootScope', '$location', '$window', '$document', '$timeout', 'appConfig', 'authService', AppCtrl]); // overall control
     
-    function AppCtrl($scope, $rootScope, $location, $window, $document, appConfig, authService) {
+    function AppCtrl($scope, $rootScope, $location, $window, $document, $timeout, appConfig, authService) {
 
         $scope.pageTransitionOpts = appConfig.pageTransitionOpts;
         $scope.main = appConfig.main;
@@ -31,7 +31,10 @@
         }, true);
 
         $rootScope.$on("$routeChangeSuccess", function (event, currentRoute, previousRoute) {
-            $document.scrollTo(0, 0);
+            $timeout(function(){
+                $document.scrollTo(0, 0);
+            });
+            
         });
     }
 
