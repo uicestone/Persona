@@ -11,6 +11,10 @@ const portHttp    = process.env.PORT_HTTP || 8080;
 const httpServer  = http.createServer(app);
 const io          = require('socket.io')(httpServer);
 
+const env 		  = require('node-env-file');
+
+env(`${__dirname}/.env`);
+
 mongoose.connect(process.env.DATABASE_URL || 'mongodb://localhost/persona');
 mongoose.Promise = global.Promise;
 

@@ -4,6 +4,9 @@ const browserSync = require('browser-sync');
 const config = require('./gulp.config')();
 const del = require('del');
 const $ = require('gulp-load-plugins')({lazy: true});
+const env = require('node-env-file');
+
+env(`${__dirname}/.env`);
 
 gulp.task('help', $.taskListing);
 gulp.task('default', ['help']);
@@ -133,7 +136,7 @@ gulp.task('optimize', ['inject', 'sass-min'], function() {
         .pipe($.useref())
         .pipe(jsFilter)
         .pipe($.if('scripts/app.js', $.uglify()))
-        .pipe($.replace(/http:\/\/localhost/g, 'http://persona.stirad.com'))
+        .pipe($.replace(/http:\/\/localhost:8080\/api\//g, process.env.API_BASE))
         .pipe(jsFilter.restore)
         .pipe($.replace(/\.html(?=[\'\"])/g, '.html?v=' + (new Date()).getTime()))
         .pipe(indexHtmlFilter)
