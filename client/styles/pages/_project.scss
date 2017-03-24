@@ -101,6 +101,11 @@ md-tabs.project-detail {
                 color: $white;
             }
 
+            &.ended {
+                background-color: #6bc04b;
+                color: $white;
+            }
+
             .project-name {
                 text-overflow: ellipsis;
                 overflow: hidden;
