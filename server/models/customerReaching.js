@@ -12,6 +12,4 @@ const customerReachingSchema = new Schema({
 	failed: Number
 });
 
-customerReachingSchema.index({name:1}, {unique:true});
-
 module.exports = mongoose.model('customerReaching', customerReachingSchema);

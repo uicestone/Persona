@@ -7,8 +7,8 @@
                         <div layout="row">
                             <md-input-container flex="30">
                                 <label>用户组</label>
-                                <md-select ng-model="newCustomerReaching.customerGroup">
-                                    <md-option ng-repeat="customerGroup in customerGroups" value="customerGroup">{{ customerGroup.name }}</md-option>
+                                <md-select ng-model="newCustomerReaching.group" aria-label="用户组">
+                                    <md-option ng-repeat="customerGroup in customerGroups" ng-value="customerGroup">{{ customerGroup.name }}</md-option>
                                 </md-select>
                             </md-input-container>
                         </div>
@@ -18,7 +18,7 @@
                             <textarea rows="5" ng-model="newCustomerReaching.content"></textarea>
                         </md-input-container>
                         <div style="text-align:right">
-                            <md-button ng-click="send(customerReaching)" class="md-primary md-raised">发送短信</md-button>
+                            <md-button ng-click="saveCustomerReaching(newCustomerReaching)" class="md-primary md-raised">发送短信</md-button>
                         </div>
                     </md-content>
                 </md-tab>
@@ -52,7 +52,7 @@
                                 <td md-cell>{{ customerReaching.content }}</td>
                                 <td md-cell>
                                     <md-icon class="md-primary" ng-click="showCustomerReachingDetail(customerReaching)">info_outline</md-icon>
-                                    <md-icon class="md-primary">refresh</md-icon>
+                                    <md-icon class="md-primary" ng-click="reloadCustomerReaching(customerReaching)">refresh</md-icon>
                                 </td>
                             </tr>
                         </tbody>

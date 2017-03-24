@@ -1,4 +1,6 @@
 const CustomerReaching = require('../models/customerReaching.js');
+const Customer = require('../models/customer.js');
+const AliyunPush = require('ali-push');
 
 module.exports = (router) => {
     // CustomerReaching CURD
@@ -14,10 +16,33 @@ module.exports = (router) => {
                 customerReaching.brand = req.user.brand.name;
             }
 
+            customerReaching.updatedAt = new Date();
+
             // save the customer reaching and check for errors
-            customerReaching.save((err) => {
-                if (err)
-                    return res.status(500).send(err);
+            Promise.all([
+                customerReaching.save(),
+                Customer.find({'group._id':customerReaching.group._id})
+            ]).then(result => {
+                const [customerReaching, customers] = result;
+
+                const aliyunClient = new AliyunPush({
+                    AccessKeyId: process.env.ALIYUN_ACCESS_KEY_ID,
+                    AccessKeySecret: process.env.ALIYUN_ACCESS_KEY_SECRET
+                });
+
+                aliyunClient.SingleSendSms({
+                    SignName: '智关',
+                    TemplateCode: 'SMS_57690023',
+                    RecNum: customers.map(customer => customer.mobile).join(','),
+                    ParamString: '{}'
+                }, (err, res, body) => {
+                    customerReaching.sendAt = new Date();
+                    customerReaching.succeeded = customers.length;
+                    customerReaching.failed = 0;
+                    customerReaching.save();
+                    console.log('短信发送完成', body);
+                });
+
                 res.json(customerReaching);
             });
             

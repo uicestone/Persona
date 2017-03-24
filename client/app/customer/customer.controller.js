@@ -294,6 +294,21 @@
                 + '&' + queryString;
         };
 
+        if($location.path() === '/customer/reaching') {
+            $scope.newCustomerReaching = new customerReachingService();
+        }
+
+        $scope.saveCustomerReaching = function(customerReaching) {
+            customerReaching.$save().then(function() {
+                $scope.newCustomerReaching = new customerReachingService();
+                $scope.getCustomerReachings();
+            });
+        };
+
+        $scope.reloadCustomerReaching = function(customerReaching) {
+            $scope.newCustomerReaching = customerReaching;
+        };
+
     }
     
 })(); 
