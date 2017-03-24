@@ -20,12 +20,12 @@
 
                                     <md-input-container>
                                         <label>开始时间</label>
-                                        <md-datepicker ng-model="project.startDate"></md-datepicker>
+                                        <md-datepicker md-max-date="project.endDate" ng-model="project.startDate"></md-datepicker>
                                     </md-input-container>
 
                                     <md-input-container>
                                         <label>结束时间</label>
-                                        <md-datepicker ng-model="project.endDate"></md-datepicker>
+                                        <md-datepicker md-min-date="project.startDate" ng-model="project.endDate"></md-datepicker>
                                     </md-input-container>
                                 </div>
 
