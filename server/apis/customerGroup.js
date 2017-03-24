@@ -26,63 +26,85 @@ module.exports = (router) => {
 
                 res.json(customerGroup);
 
-                let query = {};
+                let query = Customer.find();
 
                 const arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
                 const advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
+                const utilQueryParams = ['token', 'export', 'fields', 'limit', 'page', 'skip'];
                 
                 // 精准搜索字段
                 const preciseKeys = Object.keys(customerGroup.query).filter((key) => {
-                    return arrayQueryParams.indexOf(key) === -1;
+                    return arrayQueryParams.indexOf(key) === -1
+                    && advancedQueryParams.indexOf(key) === -1
+                    && utilQueryParams.indexOf(key) === -1;
                 });
 
                 preciseKeys.forEach((key) => {
-                    query[key] = customerGroup.query[key];
+                    query.find({
+                        [key]: customerGroup.query[key]
+                    });
                 });
 
                 // 包含标签
-                if(customerGroup.query.withTags) {
-                    !query.tags && (query.tags = {});
-                    query.tags['$all'] = Array.isArray(customerGroup.query.withTags) ? customerGroup.query.withTags : [customerGroup.query.withTags];
+                if(customerGroup.query.withTags && customerGroup.query.withTags.length) {
+                    query.find({
+                        tags: {
+                            $all: Array.isArray(customerGroup.query.withTags) ? customerGroup.query.withTags : [customerGroup.query.withTags]
+                        }
+                    });
                 }
 
                 // 排除标签
-                if(customerGroup.query.withoutTags) {
-                    !query.tags && (query.tags = {});
-                    query.tags['$nin'] = Array.isArray(customerGroup.query.withoutTags) ? customerGroup.query.withoutTags : [customerGroup.query.withoutTags];
+                if(customerGroup.query.withoutTags && customerGroup.query.withoutTags.length) {
+                    query.find({
+                        tags: {
+                            $nin: Array.isArray(customerGroup.query.withoutTags) ? customerGroup.query.withoutTags : [customerGroup.query.withoutTags]
+                        }
+                    });
                 }
 
                 // 在访客组
-                if(customerGroup.query.inGroup) {
-                    !query.group && (query['group._id'] = {});
-                    query['group._id']['$all'] = Array.isArray(customerGroup.query.inGroup) ? customerGroup.query.inGroup : [customerGroup.query.inGroup];
+                if(customerGroup.query.inGroup && customerGroup.query.inGroup.length) {
+                    query.find({
+                        'group._id': {
+                            $all: Array.isArray(customerGroup.query.inGroup) ? customerGroup.query.inGroup : [customerGroup.query.inGroup]
+                        }
+                    });
                 }
 
                 // 不在访客组
-                if(customerGroup.query.notInGroup) {
-                    !query.group && (query['group._id'] = {});
-                    query['group._id']['$nin'] = Array.isArray(customerGroup.query.notInGroup) ? customerGroup.query.notInGroup : [customerGroup.query.notInGroup];
+                if(customerGroup.query.notInGroup && customerGroup.query.notInGroup.length) {
+                    query.find({
+                        'group._id': {
+                            $nin: Array.isArray(customerGroup.query.notInGroup) ? customerGroup.query.notInGroup : [customerGroup.query.notInGroup]
+                        }
+                    });
                 }
 
                 // 维度过滤
                 advancedQueryParams.forEach((attribute) => {
                     if(customerGroup.query[attribute]) {
-                        query[attribute] = {$lte: customerGroup.query[attribute] / 100, $gt: (customerGroup.query[attribute] - 10) / 100}
+                        query.find({
+                            [attribute]: {$lte: customerGroup.query[attribute] / 100, $gt: (customerGroup.query[attribute] - 10) / 100}
+                        });
                     }
                 });
 
+                // 非平台管理员只能看到本品牌的访客
                 if(req.user.roles.indexOf('admin') === -1) {
-                    query.brand = req.user.brand.name;
+                    query.find({
+                        brand: req.user.brand.name
+                    });
                 }
-                
-                Customer.update(query, {
+
+                query.setOptions({multi: true}).update({
                     $addToSet: {
                         group: {
                             _id: customerGroup._id,
                             name: customerGroup.name
                         }
                     }
-                }, {multi: true}).then((result) => {
+                }).then((result) => {
                     console.log(result.nModified + ' customers added to group: ' + customerGroup.name);
                 });
             });
