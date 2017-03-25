@@ -30,6 +30,7 @@
         // 除了这几个query字段，其他的被认为是精确字段
         $scope.arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup'];
         $scope.advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
+        $scope.utilQueryParams = ['token', 'export', 'fields', 'limit', 'page', 'skip'];
 
         // 初始化数组query字段
         $scope.arrayQueryParams.forEach(function(key) {
@@ -50,6 +51,13 @@
 
         // 访客字段
         $scope.customerFields = customerFieldService.query();
+        
+        $scope.customerFields.$promise.then(function(customerFields){
+            $scope.customerFieldKeys = {};
+            customerFields.forEach(function(customerField) {
+                $scope.customerFieldKeys[customerField.label] = customerField.key;
+            });
+        });
 
         $scope.customerGroups = customerGroupService.query();
 
@@ -131,12 +139,17 @@
                 query[key] = $scope.query[key];
             });
 
+            $scope.utilQueryParams.forEach(function(key) {
+                query[key] = $scope.query[key];
+            });
+
             $scope.query = query;
         }
 
         // 精确搜索表单，将其应用到query中
         $scope.preciseSearch = function(preciseSearchText) {
             
+            // 移除现有的精确搜索条件
             removePreciseQueryParams();
             
             if(!preciseSearchText) {
@@ -155,17 +168,13 @@
 
                 key = match[1]; value = match[2];
 
-                $scope.customerFields.forEach(function(customerField) {
+                if($scope.customerFieldKeys[key]) {
                     // 支持将搜索的中文key转化为对应的英文key
-                    if(customerField.label === key) {
-                        key = customerField.key;
-                        $scope.query[key] = value;
-                    }
-                    else if(customerField.key === key) {
-                        $scope.query[key] = value;
-                    }
-                });
-
+                    $scope.query[$scope.customerFieldKeys[key]] = value;
+                }
+                else {
+                    $scope.query[key] = value;
+                }
             });
         };
 

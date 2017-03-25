@@ -45,8 +45,17 @@ module.exports = (router) => {
             }
 
             preciseKeys.forEach((key) => {
+                var value;
+
+                try {
+                    value = JSON.parse(req.query[key]);
+                }
+                catch(e) {
+                    value = req.query[key];
+                }
+
                 query.find({
-                    [key]: req.query[key]
+                    [key]: value
                 });
             });
 
