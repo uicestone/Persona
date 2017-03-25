@@ -40,8 +40,17 @@ module.exports = (router) => {
                 });
 
                 preciseKeys.forEach((key) => {
+                    var value;
+
+                    try {
+                        value = JSON.parse(customerGroup.query[key]);
+                    }
+                    catch(e) {
+                        value = customerGroup.query[key];
+                    }
+
                     query.find({
-                        [key]: customerGroup.query[key]
+                        [key]: value
                     });
                 });
 
