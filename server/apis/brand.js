@@ -10,11 +10,11 @@ module.exports = (router) => {
             let brand = new Brand(req.body); // create a new instance of the Brand model
 
             // save the brand and check for errors
-            brand.save((err) => {
-                if (err)
-                    res.status(500).send(err);
-
+            brand.save().then(brand => {
                 res.json(brand);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
             
         })
@@ -67,36 +67,30 @@ module.exports = (router) => {
 
         // get the brand with that id
         .get((req, res) =>{
-            Brand.findById(req.params.brandId, (err, brand) => {
-                if (err)
-                    return res.status(500).send(err);
+            Brand.findById(req.params.brandId).then(brand => {
                 res.json(brand);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         .put((req, res) =>{
-            Brand.where({_id: req.params.brandId}).update(req.body, (err, raw) => {
-                if (err)
-                    return res.status(500).send(err);
-
-                Brand.findById(req.params.brandId, (err, brand) => {
-                    if (err)
-                        res.status(500).send(err);
-
-                    res.json(brand);
-                });
+            Brand.findByIdAndUpdate(req.params.brandId, req.body, {new: true}).then(brand => {
+                res.json(brand);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         // delete the brand with this id
         .delete((req, res) =>{
-            Brand.remove({
-                _id: req.params.brandId
-            }, (err, brand) => {
-                if (err)
-                    res.status(500).send(err);
-
+            Brand.findByIdAndRemove(req.params.brandId).then(() => {
                 res.end();
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         });
 

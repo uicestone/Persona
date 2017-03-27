@@ -15,16 +15,15 @@ module.exports = (router) => {
             project.createdAt = new Date();
 
             // save the project and check for errors
-            project.save((err, project) => {
-                if (err)
-                    return res.status(500).send(err);
-
+            project.save().then(project => {
                 project.appid = project._id;
                 project.save();
 
                 res.json(project);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
-            
         })
 
         // get all the projects for current user
@@ -116,37 +115,30 @@ module.exports = (router) => {
 
         // get the project with that id
         .get((req, res) => {
-            Project.findById(req.params.projectId, (err, project) => {
-                if (err)
-                    return res.status(500).send(err);
-
+            Project.findById().then(project => {
                 res.json(project);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         .put((req, res) => {
-            Project.where({_id: req.params.projectId}).update(req.body, (err, raw) => {
-                if (err)
-                    return res.status(500).send(err);
-
-                Project.findById(req.params.projectId, (err, project) => {
-                    if (err)
-                        return res.status(500).send(err);
-                    
-                    res.json(project);
-                });
+            Project.findByIdAndUpdate(req.params.projectId, req.body, {new: true}).then(project => {
+                res.json(project);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         // delete the project with this id
         .delete((req, res) => {
-            Project.remove({
-                _id: req.params.projectId
-            }, (err, project) => {
-                if (err)
-                    return res.status(500).send(err);
-
-                res.json({ message: 'Successfully deleted' });
+            Project.findByIdAndRemove(req.params.projectId).then(() => {
+                res.end();
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         });
 

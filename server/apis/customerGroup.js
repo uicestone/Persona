@@ -20,10 +20,7 @@ module.exports = (router) => {
             }
             
             // save the customer group and check for errors
-            customerGroup.save((err) => {
-                if (err)
-                    console.error(err);
-                    return res.status(500);
+            customerGroup.save().then((customerGroup) => {
 
                 res.json(customerGroup);
 
@@ -41,13 +38,11 @@ module.exports = (router) => {
                 });
 
                 preciseKeys.forEach((key) => {
-                    var value;
-
                     try {
-                        value = JSON.parse(customerGroup.query[key]);
+                        let value = JSON.parse(customerGroup.query[key]);
                     }
                     catch(e) {
-                        value = customerGroup.query[key];
+                        let value = customerGroup.query[key];
                     }
 
                     query.find({
@@ -107,16 +102,19 @@ module.exports = (router) => {
                     });
                 }
 
-                query.setOptions({multi: true}).update({
+                return query.setOptions({multi: true}).update({
                     $addToSet: {
                         group: {
                             _id: customerGroup._id,
                             name: customerGroup.name
                         }
                     }
-                }).then((result) => {
-                    console.log(result.nModified + ' customers added to group: ' + customerGroup.name);
-                });
+                })
+            }).then((result) => {
+                console.log(result.nModified + ' customers added to group: ' + customerGroup.name);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
             
         })
@@ -169,40 +167,30 @@ module.exports = (router) => {
 
         // get the customer group with that id
         .get((req, res) => {
-            CustomerGroup.findById(req.params.customerGroupId, (err, customerGroup) => {
-                if (err)
-                    res.status(500).send(err);
+            CustomerGroup.findById(req.params.customerGroupId).then(customerGroup => {
                 res.json(customerGroup);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         .put((req, res) => {
-            CustomerGroup.where({_id: req.params.customerGroupId}).update(req.body, (err, raw) => {
-                if (err) {
-                    res.status(500).send(err);
-                    return;
-                }
-
-                CustomerGroup.findById(req.params.customerGroupId, (err, customerGroup) => {
-                    if (err)
-                        res.status(500).send(err);
-                    
-                    res.json(customerGroup);
-                });
+            CustomerGroup.findByIdAndUpdate(req.params.customerGroupId, req.body, {new: true}).then(customerGroup => {
+                res.json(customerGroup);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         // delete the customer group with this id
         .delete((req, res) => {
-            CustomerGroup.remove({
-                _id: req.params.customerGroupId
-            }, (err) => {
-                if (err)
-                    res.status(500).send(err);
-
+            CustomerGroup.findByIdAndRemove(req.params.customerGroupId).then(() => {
+                
                 res.end();
 
-                Customer.update({
+                return Customer.update({
                     'group._id': req.params.customerGroupId
                 }, {
                     $pull: {
@@ -210,10 +198,14 @@ module.exports = (router) => {
                             _id: req.params.customerGroupId
                         }
                     }
-                }, {multi: true}).then((result) => {
-                    console.log(result.nModified + ' customers removed from group: ' + req.params.customerGroupId);
-                });
+                }, {multi: true});
 
+            }).then((result) => {
+                console.log(result.nModified + ' customers removed from group: ' + req.params.customerGroupId);
+            })
+            .catch(err => {
+                console.error(err);
+                res.status(500);
             });
         });
 

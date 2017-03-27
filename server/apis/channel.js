@@ -10,11 +10,11 @@ module.exports = (router) => {
             let channel = new Channel(req.body); // create a new instance of the Channel model
 
             // save the channel and check for errors
-            channel.save((err) => {
-                if (err)
-                    res.status(500).send(err);
-
+            channel.save().then(channel => {
                 res.json(channel);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
             
         })
@@ -67,38 +67,30 @@ module.exports = (router) => {
 
         // get the channel with that id
         .get((req, res) => {
-            Channel.findById(req.params.channelId, (err, channel) => {
-                if (err)
-                    res.status(500).send(err);
+            Channel.findById(req.params.channelId).then(channel => {
                 res.json(channel);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         .put((req, res) => {
-            Channel.where({_id: req.params.channelId}).update(req.body, (err, raw) => {
-                if (err) {
-                    res.status(500).send(err);
-                    return;
-                }
-
-                Channel.findById(req.params.channelId, (err, channel) => {
-                    if (err)
-                        res.status(500).send(err);
-
-                    res.json(channel);
-                });
+            Channel.findByIdAndUpdate(req.params.channelId, req.body, {new: true}).then(channel => {
+                res.json(channel);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         // delete the channel with this id
         .delete((req, res) => {
-            Channel.remove({
-                _id: req.params.channelId
-            }, (err, channel) => {
-                if (err)
-                    res.status(500).send(err);
-
+            Channel.findByIdAndRemove(req.params.channelId).then(() => {
                 res.end();
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         });
 

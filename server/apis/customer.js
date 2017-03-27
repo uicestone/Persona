@@ -12,11 +12,11 @@ module.exports = (router) => {
             let customer = new Customer(req.body);      // create a new instance of the Customer model
 
             // save the customer and check for errors
-            customer.save((err) => {
-                if (err)
-                    res.status(500).send(err);
-
+            customer.save().then(customer => {
                 res.json(customer);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
             
         })
@@ -167,38 +167,30 @@ module.exports = (router) => {
 
         // get the customer with that id
         .get((req, res) => {
-            Customer.findById(req.params.customerId, (err, customer) => {
-                if (err)
-                    res.status(500).send(err);
+            Customer.findById(req.params.customerId).then(customer => {
                 res.json(customer);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         .put((req, res) => {
-            Customer.where({_id: req.params.customerId}).update(req.body, (err, raw) => {
-                if (err) {
-                    res.status(500).send(err);
-                    return;
-                }
-
-                Customer.findById(req.params.customerId, (err, customer) => {
-                    if (err)
-                        res.status(500).send(err);
-                    
-                    res.json(customer);
-                });
+            Customer.findByIdAndUpdate(req.params.customerId, req.body, {new: true}).then(customer => {
+                res.json(customer);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         // delete the customer with this id
         .delete((req, res) => {
-            Customer.remove({
-                _id: req.params.customerId
-            }, (err, customer) => {
-                if (err)
-                    res.status(500).send(err);
-
+            Customer.findByIdAndRemove(req.params.customerId).then(() => {
                 res.end();
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         });
 

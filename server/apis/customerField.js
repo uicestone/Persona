@@ -15,10 +15,11 @@ module.exports = (router) => {
             }
 
             // save the customer field and check for errors
-            customerField.save((err) => {
-                if (err)
-                    return res.status(500).send(err);
+            customerField.save().then(customerField => {
                 res.json(customerField);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
             
         })
@@ -83,38 +84,30 @@ module.exports = (router) => {
 
         // get the customerField with that id
         .get((req, res) => {
-            CustomerField.findById(req.params.customerFieldId, (err, customerField) => {
-                if (err)
-                    res.status(500).send(err);
+            CustomerField.findById(req.params.customerFieldId).then(customerField => {
                 res.json(customerField);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         .put((req, res) => {
-            CustomerField.where({_id: req.params.customerFieldId}).update(req.body, (err, raw) => {
-                if (err) {
-                    res.status(500).send(err);
-                    return;
-                }
-
-                CustomerField.findById(req.params.customerFieldId, (err, customerField) => {
-                    if (err)
-                        res.status(500).send(err);
-
-                    res.json(customerField);
-                });
+            CustomerField.findByIdAndUpdate(req.params.customerFieldId, req.body, {new: true}).then(customerField => {
+                res.json(customerField);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         // delete the customer field with this id
         .delete((req, res) => {
-            CustomerField.remove({
-                _id: req.params.customerFieldId
-            }, (err, customerField) => {
-                if (err)
-                    res.status(500).send(err);
-
+            CustomerField.findByIdAndRemove(req.params.customerFieldId).then(() => {
                 res.end();
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         });
 

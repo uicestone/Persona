@@ -10,10 +10,11 @@ module.exports = (router) => {
             let user = new User(req.body);      // create a new instance of the User model
 
             // save the user and check for errors
-            user.save((err) => {
-                if (err)
-                    return res.status(500).send(err);
+            user.save().then(user => {
                 res.json(user);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
             
         })
@@ -74,36 +75,30 @@ module.exports = (router) => {
 
         // get the user with that id
         .get((req, res) => {
-            User.findById(req.params.userId, (err, user) => {
-                if (err)
-                    return res.status(500).send(err);
+            User.findById(req.params.userId).then(user => {
                 res.json(user);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         .put((req, res) => {
-            User.where({_id: req.params.userId}).update(req.body, (err, raw) => {
-                if (err) {
-                    return res.status(500).send(err);
-                }
-
-                User.findById(req.params.userId, (err, user) => {
-                    if (err)
-                        return res.status(500).send(err);
-                    
-                    res.json(user);
-                });
+            User.findByIdAndUpdate(req.params.userId, req.body, {new: true}).then(user => {
+                res.json(user);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         // delete the user with this id
         .delete((req, res) => {
-            User.remove({
-                _id: req.params.userId
-            }, (err, user) => {
-                if (err)
-                    return res.status(500).send(err);
+            User.findByIdAndRemove(req.params.userId).then(() => {
                 res.end();
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         });
 

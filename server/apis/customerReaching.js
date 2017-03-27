@@ -44,6 +44,9 @@ module.exports = (router) => {
                 });
 
                 res.json(customerReaching);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
             
         })
@@ -108,38 +111,30 @@ module.exports = (router) => {
 
         // get the customerReaching with that id
         .get((req, res) => {
-            CustomerReaching.findById(req.params.customerReachingId, (err, customerReaching) => {
-                if (err)
-                    res.status(500).send(err);
+            CustomerReaching.findById(req.params.customerReachingId).then(customerReaching => {
                 res.json(customerReaching);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         .put((req, res) => {
-            CustomerReaching.where({_id: req.params.customerReachingId}).update(req.body, (err, raw) => {
-                if (err) {
-                    res.status(500).send(err);
-                    return;
-                }
-
-                CustomerReaching.findById(req.params.customerReachingId, (err, customerReaching) => {
-                    if (err)
-                        res.status(500).send(err);
-
-                    res.json(customerReaching);
-                });
+            CustomerReaching.findByIdAndUpdate(req.params.customerReachingId, req.body, {new: true}).then(customerReaching => {
+                res.json(customerReaching);
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         })
 
         // delete the customer reaching with this id
         .delete((req, res) => {
-            CustomerReaching.remove({
-                _id: req.params.customerReachingId
-            }, (err, customerReaching) => {
-                if (err)
-                    res.status(500).send(err);
-
+            CustomerReaching.findByIdAndRemove(req.params.customerReachingId).then(() => {
                 res.end();
+            }).catch(err => {
+                console.error(err);
+                res.status(500);
             });
         });
 
