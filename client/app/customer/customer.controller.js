@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.customer')
-    .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', 'customerService', 'customerGroupService', 'customerFieldService', 'customerReachingService', customerCtrl]);
+    .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', '$mdToast', 'customerService', 'customerGroupService', 'customerFieldService', 'customerReachingService', customerCtrl]);
 
-    function customerCtrl($scope, $window, $location, $mdBottomSheet, customerService, customerGroupService, customerFieldService, customerReachingService) {
+    function customerCtrl($scope, $window, $location, $mdBottomSheet, $mdToast, customerService, customerGroupService, customerFieldService, customerReachingService) {
         
         $scope.query = $location.search();
 
@@ -251,7 +251,9 @@
         };
 
         $scope.updateGroup = function(group) {
+            var isNew = !group._id;
             group.$save();
+            $mdToast.showSimple((isNew ? '创建' : '更新') + '分组成功');
             $mdBottomSheet.hide();
             $scope.group = undefined;
             if(!group._id) {
