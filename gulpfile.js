@@ -139,6 +139,7 @@ gulp.task('optimize', ['inject', 'sass-min'], function() {
         .pipe($.replace(/http:\/\/localhost:8080\/api\//g, process.env.API_BASE))
         .pipe(jsFilter.restore)
         .pipe($.replace(/\.html(?=[\'\"])/g, '.html?v=' + (new Date()).getTime()))
+        .pipe($.replace(/\.json(?=[\'\"])/g, '.json?v=' + (new Date()).getTime()))
         .pipe(indexHtmlFilter)
         .pipe($.rev())                // Rename the concatenated files (but not index.html)
         .pipe(indexHtmlFilter.restore)
