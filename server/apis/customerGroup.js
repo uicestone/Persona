@@ -22,7 +22,8 @@ module.exports = (router) => {
             // save the customer group and check for errors
             customerGroup.save((err) => {
                 if (err)
-                    res.status(500).send(err);
+                    console.error(err);
+                    return res.status(500);
 
                 res.json(customerGroup);
 
