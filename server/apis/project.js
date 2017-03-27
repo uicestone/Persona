@@ -115,7 +115,7 @@ module.exports = (router) => {
 
         // get the project with that id
         .get((req, res) => {
-            Project.findById().then(project => {
+            Project.findById(req.params.projectId).then(project => {
                 res.json(project);
             }).catch(err => {
                 console.error(err);
