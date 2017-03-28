@@ -15,7 +15,7 @@ const env 		  = require('node-env-file');
 
 env(`${__dirname}/.env`);
 
-mongoose.connect(process.env.DATABASE_URL || 'mongodb://localhost/persona');
+mongoose.connect(process.env.MONGODB_URL);
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.json());
