@@ -15,6 +15,6 @@ const channelSchema = new Schema({
     updatedAt: Date
 });
 
-channelSchema.index({spid:1}, {unique:true});
+channelSchema.index({spid:1}, {unique:true, sparse:true});
 
 module.exports = mongoose.model('Channel', channelSchema);
