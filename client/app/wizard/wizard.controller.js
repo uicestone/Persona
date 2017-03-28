@@ -16,7 +16,7 @@
 
         $scope.kpiNames = ['PV', 'UV', '转化数', '转化率', '获取用户数', '平均停留时间', '分享率'];
 
-        $scope.channels = channelService.query();
+        $scope.channels = channelService.query({limit:1000});
 
         $scope.isEditing = $location.search().editing;
 
