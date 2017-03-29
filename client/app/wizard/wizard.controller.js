@@ -2,17 +2,33 @@
     'use strict';
 
     angular.module('app.wizard')
-    .controller('wizardCtrl', ['$scope', '$window', '$location', '$route', '$mdToast', 'userService', 'channelService', 'projectService', wizardCtrl]);
+    .controller('wizardCtrl', ['$scope', '$window', '$location', '$route', '$mdToast', 'userService', 'channelService', 'projectService', 'regionService', wizardCtrl]);
 
-    function wizardCtrl($scope, $window, $location, $route, $mdToast, userService, channelService, projectService) {
+    function wizardCtrl($scope, $window, $location, $route, $mdToast, userService, channelService, projectService, regionService) {
 
         $scope.platforms = [
             '微信', '微博', 'QQ'
         ];
 
-        $scope.cities = [
-            '上海', '北京', '深圳', '广州', '杭州', '南京', '成都', '武汉', '大连', '青岛'
-        ];
+        $scope.provinces = regionService.query();
+        $scope.cities = [];
+
+        $scope.$watch('project.region[0]', function(province) {
+            if(!province || !province.id) {
+                return;
+            }
+            $scope.cities = regionService.query(province.id);
+        });
+
+        // 切换省时清空市
+        $scope.$watch('cities.$resolved', function(resolved) {
+            if(!resolved)
+                return;
+
+            if($scope.project && $scope.project.region[1] && $scope.cities.map(function(city){return city.id}).indexOf($scope.project.region[1].id) === -1) {
+                $scope.project.region[1] = null;
+            }
+        })
 
         $scope.kpiNames = ['PV', 'UV', '转化数', '转化率', '获取用户数', '平均停留时间', '分享率'];
 

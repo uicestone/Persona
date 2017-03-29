@@ -43,7 +43,7 @@
                                         <input name="postalCode" ng-model="project.url" placeholder="https://www.example.com">
                                     </md-input-container>
 
-                                    <md-input-container class="md-block" flex-gt-sm="25">
+                                    <md-input-container class="md-block" flex-gt-sm="20">
                                         <label>投放平台</label>
                                         <md-select ng-model="project.platform">
                                             <md-option ng-repeat="platform in platforms" value="{{platform}}">
@@ -51,15 +51,14 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
+                                    
+                                    <md-autocomplete class="md-block" flex-gt-sm="15" md-floating-label="省/市" md-items="province in provinces | filter:provinceSearchText" md-search-text="provinceSearchText" md-item-text="province.name" md-selected-item="project.region[0]" md-min-length="0" md-no-cache="true">
+                                        <span>{{province.name}}</span>
+                                    </md-autocomplete>
 
-                                    <md-input-container class="md-block" flex-gt-sm="25">
-                                        <label>城市</label>
-                                        <md-select ng-model="project.city">
-                                            <md-option ng-repeat="city in cities" value="{{city}}">
-                                                {{city}}
-                                            </md-option>
-                                        </md-select>
-                                    </md-input-container>
+                                    <md-autocomplete class="md-block" flex-gt-sm="15" md-floating-label="市/区" md-items="city in cities | filter:citySearchText" md-search-text="citySearchText" md-item-text="city.name" md-selected-item="project.region[1]" md-min-length="0" md-no-cache="true">
+                                        <span>{{city.name}}</span>
+                                    </md-autocomplete>
                                 </div>
 
                                 <div layout-gt-sm="row">

@@ -12,7 +12,7 @@ const projectSchema = new Schema({
     comment: String,
     url: String,
     platform: String,
-    city: String,
+    region: [{id: String, name: String}],
     executive: {
     	_id: Schema.Types.ObjectId,
     	name: String

@@ -74,7 +74,7 @@
                                 <input name="postalCode" ng-model="project.url" placeholder="https://www.example.com" disabled>
                             </md-input-container>
 
-                            <md-input-container class="md-block" flex-gt-sm="25">
+                            <md-input-container class="md-block" flex-gt-sm="30">
                                 <label>投放平台</label>
                                 <md-select ng-model="project.platform" disabled>
                                     <md-option ng-repeat="platform in platforms" value="{{platform}}">
@@ -83,26 +83,22 @@
                                 </md-select>
                             </md-input-container>
 
-                            <md-input-container class="md-block" flex-gt-sm="25">
-                                <label>城市</label>
-                                <md-select ng-model="project.city" disabled>
-                                    <md-option ng-repeat="city in cities" value="{{city}}">
-                                        {{city}}
-                                    </md-option>
-                                </md-select>
+                            <md-input-container class="md-block md-input-has-value" flex-gt-sm="15">
+                                <label>省/市</label>
+                                <input ng-model="project.region[0].name" disabled>
                             </md-input-container>
 
+                            <md-input-container class="md-block" flex-gt-sm="15">
+                                <label>市/区</label>
+                                <input ng-model="project.region[1].name" disabled>
+                            </md-input-container>
                         </div>
 
                         <div layout-gt-sm="row">
 
                             <md-input-container class="md-block" flex-gt-sm="25">
                                 <label>执行者</label>
-                                <md-select ng-model="project.executive" disabled disabled>
-                                    <md-option ng-repeat="user in users" value="{{user.name}}">
-                                        {{user.name}}
-                                    </md-option>
-                                </md-select>
+                                <input ng-model="project.executive.name" disabled>
                             </md-input-container>
 
                             <md-input-container class="md-block" flex-gt-sm="25">

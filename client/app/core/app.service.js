@@ -23,6 +23,7 @@
         .service('customerReachingService', ['$resource', customerReachingService])
         .service('projectService', ['$resource', projectService])
         .service('userService', ['$resource', 'userRolesConstant', userService])
+        .service('regionService', ['$http', '$sce', regionService])
         .constant('userRolesConstant', [
             {name: 'admin', label: '平台管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'reach-customer', 'set-channel', 'set-data', 'set-user']},
             {name: 'brand_admin', label: '品牌管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'reach-customer', 'set-data']},
@@ -345,6 +346,40 @@
         
         return user;
 
+    }
+
+    function regionService($http, $sce) {
+        return {
+            query: function(parent) {
+
+                var resource = [];
+
+                var url = 'http://apis.map.qq.com/ws/district/v1/getchildren';
+
+                url += '?key=4M2BZ-MY5WO-K7FWH-SV5SK-F4BG5-TKB6D&output=jsonp';
+
+                if(parent) {
+                    url += '&id=' + parent;
+                }
+
+                resource.$resolved = false;
+                resource.$promise = $http.jsonp(
+                    $sce.trustAsResourceUrl(url),
+                    {jsonpCallbackParam: 'callback'}
+                );
+
+                resource.$promise.then(function(response) {
+                    response.data.result[0].forEach(function(item) {
+                        item.name = item.fullname;
+                        delete item.fullname;
+                        resource.push(item);
+                        resource.$resolved = true;
+                    });
+                });
+
+                return resource;
+            }
+        };
     }
 
 })(); 
