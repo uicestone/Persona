@@ -135,7 +135,7 @@
         };
 
         $scope.urlCopied = function() {
-            $mdToast.showSimple('链接已复制到剪贴板');
+            $mdToast.show('链接已复制到剪贴板').position('top right'));
         };
 
         $scope.getUsers = function(roles, name) {

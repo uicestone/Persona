@@ -63,10 +63,10 @@
                 var $mdToast = $injector.get('$mdToast');
 
                 if(rejection.data && rejection.data.message) {
-                    $mdToast.showSimple(rejection.data.message);
+                    $mdToast.show($mdToast.simple(rejection.data.message).position('top right'));
                 }
                 else {
-                    $mdToast.showSimple('网络错误');
+                    $mdToast.show($mdToast.simple('网络错误').position('top right'));
                 }
 
                 return $q.reject(rejection);

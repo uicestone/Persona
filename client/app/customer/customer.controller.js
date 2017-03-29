@@ -271,7 +271,7 @@
         $scope.updateGroup = function(group) {
             var isNew = !group._id;
             group.$save();
-            $mdToast.showSimple((isNew ? '创建' : '更新') + '分组成功');
+            $mdToast.show($mdToast.simple((isNew ? '创建' : '更新') + '分组成功').position('top right'));
             $mdBottomSheet.hide();
             $scope.group = undefined;
             if(!group._id) {

@@ -107,7 +107,7 @@
             .then(function(project) {
                 project.startDate && (project.startDate = new Date(project.startDate));
                 project.endDate && (project.endDate = new Date(project.endDate));
-                $mdToast.showSimple('项目概况已保存');
+                $mdToast.show($mdToast.simple('项目概况已保存').position('top right'));
             });
         };
 
