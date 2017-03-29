@@ -153,32 +153,17 @@
                         </div>
                     </md-content>
                 </md-tab>
-                <md-tab label="用户组管理">
+                <md-tab label="用户分组">
                     <md-content class="md-padding" layout="row">
-                        <md-input-container flex="100" class="md-input-has-value">
-                            <label>已有用户组</label>
-                            <md-chips ng-model="customerGroups" readonly="true">
-                                <md-chip-template ng-class="bg-primary">
-                                    <div ng-click="addInGroup($chip)">
-                                        {{ $chip.name }}
-                                        <md-icon ng-click="editGroup($chip);$event.stopPropagation()">edit</md-icon>
-                                        <md-icon ng-click="removeGroup($chip);$event.stopPropagation()">close</md-icon>
-                                    </div>
-                                </md-chip-template>
-                            </md-chips>
-                        </md-input-container>
-                    </md-content>
-                    <md-content class="md-padding" layout="row">
-                        <md-input-container flex="100" class="md-input-has-value">
-                            <label>筛选用户组</label>
-                            <md-chips ng-model="inGroup">
-                                <md-chip-template>
-                                    <div>
-                                        {{ $chip.name }}
-                                    </div>
-                                </md-chip-template>
-                            </md-chips>
-                        </md-input-container>
+                        <md-chips flex ng-model="customerGroups" readonly="true" class="customer-group">
+                            <md-chip-template>
+                                <div ng-click="toggleInGroup($chip, $event)">
+                                    {{ $chip.name }}
+                                    <md-icon ng-click="editGroup($chip);$event.stopPropagation()">edit</md-icon>
+                                    <md-icon ng-click="removeGroup($chip);$event.stopPropagation()">close</md-icon>
+                                </div>
+                            </md-chip-template>
+                        </md-chips>
                     </md-content>
                 </md-tab>
             </md-tabs>

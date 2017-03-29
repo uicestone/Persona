@@ -21,7 +21,6 @@
         }
     }
     md-chips-wrap {
-        height: 48px;
         md-icon {
             font-size: 21px;
         }
@@ -41,6 +40,10 @@
     .showing-fields {
         line-height: 35px;
         margin: 0;
+    }
+
+    .customer-group md-chip.bg-primary md-icon {
+        color: $white !important;
     }
 }
 .campaign-data-table .label {

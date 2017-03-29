@@ -59,7 +59,7 @@
             });
         });
 
-        $scope.customerGroups = customerGroupService.query();
+        $scope.customerGroups = customerGroupService.query({limit:1000});
 
         $scope.queryCustomerReachings = {page: 1, limit: 20};
         
@@ -218,15 +218,33 @@
             $scope.notInGroup = [];
         }
 
-        // 属于访客分组
-        $scope.addInGroup = function(group) {
-            $scope.inGroup.push(group);
-        };
+        $scope.toggleInGroup = function(groupToToggle, $event) {
+            var alreadyInGroup = false;
 
-        // 不属于访客分组
-        $scope.addNotInGroup = function() {
-            $scope.notInGroup.push(group);
-        }
+            // 给<md-chip>添加一个选中状态的class
+            var chipElement = $event.currentTarget.parentElement.parentElement.parentElement
+
+            if(chipElement.className.search('bg-primary') > -1) {
+                chipElement.className = chipElement.className.replace('bg-primary', '');
+            }
+            else {
+                chipElement.className += ' bg-primary';
+            }
+
+            $scope.inGroup = $scope.inGroup.filter(function(group) {
+                if(group._id === groupToToggle._id) {
+                    alreadyInGroup = true;
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            });
+
+            if(!alreadyInGroup) {
+                $scope.inGroup.push(groupToToggle);
+            }
+        };
 
         // 编辑分组
         $scope.editGroup = function(group) {
