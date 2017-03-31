@@ -2,6 +2,7 @@
 
 const express     = require('express');
 const bodyParser  = require('body-parser');
+const compression = require('compression');
 const mongoose    = require('mongoose');
 const http        = require('http');
 
@@ -18,6 +19,7 @@ const portHttp    = process.env.PORT_HTTP;
 mongoose.connect(process.env.MONGODB_URL);
 mongoose.Promise = global.Promise;
 
+app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
