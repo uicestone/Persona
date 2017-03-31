@@ -7,7 +7,6 @@ const http        = require('http');
 
 const app         = express();
 const router      = express.Router();
-const portHttp    = process.env.PORT_HTTP || 8080;
 const httpServer  = http.createServer(app);
 const io          = require('socket.io')(httpServer);
 
@@ -15,6 +14,7 @@ const env 		  = require('node-env-file');
 
 env(`${__dirname}/.env`);
 
+const portHttp    = process.env.PORT_HTTP;
 mongoose.connect(process.env.MONGODB_URL);
 mongoose.Promise = global.Promise;
 
