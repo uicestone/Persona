@@ -82,6 +82,9 @@
         };
 
         $scope.getProjects = function() {
+            if($scope.query.endDateBefore) {
+                $scope.query.endDate = '~' + $scope.query.endDateBefore;
+            }
             $scope.projectsPromise = projectService.query($scope.query, function(projects) {
                 $scope.projects = projects;
             }).$promise;

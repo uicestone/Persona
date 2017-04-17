@@ -7,22 +7,25 @@
                     <div class="panel-title">项目管理</div>
                 </div>
                 <div class="panel-body" ng-if="!projects.$resolved || projects.length>0">
-                    <div class="filters" layout="row">
+                    <form ng-submit="getProjects()" class="filters" layout="row">
                         <md-input-container flex="1">
-                            <label>开始时间</label>
-                            <md-datepicker ng-model="query.startDate" md-hide-icons="calendar"></md-datepicker>
+                            <label>开始时间晚于</label>
+                            <md-datepicker ng-model="query.startDate" md-hide-icons="calendar" md-max-date="query.endDate"></md-datepicker>
                         </md-input-container>
                         <md-input-container flex="1">
-                            <label>结束时间</label>
-                            <md-datepicker ng-model="query.endDate" md-hide-icons="calendar"></md-datepicker>
+                            <label>结束时间早于</label>
+                            <md-datepicker ng-model="query.endDateBefore" md-hide-icons="calendar" md-min-date="query.startDate"></md-datepicker>
                         </md-input-container>
                         <md-input-container flex="1">
                             <label>投放平台</label>
                             <md-select ng-model="query.platform">
-                                <md-option ng-repeat="platform in platforms" value="{{ platform }}"></md-option>
+                                <md-option ng-repeat="platform in platforms" value="{{ platform }}">{{ platform }}</md-option>
                             </md-select>
                         </md-input-container>
-                    </div>
+                        <md-input-container flex="1">
+                            <md-button type="submit" class="md-primary md-raised" style="min-height:29px;min-width:70px"><md-icon>search</md-icon></md-button>
+                        </md-input-container>
+                    </form>
                     <md-card>
                         <md-table-container>
                             <table md-table md-progress="projectsPromise" style="background:white">
@@ -33,8 +36,8 @@
                                         <th md-column>投放平台</th>
                                         <th md-column>管理者</th>
                                         <th md-column>创建时间</th>
-                                        <th md-column>今日新增/累计用户</th>
-                                        <th md-column>综合KPI完成率</th>
+                                        <th md-column>开始时间</th>
+                                        <th md-column>结束时间</th>
                                         <th md-column>状态</th>
                                     </tr>
                                 </thead>
@@ -45,8 +48,8 @@
                                         <td md-cell>{{ project.platform }}</td>
                                         <td md-cell>{{ project.manager.name }}</td>
                                         <td md-cell>{{ project.createdAt | date:'y/M/d' }}</td>
-                                        <td md-cell></td>
-                                        <td md-cell></td>
+                                        <td md-cell>{{ project.startDate | date:'y/M/d' }}</td>
+                                        <td md-cell>{{ project.endDate | date:'y/M/d' }}</td>
                                         <td md-cell>{{ project.status }}</td>
                                     </tr>
                                 </tbody>

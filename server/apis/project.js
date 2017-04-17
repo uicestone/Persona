@@ -57,7 +57,7 @@ module.exports = (router) => {
                 ]});
             }
 
-            ['name', 'url', 'appid'].forEach(property => {
+            ['name', 'url', 'appid', 'platform'].forEach(property => {
                 if(req.query[property]) {
                     query.find({[property]: new RegExp(req.query[property])});
                 }
@@ -69,17 +69,17 @@ module.exports = (router) => {
 
                     const range = req.query[property].split(/[~_]/);
 
-                    let condition = {[property]:{}};
-
-                    if(range[0] && !isNaN(range[0])) {
-                        condition[property].$gte = Number(range[0]);
+                    if(range[0] && !isNaN((new Date(range[0])).getTime())) {
+                        query.find({
+                            [property]: {$gte: new Date(range[0])}
+                        })
                     }
 
-                    if(range[1] && !isNaN(range[1])) {
-                        condition[property].$lte = Number(range[1]);
+                    if(range[1] && !isNaN((new Date(range[1])).getTime())) {
+                        query.find({
+                            [property]: {$lte: new Date(range[1])}
+                        })
                     }
-
-                    query.find(condition);
 
                 }
 
