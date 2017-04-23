@@ -65,13 +65,17 @@
             });
         });
 
-        $scope.addKpi = function(kpi) {
+        $scope.saveKpi = function(kpi) {
             
             if(!$scope.project.kpis) {
                 $scope.project.kpis = [];
             }
 
             $scope.project.kpis.push(kpi);
+            $scope.newKpi = false;
+        };
+
+        $scope.addKpi = function() {
             $scope.newKpi = undefined;
         };
 
