@@ -92,7 +92,7 @@
                                 </md-input-container>
                             </div>
                             <!--新增节点的表单-->
-                            <div layout="row">
+                            <div layout="row" ng-if="kpi.newTiming !== false">
                                 <md-input-container flex="1" flex-offset="10">
                                     <label>新增节点名称</label>
                                     <input ng-model="kpi.newTiming.name">
@@ -113,9 +113,11 @@
                                     </md-input-container>
                                 </md-slider-container>
                                 <md-input-container flex="1">
-                                    <md-button ng-click="addKpiTiming(kpi, kpi.newTiming)">添加</md-button>
+                                    <md-button ng-click="saveKpiTiming(kpi, kpi.newTiming)">保存</md-button>
                                 </md-input-container>
                             </div>
+                            <md-button ng-if="kpi.newTiming === false" ng-click="addKpiTiming(kpi)" style="width:100%"><md-icon>add</md-icon></md-button>
+
                             <!--所有节点显示在一个轴上-->
                             <div layout="row" layout-align="center end" class="timeline-timings">
                                 <div class="endpoint" flex="1">

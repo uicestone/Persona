@@ -85,15 +85,19 @@
             });
         }
 
-        $scope.addKpiTiming = function(kpi, newTiming) {
+        $scope.saveKpiTiming = function (kpi, newTiming) {
             
             if(!kpi.timings) {
                 kpi.timings = [];
             }
 
             kpi.timings.push(newTiming);
-            delete kpi.newTiming;
-        }
+            kpi.newTiming = false;
+        };
+
+        $scope.addKpiTiming = function (kpi) {
+            kpi.newTiming = undefined;
+        };
 
         $scope.removeKpiTiming = function(kpi, timingToRemove) {
             kpi.timings = kpi.timings.filter(function(timing) {
