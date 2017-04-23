@@ -149,6 +149,7 @@
         $scope.getUsers = function(roles, name) {
             return userService.query({roles:roles, name: name}).$promise;
         };
+
     }
     
 })(); 
