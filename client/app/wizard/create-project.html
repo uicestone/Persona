@@ -71,14 +71,14 @@
                             </md-input-container>
                         </div>
 
-                        <div layout-gt-sm="row">
+                        <div layout="row">
 
-                            <md-input-container class="md-block" flex-gt-sm>
+                            <md-input-container flex="33">
                                 <label>URL</label>
                                 <input name="postalCode" ng-model="project.url" placeholder="https://www.example.com">
                             </md-input-container>
 
-                            <md-input-container class="md-block" flex-gt-sm="20">
+                            <md-input-container flex="33">
                                 <label>投放平台</label>
                                 <md-select ng-model="project.platform">
                                     <md-option ng-repeat="platform in platforms" value="{{platform}}">
@@ -87,22 +87,22 @@
                                 </md-select>
                             </md-input-container>
 
-                            <md-autocomplete class="md-block" flex-gt-sm="15" md-floating-label="省/市" md-items="province in provinces | filter:provinceSearchText" md-search-text="provinceSearchText" md-item-text="province.name" md-selected-item="project.region[0]" md-min-length="0" md-no-cache="true">
+                            <md-autocomplete flex md-floating-label="省/市" md-items="province in provinces | filter:provinceSearchText" md-search-text="provinceSearchText" md-item-text="province.name" md-selected-item="project.region[0]" md-min-length="0" md-no-cache="true">
                                 <span>{{province.name}}</span>
                             </md-autocomplete>
 
-                            <md-autocomplete class="md-block" flex-gt-sm="15" md-floating-label="市/区" md-items="city in cities | filter:citySearchText" md-search-text="citySearchText" md-item-text="city.name" md-selected-item="project.region[1]" md-min-length="0" md-no-cache="true">
+                            <md-autocomplete flex md-floating-label="市/区" md-items="city in cities | filter:citySearchText" md-search-text="citySearchText" md-item-text="city.name" md-selected-item="project.region[1]" md-min-length="0" md-no-cache="true">
                                 <span>{{city.name}}</span>
                             </md-autocomplete>
                         </div>
 
                         <div layout-gt-sm="row">
 
-                            <md-autocomplete class="md-block" flex-gt-sm="25" md-floating-label="执行者" md-items="user in getUsers('project_admin', searchExecutiveText)" md-search-text="searchExecutiveText" md-item-text="user.name" md-selected-item="project.executive" md-min-length="0" required>
+                            <md-autocomplete class="md-block" flex-gt-sm="33" md-floating-label="执行者" md-items="user in getUsers('project_admin', searchExecutiveText)" md-search-text="searchExecutiveText" md-item-text="user.name" md-selected-item="project.executive" md-min-length="0" required>
                                 <span>{{ user.name }}</span>
                             </md-autocomplete>
 
-                            <md-autocomplete ng-if="$parent.user.can('set-user')" class="md-block" flex-gt-sm="25" md-floating-label="管理者" md-items="user in getUsers('brand_admin', searchManagerText)" md-search-text="searchManagerText" md-item-text="user.name" md-selected-item="project.manager" md-min-length="0" required>
+                            <md-autocomplete ng-if="$parent.user.can('set-user')" class="md-block" flex-gt-sm="33" md-floating-label="管理者" md-items="user in getUsers('brand_admin', searchManagerText)" md-search-text="searchManagerText" md-item-text="user.name" md-selected-item="project.manager" md-min-length="0" required>
                                 <span>{{ user.name }}</span>
                             </md-autocomplete>
 
