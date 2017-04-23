@@ -39,7 +39,7 @@
             <br><br>
         </div>
         <div class="panel panel-default">
-            <form name="userForm" ng-submit="saveProject(project, 'wizard/set-kpi')">
+            <form name="createProject" ng-submit="createProject.$valid && saveProject(project, 'wizard/set-kpi')">
                 <div class="panel-body">
                     <div class="col-md-3 col-lg-offset-1 text-center">
                         <img src="/assets/images/wizard-create-project.png" style="width:100%">
@@ -60,7 +60,7 @@
 
                             <md-input-container>
                                 <label>结束时间</label>
-                                <md-datepicker ng-model="project.endDate" md-min-date="project.startDate"></md-datepicker>
+                                <md-datepicker ng-model="project.endDate" md-min-date="project.startDate" required></md-datepicker>
                             </md-input-container>
                         </div>
 
@@ -98,17 +98,17 @@
 
                         <div layout-gt-sm="row">
 
-                            <md-autocomplete class="md-block" flex-gt-sm="25" md-floating-label="执行者" md-items="user in getUsers('project_admin', searchExecutiveText)" md-search-text="searchExecutiveText" md-item-text="user.name" md-selected-item="project.executive" md-min-length="0">
+                            <md-autocomplete class="md-block" flex-gt-sm="25" md-floating-label="执行者" md-items="user in getUsers('project_admin', searchExecutiveText)" md-search-text="searchExecutiveText" md-item-text="user.name" md-selected-item="project.executive" md-min-length="0" required>
                                 <span>{{ user.name }}</span>
                             </md-autocomplete>
 
-                            <md-autocomplete ng-if="$parent.user.can('set-user')" class="md-block" flex-gt-sm="25" md-floating-label="管理者" md-items="user in getUsers('brand_admin', searchManagerText)" md-search-text="searchManagerText" md-item-text="user.name" md-selected-item="project.manager" md-min-length="0">
+                            <md-autocomplete ng-if="$parent.user.can('set-user')" class="md-block" flex-gt-sm="25" md-floating-label="管理者" md-items="user in getUsers('brand_admin', searchManagerText)" md-search-text="searchManagerText" md-item-text="user.name" md-selected-item="project.manager" md-min-length="0" required>
                                 <span>{{ user.name }}</span>
                             </md-autocomplete>
 
                             <md-input-container ng-if="!$parent.user.can('set-user')" class="md-block" flex-gt-sm>
                                 <label>管理者</label>
-                                <input name="appid" ng-model="project.manager.name" disabled>
+                                <input name="appid" ng-model="project.manager.name" required disabled>
                             </md-input-container>
 
                             <md-input-container class="md-block" flex-gt-sm>

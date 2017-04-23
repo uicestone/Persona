@@ -113,8 +113,14 @@ module.exports = (router) => {
             }).then((result) => {
                 console.log(result.nModified + ' customers added to group: ' + customerGroup.name);
             }).catch(err => {
-                console.error(err);
-                res.status(500);
+                if (err.code === 11000) {
+                    res.status(409).json({message:'无法创建重复数据'});
+                    console.error(err.message);
+                }
+                else {
+                    console.error(err);
+                    res.status(500);
+                }
             });
             
         })

@@ -65,6 +65,12 @@
                 if(rejection.data && rejection.data.message) {
                     $mdToast.show($mdToast.simple(rejection.data.message).position('top right'));
                 }
+                else if (rejection.status >= 400 && rejection.status < 500) {
+                    $mdToast.show($mdToast.simple('请求错误').position('top right'));
+                }
+                else if (rejection.status >= 500) {
+                    $mdToast.show($mdToast.simple('服务器错误').position('top right'));
+                }
                 else {
                     $mdToast.show($mdToast.simple('网络错误').position('top right'));
                 }

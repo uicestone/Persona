@@ -11,6 +11,11 @@ module.exports = (router) => {
         .post((req, res) => {
             
             let project = new Project(req.body);      // create a new instance of the Project model
+
+            if (!req.body.manager) {
+                res.status(400).json({message:'请填写管理者'});
+            }
+
             project.brand = req.body.manager.brand;
             project.createdAt = new Date();
 
@@ -21,8 +26,14 @@ module.exports = (router) => {
 
                 res.json(project);
             }).catch(err => {
-                console.error(err);
-                res.status(500);
+                if (err.code === 11000) {
+                    res.status(409).json({message:'无法创建重复数据'});
+                    console.error(err.message);
+                }
+                else {
+                    console.error(err);
+                    res.status(500);
+                }
             });
         })
 
