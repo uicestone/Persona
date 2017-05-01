@@ -1,6 +1,10 @@
 const WechatAuth = require('wechat-auth');
 const redisClient = require('redis').createClient();
+const wechatCrypto = require('../util/wechatCrypto.js');
+const xmlParseString = require('xml2js').parseString;
+const env = require('node-env-file');
 
+env(`${__dirname}/../../.env`);
 /*
  * 获取全局component_verify_ticket的方法
  * 从redis缓存中读取
@@ -47,8 +51,25 @@ module.exports = (router) => {
     
     router.route('/wechat-auth').post((req, res) => {
         
-        console.log(req.method, req.query, req.body);
+        let cryptor = new wechatCrypto(process.env.COMPONENT_TOKEN, process.env.COMPONENT_ENCODING_AES_KEY, process.env.COMPONENT_APP_ID);
+
+        devSign = cryptor.getSignature(req.query.timestamp, req.query.nonce, req.body.Encrypt[0]);
+
+        if (devSign !== req.query.msg_signature) {
+            res.status(403).json({message:'Invalid signature.'});
+            return;
+        }
+
+        const xmlMessage = cryptor.decrypt(req.body.Encrypt[0]).message;
+        
+        xmlParseString(xmlMessage, {async: false, trim: true}, (err, result) => {
+            ticket = result.xml.ComponentVerifyTicket;
+            redisClient.setex('component_verify_ticket', 7000, JSON.stringify(ticket));
+            console.log(`[${new Date()}] ComponentVerifyTicket已更新：${ticket}`);
+        });
+
         res.send('success').end();
+
         // const wechatAuth = new WechatAuth(process.env.COMPONENT_APP_ID, process.env.COMPONENT_APP_SECRET, getVerifyTicket, getComponentToken, saveComponentToken);
 
         // wechatAuth.getLatestComponentToken((err, token) => {
