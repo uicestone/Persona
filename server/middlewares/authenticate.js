@@ -7,6 +7,11 @@ module.exports = function(req, res, next) {
         return;
     }
 
+    if(req.originalUrl === '/api/wechat-auth') {
+        next();
+        return;
+    }
+
     const token = req.get('authorization') || req.query.token;
 
     if(!token) {

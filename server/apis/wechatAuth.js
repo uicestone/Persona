@@ -44,7 +44,7 @@ const saveComponentToken = function(token, callback) {
 };
 
 module.exports = (router) => {
-    // Channel CURD
+    
     router.route('/wechat-auth').post((req, res) => {
         
         console.log(req.method, req.query, req.body);

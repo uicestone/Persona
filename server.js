@@ -19,9 +19,12 @@ const portHttp    = process.env.PORT_HTTP;
 mongoose.connect(process.env.MONGODB_URL);
 mongoose.Promise = global.Promise;
 
+require('body-parser-xml')(bodyParser);
+
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.xml());
 
 require('./server/apis')(app, router);
 
