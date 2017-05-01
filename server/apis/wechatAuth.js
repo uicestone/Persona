@@ -53,14 +53,14 @@ module.exports = (router) => {
         
         let cryptor = new wechatCrypto(process.env.COMPONENT_TOKEN, process.env.COMPONENT_ENCODING_AES_KEY, process.env.COMPONENT_APP_ID);
 
-        devSign = cryptor.getSignature(req.query.timestamp, req.query.nonce, req.body.Encrypt[0]);
+        devSign = cryptor.getSignature(req.query.timestamp, req.query.nonce, req.body.xml.Encrypt[0]);
 
         if (devSign !== req.query.msg_signature) {
             res.status(403).json({message:'Invalid signature.'});
             return;
         }
 
-        const xmlMessage = cryptor.decrypt(req.body.Encrypt[0]).message;
+        const xmlMessage = cryptor.decrypt(req.body.xml.Encrypt[0]).message;
         
         xmlParseString(xmlMessage, {async: false, trim: true}, (err, result) => {
             ticket = result.xml.ComponentVerifyTicket;
