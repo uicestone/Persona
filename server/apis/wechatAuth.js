@@ -63,7 +63,7 @@ module.exports = (router) => {
         const xmlMessage = cryptor.decrypt(req.body.xml.Encrypt[0]).message;
         
         xmlParseString(xmlMessage, {async: false, trim: true}, (err, result) => {
-            ticket = result.xml.ComponentVerifyTicket;
+            ticket = result.xml.ComponentVerifyTicket[0];
             redisClient.setex('component_verify_ticket', 7000, ticket);
             console.log(`[${new Date()}] ComponentVerifyTicket已更新：${ticket}`);
         });
