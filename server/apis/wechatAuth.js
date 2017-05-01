@@ -48,6 +48,7 @@ module.exports = (router) => {
     router.route('/wechat-auth').post((req, res) => {
         
         console.log(req.method, req.query, req.body);
+        res.send('success').end();
         // const wechatAuth = new WechatAuth(process.env.COMPONENT_APP_ID, process.env.COMPONENT_APP_SECRET, getVerifyTicket, getComponentToken, saveComponentToken);
 
         // wechatAuth.getLatestComponentToken((err, token) => {

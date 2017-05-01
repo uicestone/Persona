@@ -7,7 +7,7 @@ module.exports = function(req, res, next) {
         return;
     }
 
-    if(req.originalUrl === '/api/wechat-auth') {
+    if(req.originalUrl.match(/^\/api\/wechat\-auth/)) {
         next();
         return;
     }
