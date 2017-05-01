@@ -64,7 +64,7 @@ module.exports = (router) => {
         
         xmlParseString(xmlMessage, {async: false, trim: true}, (err, result) => {
             ticket = result.xml.ComponentVerifyTicket;
-            redisClient.setex('component_verify_ticket', 7000, JSON.stringify(ticket));
+            redisClient.setex('component_verify_ticket', 7000, ticket);
             console.log(`[${new Date()}] ComponentVerifyTicket已更新：${ticket}`);
         });
 
