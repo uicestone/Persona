@@ -3,7 +3,7 @@
 
     angular.module('app.page')
     .controller('invoiceCtrl', ['$scope', '$window', invoiceCtrl])
-    .controller('authCtrl', ['$scope', '$window', '$location', 'authService', authCtrl]);
+    .controller('authCtrl', ['$scope', '$window', '$location', '$http', 'authService', authCtrl]);
 
     function invoiceCtrl($scope, $window) {
         var printContents, originalContents, popupWin;
@@ -18,7 +18,7 @@
         }
     }
 
-    function authCtrl($scope, $window, $location, authService) {
+    function authCtrl($scope, $window, $location, $http, authService) {
 
         $scope.login = function() {
             $scope.$parent.$parent.user = authService.login($scope.username, $scope.password);
@@ -28,17 +28,21 @@
             $location.url('/')
         }
 
-        $scope.reset =    function() {
+        $scope.reset = function() {
             $location.url('/')
         }
 
-        $scope.unlock =    function() {
+        $scope.unlock = function() {
             $location.url('/')
         }     
 
         $scope.updateUser = function(user) {
             user.$save();
         };
+
+        $http.get('http://localhost:8080/api/wechat-auth').then(function (res) {
+            $scope.wechatAuthUrl = res.data + encodeURIComponent('http://localhost:8080/api/wechat-auth?intendedUri=' + $location.url() + '&homeUrl=' + window.location.protocol + '//' + window.location.host);
+        });
     }
 
 })(); 
