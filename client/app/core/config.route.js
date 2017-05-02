@@ -60,6 +60,9 @@
                         templateUrl: 'app/customer/image.html',
                         reloadOnSearch: false
                     })
+                    .when('/customer/collecting/:id?', {
+                        templateUrl: 'app/customer/collecting.html'
+                    })
                     .when('/form/editor', {
                         templateUrl: "app/form/editor.html",
                         resolve: {

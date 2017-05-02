@@ -22,7 +22,7 @@
 
             addBg = function(path) {
                 $element.removeClass('on-canvas');
-                $element.removeClass('body-wide body-err body-lock body-auth body-welcome');
+                $element.removeClass('body-wide body-err body-lock body-auth body-welcome body-customer-collecting');
                 switch (path) {
                     case '/welcome':
                         return $element.addClass('body-welcome');
@@ -35,6 +35,10 @@
                         return $element.addClass('body-wide body-auth');
                     case '/lock-screen':
                         return $element.addClass('body-wide body-lock');
+                }
+
+                if (path.match(/\/customer\/collecting/)) {
+                    return $element.addClass('body-wide body-customer-collecting');
                 }
             };
 

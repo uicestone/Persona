@@ -2,7 +2,8 @@
     'use strict';
 
     angular.module('app.customer')
-    .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', '$mdToast', 'customerService', 'customerGroupService', 'customerFieldService', 'customerReachingService', customerCtrl]);
+    .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', '$mdToast', 'customerService', 'customerGroupService', 'customerFieldService', 'customerReachingService', customerCtrl])
+    .controller('customerCollectingCtrl', ['$scope', '$route', 'customerService', customerCollectingCtrl]);
 
     function customerCtrl($scope, $window, $location, $mdBottomSheet, $mdToast, customerService, customerGroupService, customerFieldService, customerReachingService) {
         
@@ -338,6 +339,17 @@
             $scope.newCustomerReaching = customerReaching;
         };
 
+    }
+
+    function customerCollectingCtrl ($scope, $route, customerService) {
+        if ($route.current.params.id) {
+            $scope.customer = customerService.get({id:$route.current.params.id});
+            $scope.customer.$promise.then(function (customer) {
+                $scope.title = 'UNID: ' + customer._id;
+            });
+        } else {
+            $scope.title = '访客列表';
+        }
     }
     
 })(); 
