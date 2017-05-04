@@ -3,7 +3,7 @@
 
     angular.module('app.customer')
     .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', '$mdToast', 'customerService', 'customerGroupService', 'customerFieldService', 'customerReachingService', customerCtrl])
-    .controller('customerCollectingCtrl', ['$scope', '$route', 'customerService', customerCollectingCtrl]);
+    .controller('customerCollectingCtrl', ['$scope', '$route', '$location', 'customerService', customerCollectingCtrl]);
 
     function customerCtrl($scope, $window, $location, $mdBottomSheet, $mdToast, customerService, customerGroupService, customerFieldService, customerReachingService) {
         
@@ -341,15 +341,20 @@
 
     }
 
-    function customerCollectingCtrl ($scope, $route, customerService) {
+    function customerCollectingCtrl ($scope, $route, $location, customerService) {
         if ($route.current.params.id) {
             $scope.customer = customerService.get({id:$route.current.params.id});
             $scope.customer.$promise.then(function (customer) {
-                $scope.title = 'UNID: ' + customer._id;
+                $scope.title = 'NUID: ...' + customer._id.substr(11);
             });
         } else {
             $scope.title = '访客列表';
+            $scope.customers = customerService.query({zgid: {$exists: true}, openid: null});
         }
+
+        $scope.showDetail = function (customer) {
+            $location.url('/customer/collecting/' + customer._id);
+        };
     }
     
 })(); 

@@ -1,29 +1,27 @@
 <div class="container" ng-controller="customerCollectingCtrl">
     <h1 class="title">{{ title }}</h1>
     <div class="list" ng-if="customers.length">
-        <div ng-repeat="customer in customers" class="item" layout="row">
+        <div ng-repeat="customer in customers" ng-click="showDetail(customer)" class="item" layout="row">
             <div class="avatar" flex="50">
-                <img src="/assets/images/g1.jpg">
+                <img ng-src="{{ customer.portraitUrl }}">
             </div>
             <div class="description" flex="50">
                 <h2 class="times-title">到店次数</h2>
-                <p class="times">n次</p>
+                <p class="times">{{ customer.visitedTimes }}次</p>
             </div>
         </div>
     </div>
     <div class="detail" ng-if="customer">
         <div class="avatar">
-            <img src="/assets/images/g1.jpg">
+            <img ng-src="{{ customer.portraitUrl }}">
         </div>
         <div class="description">
             <div class="latest">
-                <p class="line1">到店次数：<span class="times">n次</span></p>
-                <p class="line2">最近到店时间：<span class="date">2017年4月11日</span></p>
+                <p class="line1">到店次数：<span class="times">{{ customer.visitedTimes }}次</span></p>
+                <p class="line2">最近到店时间：<span class="date">{{ customer.lastVisitedAt | date:'y年M月d日' }}</span></p>
             </div>
             <div class="history">
-                <p>历史到店时间：<span class="date">2017年4月11日</span></p>
-                <p>历史到店时间：<span class="date">2017年4月8日</span></p>
-                <p>历史到店时间：<span class="date">2017年4月7日</span></p>
+                <p ng-repeat="date in customer.visitedAt" ng-if="$index > 0">历史到店时间：<span class="date">{{ date | date:'y年M月d日' }}</span></p>
             </div>
         </div>
     </div>
