@@ -50,6 +50,7 @@
     "ali-push": "^0.1.8",
     "body-parser": "^1.15.2",
     "body-parser-xml": "^1.1.0",
+    "camelcase-keys": "^4.1.0",
     "compression": "^1.6.2",
     "cors": "^2.8.1",
     "express": "^4.14.0",

@@ -20,6 +20,8 @@ const customerSchema = new Schema({
     tags: [String],
     group: [{_id: Schema.Types.ObjectId, name: String}],
     brand: String
+}, {
+    strict: false
 });
 
 customerSchema.index({brand:1, mobile:1}, {unique:true, sparse:true});
