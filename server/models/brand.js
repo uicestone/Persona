@@ -3,17 +3,11 @@ const Schema = mongoose.Schema;
 
 const brandSchema = new Schema({
     name: String,
-    wechat: [{
-        appId: String,
+    wechats: [{
+        _id: Schema.ObjectId,
         name: String,
-        alias: String,
-        originalId: String,
         logoUrl: String,
-        isService: Boolean,
-        isVerified: Boolean,
-        qrcodeUrl: String,
-        entityName: String,
-        signature: String
+        isService: Boolean
     }]
 });
 
