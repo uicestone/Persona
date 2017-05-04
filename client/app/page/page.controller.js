@@ -40,9 +40,11 @@
             user.$save();
         };
 
-        $http.get('http://localhost:8080/api/wechat-auth').then(function (res) {
-            $scope.wechatAuthUrl = res.data + encodeURIComponent('http://localhost:8080/api/wechat-auth?intendedUri=' + $location.url() + '&homeUrl=' + window.location.protocol + '//' + window.location.host);
-        });
+        if ($location.path().match(/^\/profile/)) {
+            $http.get('http://localhost:8080/api/wechat-auth').then(function (res) {
+                $scope.wechatAuthUrl = res.data + encodeURIComponent('http://localhost:8080/api/wechat-auth?intendedUri=' + $location.url() + '&homeUrl=' + window.location.protocol + '//' + window.location.host + '&token=' + localStorage.getItem('token'));
+            });
+        }
     }
 
 })(); 
