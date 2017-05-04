@@ -2,9 +2,9 @@ const WechatAuth = require('wechat-auth');
 const redisClient = require('redis').createClient();
 const wechatCrypto = require('../util/wechatCrypto.js');
 const xmlParseString = require('xml2js').parseString;
-// const env = require('node-env-file');
+const Brand = require('../models/brand.js');
+const Wechat = require('../models/wechat.js');
 
-// env(`${__dirname}/../../.env`);
 /*
  * 获取全局component_verify_ticket的方法
  * 从redis缓存中读取
@@ -109,13 +109,34 @@ module.exports = (router) => {
                         signature: info.signature
                     };
 
-                    console.log(wechatInfo);
+                    if (!req.user || !req.user.brand) {
+                        return;
+                    }
+
+                    Wechat.findOneAndUpdate(
+                        {appId: wechatInfo.appId},
+                        wechatInfo,
+                        {upsert: true, new: true}
+                    ).exec().then(wechat => {
+                        console.log(wechat);
+                        Brand.findOneAndUpdate(
+                            {name: req.user.brand.name},
+                            {$addToSet: {wechats: wechat}},
+                            {upsert: true, new: true}
+                        ).exec();
+                    });
+
                 });
 
                 res.redirect(`${req.query.homeUrl}/#!${req.query.intendedUri}`);
             });
         } else {
             wechatAuth.getPreAuthCode((err, reply) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send(err);
+                    return;
+                }
                 res.send(`https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=${process.env.COMPONENT_APP_ID}&pre_auth_code=${reply.pre_auth_code}&redirect_uri=`);
             });
         }
