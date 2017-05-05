@@ -7,7 +7,9 @@ const brandSchema = new Schema({
         _id: Schema.ObjectId,
         name: String,
         logoUrl: String,
-        isService: Boolean
+        isService: Boolean,
+        appId: String,
+        refreshToken: String
     }]
 });
 

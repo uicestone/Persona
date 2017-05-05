@@ -155,7 +155,8 @@
         var customers = $resource(api + 'customer/:id', {id: '@_id'}, {
             query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
             create: {method: 'POST'},
-            update: {method: 'PUT'}
+            update: {method: 'PUT'},
+            getQrcode: {method: 'GET', url: api + 'customer/:id/qrcode/:scene'}
         });
         
         // Angular mix PUT and POST methot to $save,

@@ -347,6 +347,7 @@
             $scope.customer.$promise.then(function (customer) {
                 $scope.title = 'NUID: ...' + customer._id.substr(11);
             });
+            $scope.qrcode = customerService.getQrcode({id:$route.current.params.id, scene: '人脸识别'});
         } else {
             $scope.title = '访客列表';
             $scope.customers = customerService.query({zgid: {$exists: true}, openid: null});

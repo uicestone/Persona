@@ -11,7 +11,9 @@ const wechatSchema = new Schema({
     isVerified: Boolean,
     qrcodeUrl: String,
     entityName: String,
-    signature: String
+    signature: String,
+    refreshToken: String,
+    lastQrSceneId: {temp: Number, limit: Number}
 });
 
 wechatSchema.index({appId:1}, {unique:true});

@@ -1,55 +1,9 @@
-const WechatAuth = require('wechat-auth');
 const redisClient = require('redis').createClient();
 const wechatCrypto = require('../util/wechatCrypto.js');
 const xmlParseString = require('xml2js').parseString;
 const Brand = require('../models/brand.js');
 const Wechat = require('../models/wechat.js');
-
-/*
- * 获取全局component_verify_ticket的方法
- * 从redis缓存中读取
- */
-const getVerifyTicket = function(callback) {
-    return redisClient.get('component_verify_ticket', function(err, ticket) {
-        if (err) {
-            return callback(err);
-        } else if (!ticket) {
-            return callback(new Error('no component_verify_ticket'));
-        } else {
-            return callback(null, ticket);
-        }
-    });
-};
-
-/*
- * 获取全局component_access_token的方法
- * 从redis缓存中读取
- */
-const getComponentToken = function(callback) {
-    return redisClient.get('component_access_token', function(err, token) {
-        if (err) {
-            return callback(err);
-        } else {
-            return callback(null, JSON.parse(token));
-        }
-    });
-};
-
-/*
- * 保存component_access_token到redis中
- */
-const saveComponentToken = function(token, callback) {
-    return redisClient.setex('component_access_token', 7000, JSON.stringify(token), function(err, reply) {
-        if (err) {
-            callback(err);
-        }
-        return callback(null);
-    });
-};
-
-const saveAuthorizationInfo = function(info) {
-    return redisClient.setex(`authorization_info_${info.authorizer_appid}`, 7000, JSON.stringify(info));
-}
+const WechatAuth = require('../models/wechatAuth.js');
 
 module.exports = (router) => {
     
@@ -79,8 +33,11 @@ module.exports = (router) => {
     })
 
     .get((req, res) => {
-        const wechatAuth = new WechatAuth(process.env.COMPONENT_APP_ID, process.env.COMPONENT_APP_SECRET, getVerifyTicket, getComponentToken, saveComponentToken);
+
+        const wechatAuth = WechatAuth();
+
         if (req.query.auth_code) {
+
             wechatAuth.getAuthToken(req.query.auth_code, function(err, result) {
 
                 const authorizationInfo = result.authorization_info;
@@ -89,7 +46,7 @@ module.exports = (router) => {
                 const refreshToken = authorizationInfo.authorizer_refresh_token;
 
                 // 将auth_code换access_token并记录在redis
-                saveAuthorizationInfo(authorizationInfo);
+                WechatAuth.saveAuthorizerAccessToken(authorizationInfo.authorizer_appid, authorizationInfo.authorizer_access_token, authorizationInfo.expires_in);
 
                 // 将微信公众号基本信息记录在mongodb
                 wechatAuth.getAuthInfo(appId, function(err, result) {
@@ -106,7 +63,8 @@ module.exports = (router) => {
                         isVerified: info.verify_type_info.id >= 0,
                         qrcodeUrl: info.qrcode_url,
                         entityName: info.principal_name,
-                        signature: info.signature
+                        signature: info.signature,
+                        refreshToken: authorizationInfo.authorizer_refresh_token
                     };
 
                     if (!req.user || !req.user.brand) {

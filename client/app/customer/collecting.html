@@ -23,6 +23,9 @@
             <div class="history">
                 <p ng-repeat="date in customer.visitedAt" ng-if="$index > 0">历史到店时间：<span class="date">{{ date | date:'y年M月d日' }}</span></p>
             </div>
+            <div class="qrcode">
+                <img ng-src="{{ qrcode.url }}">
+            </div>
         </div>
     </div>
 </div>
