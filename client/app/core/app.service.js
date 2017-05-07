@@ -14,7 +14,7 @@
 
     angular.module('app')
         .service('httpInterceptorService', ['$q', '$window', '$location', '$injector', httpInterceptorService])
-        .service('authService', ['$window', 'userService', authService])
+        .service('authService', ['$window', '$location', 'userService', authService])
         .service('brandService', ['$resource', brandService])
         .service('channelService', ['$resource', channelService])
         .service('customerService', ['$resource', customerService])
@@ -80,7 +80,7 @@
         };
     }
 
-    function authService($window, userService) {
+    function authService($window, $location, userService) {
 
         var user = new userService();
 
@@ -95,6 +95,11 @@
         };
 
         this.user = function() {
+
+            if ($location.search().token) {
+                $window.localStorage.setItem('token', $location.search().token);
+            }
+
             if(!$window.localStorage.getItem('token')) {
                 user.$resolved = true;
                 return user;
