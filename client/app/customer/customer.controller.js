@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('app.customer')
-    .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', '$mdToast', 'customerService', 'customerGroupService', 'customerFieldService', 'customerReachingService', customerCtrl])
+    .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', '$mdToast', 'customerService', 'customerGroupService', 'customerFieldService', 'customerReachingService', 'brandService', customerCtrl])
     .controller('customerCollectingCtrl', ['$scope', '$route', '$location', 'customerService', customerCollectingCtrl]);
 
-    function customerCtrl($scope, $window, $location, $mdBottomSheet, $mdToast, customerService, customerGroupService, customerFieldService, customerReachingService) {
+    function customerCtrl($scope, $window, $location, $mdBottomSheet, $mdToast, customerService, customerGroupService, customerFieldService, customerReachingService, brandService) {
         
         $scope.query = $location.search();
 
@@ -339,6 +339,16 @@
             $scope.newCustomerReaching = customerReaching;
         };
 
+        $scope.selectTab = function (tab) {
+            $location.search('tab', tab);
+        };
+
+        $scope.currentTab = $location.search().tab || 'sms';
+
+        $scope.$watch('$parent.$parent.user.$resolved', function (resolved) {
+            if (!resolved) return;
+            $scope.brand = brandService.get({id:$scope.$parent.$parent.user.brand.name});
+        });
     }
 
     function customerCollectingCtrl ($scope, $route, $location, customerService) {

@@ -2,7 +2,7 @@
     <div class="row ui-section">
         <div class="col-md-12">
             <md-tabs class="project-detail customer-image" md-dynamic-height md-border-bottom>
-                <md-tab label="短信触达">
+                <md-tab label="短信触达" md-active="currentTab=='sms'" md-on-select="selectTab()">
                     <md-content layout="column" class="md-padding">
                         <div layout="row">
                             <md-input-container flex="30">
@@ -22,8 +22,8 @@
                         </div>
                     </md-content>
                 </md-tab>
-                <md-tab label="微信触达" md-active="true">
-                    <div class="text-center" ng-if="true" style="padding:100px">
+                <md-tab label="微信触达" md-active="currentTab=='wechat'" md-on-select="selectTab('wechat')">
+                    <div class="text-center" ng-if="brand.wechats.length==0" style="padding:100px">
                         <h3 style="color:#7d7d7d;font-weight:normal">
                             <i class="fa fa-wechat" style="font-size: 100px"></i>
                         </h3>
@@ -34,8 +34,36 @@
                             <md-button href="#!/profile" class="btn btn-lg btn-w-lg md-raised md-primary">个人中心</md-button>
                         </div>
                     </div>
+                    <div ng-if="brand.wechats.length>0" class="md-padding">
+                        <form>
+                            <md-input-container>
+                                <md-select ng-model="wechat" placeholder="选择公众号">
+                                    <md-option ng-repeat="wechat in brand.wechats">{{ wechat.name }}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="pull-right">
+                                <md-button class="btn md-raised md-primary">同步图文</md-button>
+                            </md-input-container>
+                            <div class="form-group">
+                                <div class="input-group" style="width: calc(100% - 2px);">
+                                    <div class="input-group-addon bg-white" style="padding-right:0;color:#bdbdbd"><i class="fa fa-search"></i></div>
+                                    <input ng-model="searchMaterialTitle" placeholder="搜索图文标题" class="form-control" style="border-left:none">
+                                </div>
+                            </div>
+                        </form>
+                        <form>
+                            <md-input-container>
+                                <md-select ng-model="wechat" placeholder="选择用户组">
+                                    <md-option ng-repeat="customerGroup in customerGroups">{{ customerGroup.name }}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="pull-right">
+                                <md-button class="btn md-raised md-primary">点击发送</md-button>
+                            </md-input-container>
+                        </form>
+                    </div>
                 </md-tab>
-                <md-tab label="邮件触达" ng-disabled="true">
+                <md-tab label="邮件触达" md-active="currentTab=='email'" ng-disabled="true" md-on-select="selectTab('email')">
                     
                 </md-tab>
             </md-tabs>
