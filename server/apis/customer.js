@@ -4,7 +4,7 @@ const CustomerField = require('../models/customerField.js');
 const Wechat = require('../models/wechat.js');
 const xlsx = require('node-xlsx').default;
 const redisClient = require('redis').createClient();
-const WechatApi = require('open-wechat-api');
+const WechatApi = require('../models/wechatApi.js');
 const WechatAuth = require('../models/wechatAuth.js');
 
 module.exports = (router) => {
@@ -217,34 +217,21 @@ module.exports = (router) => {
                 Brand.findOne({name: req.user.brand.name}).then(brand => {
                     const wechat = brand.wechats[0];
 
-                    redisClient.get(`authorizer_access_token_${wechat.appId}`, function (err, accessToken) {
-                        
-                        (new Promise((resolve, reject) => {
-                            if (accessToken) {
-                                resolve(accessToken);
-                            }
-                            else {
-                                const wechatAuth = WechatAuth();
-                                wechatAuth.refreshAuthToken(wechat.appId, wechat.refreshToken, function(err, result) {
-                                    WechatAuth.saveAuthorizerAccessToken(wechat.appId, result.authorizer_access_token, result.expires_in);
-                                    resolve(result.authorizer_access_token);
-                                });
-                            }
-                        })).then(accessToken => {
-                            const wechatApi = new WechatApi(wechat.appId, {authorizer_access_token: accessToken});
+                    let wechatApi;
 
-                            Wechat.findByIdAndUpdate(wechat._id, {$inc: {'lastQrSceneId.temp': 1}}, {new: true}).then(wechat => {
-                                wechatApi.createTmpQRCode(wechat.lastQrSceneId.temp, 7 * 86400, (err, result) => {
-                                    let qrcode = result;
-                                    qrcode.url = wechatApi.showQRCodeURL(qrcode.ticket);
-                                    qrcode.scene = req.params.scene;
-                                    qrcode.customerId = req.params.customerId;
-                                    redisClient.setex(`customer_qrcode_${req.params.customerId}_scene_${req.params.scene}`, qrcode.expire_seconds - 600, JSON.stringify(qrcode));
-                                    redisClient.setex(`qrcode_temp_${wechat.lastQrSceneId.temp}`, qrcode.expire_seconds - 600, JSON.stringify(qrcode));
-                                    res.json(qrcode);
-                                    // console.log('qrcode created:', qrcode);
-                                });
-                            });
+                    WechatApi(wechat.appId).then(api => {
+                        wechatApi = api;
+                        return Wechat.findByIdAndUpdate(wechat._id, {$inc: {'lastQrSceneId.temp': 1}}, {new: true});                      
+                    }).then(wechat => {
+                        wechatApi.createTmpQRCode(wechat.lastQrSceneId.temp, 7 * 86400, (err, result) => {
+                            let qrcode = result;
+                            qrcode.url = wechatApi.showQRCodeURL(qrcode.ticket);
+                            qrcode.scene = req.params.scene;
+                            qrcode.customerId = req.params.customerId;
+                            redisClient.setex(`customer_qrcode_${req.params.customerId}_scene_${req.params.scene}`, qrcode.expire_seconds - 600, JSON.stringify(qrcode));
+                            redisClient.setex(`qrcode_temp_${wechat.lastQrSceneId.temp}`, qrcode.expire_seconds - 600, JSON.stringify(qrcode));
+                            res.json(qrcode);
+                            // console.log('qrcode created:', qrcode);
                         });
                     });
                 });
