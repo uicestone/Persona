@@ -22,8 +22,18 @@
                         </div>
                     </md-content>
                 </md-tab>
-                <md-tab label="微信触达" ng-disabled="true">
-                    
+                <md-tab label="微信触达" md-active="true">
+                    <div class="text-center" ng-if="true" style="padding:100px">
+                        <h3 style="color:#7d7d7d;font-weight:normal">
+                            <i class="fa fa-wechat" style="font-size: 100px"></i>
+                        </h3>
+                        <h3 style="color:#7d7d7d;font-weight:normal;font-size: 18px">
+                            如需使用微信触达及场景触达，请至个人中心绑定微信公众号，并授权第三方平台管理，谢谢
+                        </h3>
+                        <div ng-if="$parent.user.can('edit-project')" class="actions" style="margin-top:20px">
+                            <md-button href="#!/profile" class="btn btn-lg btn-w-lg md-raised md-primary">个人中心</md-button>
+                        </div>
+                    </div>
                 </md-tab>
                 <md-tab label="邮件触达" ng-disabled="true">
                     
