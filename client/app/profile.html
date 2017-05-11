@@ -7,12 +7,12 @@
             <div class="panel-body">
 
                 <div layout="row">
-                    <div class="profile-img" flex="1">
+                    <div class="profile-img text-center" flex="20">
                         <md-icon style="color:white;font-size:100px;width:100px;height:100px">account_circle</md-icon>
                     </div>
 
                     <div layout="row" flex>
-                        <div flex layout="column">
+                        <div flex="25" layout="column">
                             <md-input-container>
                                 <label>姓名</label>
                                 <input type="text" ng-model="user.name">
@@ -26,7 +26,11 @@
                                 <input type="password" ng-model="user.password" autocomplete="new-password">
                             </md-input-container>
                         </div>
-                        <div flex layout="column">
+                        <div flex="25" layout="column">
+                            <md-input-container class="md-input-has-value">
+                                <label>权限</label>
+                                <p style="height:30px;line-height:30px;margin-bottom:23px">{{ roleLabels[user.roles[0]] }}</p>
+                            </md-input-container>
                             <md-input-container class="md-input-has-value">
                                 <label>公司</label>
                                 <p style="height:30px;line-height:30px;margin-bottom:23px">{{ user.company }}</p>
@@ -35,20 +39,37 @@
                                 <label>品牌</label>
                                 <p style="height:30px;line-height:30px;margin-bottom:23px">{{ user.brand.name }}</p>
                             </md-input-container>
-                            <md-input-container class="md-input-has-value">
-                                <label>角色</label>
-                                <p style="height:30px;line-height:30px;margin-bottom:23px">{{ user.roles }}</p>
-                            </md-input-container>
                         </div>
-                        <div>
+                        <div flex class="text-right">
                             <md-button ng-click="updateUser(user)">保存</md-button>
-                            <a ng-href="{{ wechatAuthUrl }}" class="btn">微信公众号授权</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="wechats">
+                    <md-input-container class="md-input-has-placeholder md-block">
+                        <label>已绑定公众号</label>
+                    </md-input-container>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="wechat text-center" ng-repeat="wechat in brand.wechats">
+                                <img class="logo" ng-src="{{ wechat.logoUrl }}">
+                                <div class="actions">
+                                    <md-button class="btn md-primary">同步</md-button>
+                                    <md-button class="btn md-secondary">触达</md-button>
+                                    <md-button class="btn md-secondary">删除</md-button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="wechat text-center" ng-repeat="wechat in brand.wechats">
+                                <a ng-href="{{ wechatAuthUrl }}"><i class="fa fa-plus" style="font-size:150px;color:#d6d6d6;padding:23px 0"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="profile-info">
                     <ul class="list-unstyled list-inline">
-                    <li><i class="fa fa-video-camera"></i> 品牌 <span class="text-muted">(1)</span></li>
+                    <li><i class="fa fa-video-camera"></i> 公众号 <span class="text-muted">({{ brand.wechats.length }})</span></li>
                     <li><i class="fa fa-image"></i> 项目 <span class="text-muted">({{ projectCount }})</span></li>
                     <li><i class="fa fa-bookmark"></i> 访客 <span class="text-muted">({{ customerCount }})</span></li>
                     </ul>

@@ -1,4 +1,5 @@
 const Brand = require('../models/brand.js');
+const mongoose = require('mongoose');
 
 module.exports = (router) => {
     // Brand CURD
@@ -73,7 +74,17 @@ module.exports = (router) => {
 
         // get the brand with that id
         .get((req, res) =>{
-            Brand.findById(req.params.brandId).then(brand => {
+
+            let query;
+
+            if (mongoose.Types.ObjectId.isValid(req.params.brandId)) {
+                query = Brand.findById({_id: req.params.brandId});
+            }
+            else {
+                query = Brand.findOne({name: req.params.brandId});
+            }
+
+            query.then(brand => {
                 res.json(brand);
             }).catch(err => {
                 console.error(err);

@@ -3,7 +3,7 @@
 
     angular.module('app.page')
     .controller('invoiceCtrl', ['$scope', '$window', invoiceCtrl])
-    .controller('authCtrl', ['$scope', '$window', '$location', '$http', 'authService', authCtrl]);
+    .controller('authCtrl', ['$scope', '$window', '$location', '$http', 'authService', 'brandService', 'userRolesConstant', authCtrl]);
 
     function invoiceCtrl($scope, $window) {
         var printContents, originalContents, popupWin;
@@ -18,7 +18,7 @@
         }
     }
 
-    function authCtrl($scope, $window, $location, $http, authService) {
+    function authCtrl($scope, $window, $location, $http, authService, brandService, userRolesConstant) {
 
         $scope.login = function() {
             $scope.$parent.$parent.user = authService.login($scope.username, $scope.password);
@@ -45,6 +45,20 @@
                 $scope.wechatAuthUrl = res.data + encodeURIComponent('http://localhost:8080/api/wechat-auth?intendedUri=' + $location.url() + '&homeUrl=' + window.location.protocol + '//' + window.location.host + '&token=' + localStorage.getItem('token'));
             });
         }
+
+        $scope.roleLabels = {};
+
+        userRolesConstant.forEach(function (role) {
+            $scope.roleLabels[role.name] = role.label;
+        });
+
+        $scope.$watch('$parent.$parent.user.$resolved', function (resolved) {
+            if (!resolved) {
+                return false;
+            }
+
+            $scope.brand = brandService.get({id:$scope.$parent.$parent.user.brand.name});
+        });
     }
 
 })(); 
