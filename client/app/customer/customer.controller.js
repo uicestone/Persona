@@ -339,6 +339,32 @@
             $scope.newCustomerReaching = customerReaching;
         };
 
+        $scope.editQrScene = function(qrScene) {
+
+            $scope.scene = {name: null, createdAt: new Date()};
+            
+            $mdBottomSheet.show({
+                templateUrl: 'app/customer/reaching-scene-bottom-sheet.html',
+                scope: $scope,
+                preserveScope: true
+            });
+        };
+
+        $scope.saveQrScene = function(qrScene) {
+            $mdBottomSheet.hide();
+            wechatService.saveQrScene($scope.wechat, qrScene).then(function () {
+                $scope.scene = undefined;
+                $scope.getWechat($scope.wechat);
+            });
+        };
+
+        $scope.removeScene = function(sceneToRemove) {
+            sceneToRemove.$delete();
+            $scope.scenes = $scope.scenes.filter(function(scene) {
+                return scene._id !== sceneToRemove._id;
+            });
+        };
+
         $scope.selectTab = function (tab) {
             $location.search('tab', tab);
         };

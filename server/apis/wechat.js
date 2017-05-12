@@ -198,5 +198,35 @@ module.exports = (router) => {
         });
     });
 
+    router.route('/wechat/:appId/qrscene')
+
+    .get((req, res) => {
+        Wechat.findOne({appId: req.params.appId}).then(wechat => {
+            res.json(wechat.qrScenes);
+        });
+    })
+
+    .post((req, res) => {
+
+        let wechatApi;
+
+        WechatApi(req.params.appId).then(api => {
+            wechatApi = api;
+            return Wechat.findOneAndUpdate({appId: req.params.appId}, {$inc: {'lastQrSceneId.limit': 1}}, {new: true});                      
+        }).then(wechat => {
+            wechatApi.createLimitQRCode(wechat.lastQrSceneId.limit, (err, result) => {
+                let qrScene = result;
+                qrScene.id = wechat.lastQrSceneId.limit;
+                qrScene.url = wechatApi.showQRCodeURL(qrScene.ticket);
+                qrScene.name = req.body.name;
+                qrScene.createdAt = new Date();
+                wechat.qrScenes.push(qrScene);
+                wechat.save();
+                res.json(qrScene);
+            });
+        });
+
+    });
+
     return router;
 }

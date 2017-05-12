@@ -13,6 +13,7 @@ const wechatSchema = new Schema({
     entityName: String,
     signature: String,
     refreshToken: String,
+    qrScenes: [{url: String, name: String, ticket: String, id: Number, createdAt: Date}],
     lastQrSceneId: {temp: Number, limit: Number},
     newsMaterials: []
 });

@@ -30,7 +30,7 @@
                         <h3 style="color:#7d7d7d;font-weight:normal;font-size: 18px">
                             如需使用微信触达及场景触达，请至个人中心绑定微信公众号，并授权第三方平台管理，谢谢
                         </h3>
-                        <div ng-if="$parent.user.can('edit-project')" class="actions" style="margin-top:20px">
+                        <div ng-if="$parent.user.can('edit-brand')" class="actions" style="margin-top:20px">
                             <md-button href="#!/profile" class="btn btn-lg btn-w-lg md-raised md-primary">个人中心</md-button>
                         </div>
                     </div>
@@ -75,7 +75,7 @@
                         </div>
                         <form>
                             <md-input-container>
-                                <md-select ng-model="wechat" placeholder="选择用户组">
+                                <md-select ng-model="customerGroup" placeholder="选择用户组">
                                     <md-option ng-repeat="customerGroup in customerGroups">{{ customerGroup.name }}</md-option>
                                 </md-select>
                             </md-input-container>
@@ -85,12 +85,23 @@
                         </form>
                     </div>
                 </md-tab>
-                <md-tab label="邮件触达" md-active="currentTab=='email'" ng-disabled="true" md-on-select="selectTab('email')">
-                    
+                <md-tab label="场景触达" md-active="currentTab=='scene'" md-on-select="selectTab('scene')">
+                    <div class="md-padding">
+                        <form>
+                            <md-input-container>
+                                <md-select ng-model="wechat" placeholder="选择公众号" ng-change="getWechat(wechat)">
+                                    <md-option ng-repeat="wechat in brand.wechats" ng-value="wechat">{{ wechat.name }}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="pull-right">
+                                <md-button class="btn md-raised md-primary" ng-click="editQrScene()" ng-disabled="!wechat">创建场景</md-button>
+                            </md-input-container>
+                        </form>
+                    </div>
                 </md-tab>
             </md-tabs>
             <hr>
-            <md-card style="margin:2px">
+            <md-card style="margin:2px" ng-if="currentTab=='sms'">
                 <md-table-container>
                     <table md-table md-progress="promiseCustomerReachings" class="campaign-data-table">
                         <thead md-head>
@@ -119,6 +130,32 @@
                     </table>
                 </md-table-container>
                 <md-table-pagination md-limit="queryCustomerReachings.limit" md-limit-options="[20, 50, 100]" md-page="queryCustomerReachings.page" md-total="{{ customerReachings.$total }}" md-page-select md-label="{of:'/', page:'页码', rowsPerPage:'每页条数'}"></md-table-pagination>
+            </md-card>
+            <md-card style="margin:2px" ng-if="currentTab=='scene'">
+                <md-table-container>
+                    <table md-table class="campaign-data-table">
+                        <thead md-head>
+                            <tr md-row>
+                                <th md-column>场景名称</th>
+                                <th md-column>创建时间</th>
+                                <th md-column>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody md-body>
+                            <tr md-row ng-repeat="scene in wechatDetail.qrScenes">
+                                <td md-cell>{{ scene.name }}</td>
+                                <td md-cell>{{ scene.createdAt | date:'y-MM-dd HH:mm:ss' }}</td>
+                                <td md-cell>
+                                    <div layout="row">
+                                        <md-icon class="md-primary" flex ng-click="">file_download</md-icon>
+                                        <md-icon class="md-primary" flex ng-click="">info_outline</md-icon>
+                                        <md-icon class="md-primary" flex ng-click="">delete</md-icon>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
             </md-card>
         </div>
     </div>

@@ -27,8 +27,8 @@
         .service('wechatService', ['$http', '$mdToast', wechatService])
         .constant('userRolesConstant', [
             {name: 'admin', label: '平台管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'reach-customer', 'set-channel', 'set-data', 'set-user']},
-            {name: 'brand_admin', label: '品牌管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'reach-customer', 'set-data']},
-            {name: 'project_admin', label: '品牌执行者', abilities: ['list-project', 'timing-project', 'image-customer', 'set-data']}
+            {name: 'brand_admin', label: '品牌管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'reach-customer', 'set-data', 'edit-brand']},
+            {name: 'project_admin', label: '品牌执行者', abilities: ['list-project', 'timing-project', 'image-customer', 'set-data', 'edit-brand']}
         ]);
 
     function httpInterceptorService($q, $window, $location, $injector) {
@@ -406,6 +406,14 @@
             },
             get: function (appId) {
                 return $http.get(api + 'wechat/' + appId);
+            },
+            saveQrScene: function (wechat, qrScene) {
+                if (qrScene._id) {
+                    return $http.put(api + 'wechat/' + wechat.appId + '/qrscene/' + qrScene._id, qrScene);
+                }
+                else {
+                    return $http.post(api + 'wechat/' + wechat.appId + '/qrscene', qrScene);
+                }
             }
         }
     }
