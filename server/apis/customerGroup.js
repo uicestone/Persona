@@ -38,16 +38,30 @@ module.exports = (router) => {
                 });
 
                 preciseKeys.forEach((key) => {
+                    let value;
+
                     try {
-                        let value = JSON.parse(customerGroup.query[key]);
+                        value = JSON.parse(customerGroup.query[key]);
                     }
                     catch(e) {
-                        let value = customerGroup.query[key];
+                        value = customerGroup.query[key];
                     }
 
-                    query.find({
-                        [key]: value
-                    });
+                    if (value === '*') {
+                        query.find({
+                            [key]: {$exists: true}
+                        });
+                    }
+                    else if (value === '-') {
+                        query.find({
+                            [key]: {$exists: false}
+                        });
+                    }
+                    else {
+                        query.find({
+                            [key]: value
+                        });
+                    }
                 });
 
                 // 包含标签

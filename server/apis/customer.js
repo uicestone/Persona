@@ -65,9 +65,21 @@ module.exports = (router) => {
                     value = req.query[key];
                 }
 
-                query.find({
-                    [key]: value
-                });
+                if (value === '*') {
+                    query.find({
+                        [key]: {$exists: true}
+                    });
+                }
+                else if (value === '-') {
+                    query.find({
+                        [key]: {$exists: false}
+                    });
+                }
+                else {
+                    query.find({
+                        [key]: value
+                    });
+                }
             });
 
             // 包含标签
