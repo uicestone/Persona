@@ -147,9 +147,9 @@
                                 <td md-cell>{{ scene.createdAt | date:'y-MM-dd HH:mm:ss' }}</td>
                                 <td md-cell>
                                     <div layout="row">
-                                        <md-icon class="md-primary" flex ng-click="">file_download</md-icon>
-                                        <md-icon class="md-primary" flex ng-click="">info_outline</md-icon>
-                                        <md-icon class="md-primary" flex ng-click="">delete</md-icon>
+                                        <a ng-href="{{ scene.url }}" target="_blank" flex><md-icon class="md-primary">file_download</md-icon></a>
+                                        <md-icon class="" flex ng-click="">info_outline</md-icon>
+                                        <md-icon class="" flex ng-click="">delete</md-icon>
                                     </div>
                                 </td>
                             </tr>
