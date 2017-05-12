@@ -43,8 +43,6 @@ connection.query(
 
         results.forEach(row => {
             row = camelcaseKeys(row);
-            row.openid = row.openId;
-            delete row.openId;
             row.visitedAt = row.visitedAt.split(',').map(time => new Date(time));
             querys.push(Customer.findOneAndUpdate({zgid:row.zgid}, row, {upsert: true, strictMode: false}).exec());
         });

@@ -3,7 +3,7 @@
 
     angular.module('app.page')
     .controller('invoiceCtrl', ['$scope', '$window', invoiceCtrl])
-    .controller('authCtrl', ['$scope', '$window', '$location', '$http', 'authService', 'brandService', 'userRolesConstant', authCtrl]);
+    .controller('authCtrl', ['$scope', '$window', '$location', '$http', 'authService', 'brandService', 'wechatService', 'userRolesConstant', authCtrl]);
 
     function invoiceCtrl($scope, $window) {
         var printContents, originalContents, popupWin;
@@ -18,7 +18,7 @@
         }
     }
 
-    function authCtrl($scope, $window, $location, $http, authService, brandService, userRolesConstant) {
+    function authCtrl($scope, $window, $location, $http, authService, brandService, wechatService, userRolesConstant) {
 
         $scope.login = function() {
             $scope.$parent.$parent.user = authService.login($scope.username, $scope.password);
@@ -59,6 +59,10 @@
 
             $scope.brand = brandService.get({id:$scope.$parent.$parent.user.brand.name});
         });
+
+        $scope.sync = function (wechat) {
+            wechatService.sync(wechat);
+        };
     }
 
 })(); 

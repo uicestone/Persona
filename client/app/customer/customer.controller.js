@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('app.customer')
-    .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', '$mdToast', 'customerService', 'customerGroupService', 'customerFieldService', 'customerReachingService', 'brandService', customerCtrl])
+    .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', '$mdToast', 'customerService', 'customerGroupService', 'customerFieldService', 'customerReachingService', 'brandService', 'wechatService', customerCtrl])
     .controller('customerCollectingCtrl', ['$scope', '$route', '$location', 'customerService', customerCollectingCtrl]);
 
-    function customerCtrl($scope, $window, $location, $mdBottomSheet, $mdToast, customerService, customerGroupService, customerFieldService, customerReachingService, brandService) {
+    function customerCtrl($scope, $window, $location, $mdBottomSheet, $mdToast, customerService, customerGroupService, customerFieldService, customerReachingService, brandService, wechatService) {
         
         $scope.query = $location.search();
 
@@ -349,6 +349,12 @@
             if (!resolved) return;
             $scope.brand = brandService.get({id:$scope.$parent.$parent.user.brand.name});
         });
+
+        $scope.getWechat = function (wechat) {
+            wechatService.get(wechat.appId).then(function (response) {
+                $scope.wechatDetail = response.data;
+            });
+        };
     }
 
     function customerCollectingCtrl ($scope, $route, $location, customerService) {

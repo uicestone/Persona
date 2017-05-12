@@ -54,9 +54,9 @@
                             <div class="wechat text-center" ng-repeat="wechat in brand.wechats">
                                 <img class="logo" ng-src="{{ wechat.logoUrl }}">
                                 <div class="actions">
-                                    <md-button class="btn md-primary">同步</md-button>
-                                    <md-button class="btn md-secondary">触达</md-button>
-                                    <md-button class="btn md-secondary">删除</md-button>
+                                    <md-button class="btn md-primary" ng-click="sync(wechat)">同步</md-button>
+                                    <md-button class="btn md-secondary" ng-href="#!/customer/reaching?tab=wechat">触达</md-button>
+                                    <md-button class="btn md-secondary" disabled="true">删除</md-button>
                                 </div>
                             </div>
                         </div>

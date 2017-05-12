@@ -1,7 +1,7 @@
 <div class="page" ng-controller="customerCtrl">
     <div class="row ui-section">
         <div class="col-md-12">
-            <md-tabs class="project-detail customer-image" md-dynamic-height md-border-bottom>
+            <md-tabs class="project-detail customer-reaching" md-dynamic-height md-border-bottom>
                 <md-tab label="短信触达" md-active="currentTab=='sms'" md-on-select="selectTab()">
                     <md-content layout="column" class="md-padding">
                         <div layout="row">
@@ -37,8 +37,8 @@
                     <div ng-if="brand.wechats.length>0" class="md-padding">
                         <form>
                             <md-input-container>
-                                <md-select ng-model="wechat" placeholder="选择公众号">
-                                    <md-option ng-repeat="wechat in brand.wechats">{{ wechat.name }}</md-option>
+                                <md-select ng-model="wechat" placeholder="选择公众号" ng-change="getWechat(wechat)">
+                                    <md-option ng-repeat="wechat in brand.wechats" ng-value="wechat">{{ wechat.name }}</md-option>
                                 </md-select>
                             </md-input-container>
                             <md-input-container class="pull-right">
@@ -51,6 +51,28 @@
                                 </div>
                             </div>
                         </form>
+                        <div class="row">
+                            <div class="col-md-4" ng-repeat="newsMaterial in wechatDetail.newsMaterials | limitTo:10">
+                                <div class="news-material">
+                                    <div class="date">更新于{{ newsMaterial.update_time * 1000 | date:'y年M月d日' }}</div>
+                                    <div ng-if="newsMaterial.content.news_item.length === 1">
+                                        <div class="single" ng-repeat="newsItem in newsMaterial.content.news_item">
+                                            <a ng-href="{{ newsItem.url }}"><h2 class="title">{{ newsItem.title }}</h2>
+                                            <img ng-src="{{ newsItem.thumb_url }}"></a>
+                                        </div>
+                                    </div>
+                                    <div class="multiple" ng-if="newsMaterial.content.news_item.length > 1">
+                                        <div ng-repeat="newsItem in newsMaterial.content.news_item">
+                                            <hr ng-if="$index>0">
+                                            <div class="item clearfix" ng-class="{first:$index==0}">
+                                                <a target="_blank" ng-href="{{ newsItem.url }}"><h2 class="title">{{ newsItem.title }}</h2>
+                                                <img ng-src="{{ newsItem.thumb_url }}"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <form>
                             <md-input-container>
                                 <md-select ng-model="wechat" placeholder="选择用户组">

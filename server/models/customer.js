@@ -24,6 +24,6 @@ const customerSchema = new Schema({
     strict: false
 });
 
-customerSchema.index({brand:1, mobile:1}, {unique:true, sparse:true});
+customerSchema.index({brand:1, mobile:1}, {sparse:true});
 
 module.exports = mongoose.model('Customer', customerSchema);

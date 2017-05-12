@@ -1,8 +1,8 @@
 const bluebird = require('bluebird');
 const WechatApi = require('open-wechat-api');
-const WechatAuth = require('wechat-auth');
 const redis = require('redis');
 const Wechat = require('../models/wechat.js');
+const WechatAuth = require('../models/wechatAuth.js');
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
@@ -16,6 +16,11 @@ module.exports = (appId) => {
     return Wechat.findOne({appId: appId}).exec()
 
     .then(w => {
+
+        if (!w) {
+            throw 'Wechat App ID not found';
+        }
+
         wechat = w;
         return redisClient.getAsync(`authorizer_access_token_${wechat.appId}`);
     })

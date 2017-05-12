@@ -24,6 +24,7 @@
         .service('projectService', ['$resource', projectService])
         .service('userService', ['$resource', 'userRolesConstant', userService])
         .service('regionService', ['$http', '$sce', regionService])
+        .service('wechatService', ['$http', '$mdToast', wechatService])
         .constant('userRolesConstant', [
             {name: 'admin', label: '平台管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'reach-customer', 'set-channel', 'set-data', 'set-user']},
             {name: 'brand_admin', label: '品牌管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'reach-customer', 'set-data']},
@@ -392,6 +393,21 @@
                 return resource;
             }
         };
+    }
+
+    function wechatService ($http, $mdToast) {
+        return {
+            sync: function (wechat) {
+                $mdToast.show($mdToast.simple('同步已开始').position('top right'));
+                return $http.post(api + 'wechat/' + wechat.appId, {sync: true})
+                .then(function (response) {
+                    $mdToast.show($mdToast.simple(response.data.message).position('top right'));
+                });
+            },
+            get: function (appId) {
+                return $http.get(api + 'wechat/' + appId);
+            }
+        }
     }
 
 })(); 

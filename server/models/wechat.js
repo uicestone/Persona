@@ -13,7 +13,8 @@ const wechatSchema = new Schema({
     entityName: String,
     signature: String,
     refreshToken: String,
-    lastQrSceneId: {temp: Number, limit: Number}
+    lastQrSceneId: {temp: Number, limit: Number},
+    newsMaterials: []
 });
 
 wechatSchema.index({appId:1}, {unique:true});
