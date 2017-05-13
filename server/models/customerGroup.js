@@ -6,6 +6,7 @@ const customerGroupSchema = new Schema({
 	name: String,
     fields: [{label: String, key: String}],
     query: Object,
+    wechatTagId: Number
 });
 
 customerGroupSchema.index({brand:1, name:1}, {unique:true});

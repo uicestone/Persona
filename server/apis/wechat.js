@@ -3,6 +3,7 @@ const wechatCrypto = require('../util/wechatCrypto.js');
 const xmlParseString = require('xml2js').parseString;
 const Brand = require('../models/brand.js');
 const Customer = require('../models/customer.js');
+const CustomerGroup = require('../models/customerGroup.js');
 const Wechat = require('../models/wechat.js');
 const WechatApi = require('../models/wechatApi.js');
 const WechatAuth = require('../models/wechatAuth.js');
@@ -226,6 +227,57 @@ module.exports = (router) => {
             });
         });
 
+    });
+
+    router.route('/wechat/:appId/user-group/:groupId')
+
+    .post((req, res) => {
+
+        let customersPromise = Customer.find({'group._id':req.params.groupId}).exec();
+        let groupPromise = CustomerGroup.findById(req.params.groupId).exec();
+        let wechatApiPromise = WechatApi(req.params.appId);
+
+        Promise.all([groupPromise, customersPromise, wechatApiPromise]).then((result) => {
+            const [group, customers, wechatApi] = result;
+            const openIds = customers.map(customer => customer.get('openId'));
+            console.log(customers);
+            wechatApi.getTags(function (err, result) {
+                const existingTag = result.tags.filter(tag => tag.name === group.name)[0];
+                if (existingTag) {
+                    wechatApi.deleteTag(existingTag.id, (err, result) => {
+                        createTagAndInsertUsers(wechatApi, group, openIds);
+                    });
+                }
+                else {
+                    createTagAndInsertUsers(wechatApi, group, openIds);
+                }
+            });
+        });
+
+        function createTagAndInsertUsers (wechatApi, group, openIds) {
+            wechatApi.createTag(group.name, (err, result) => {
+                const tag = result.tag;
+                group.wechatTagId = tag.id;
+                group.save();
+                wechatApi.batchTagging(openIds, tag.id, (err, result) => {
+                    res.json({message: '用户组同步完成'});
+                });
+            });
+        }
+
+    });
+
+    router.route('/wechat/:appId/mass-send')
+
+    .post((req, res) => {
+        const tagId = req.body.tagId;
+        const mediaId = req.body.mediaId;
+
+        WechatApi(req.params.appId).then(wechatApi => {
+            wechatApi.massSendNewsByTag(mediaId, tagId, (err, result) => {
+                res.json(result);
+            });
+        });
     });
 
     return router;

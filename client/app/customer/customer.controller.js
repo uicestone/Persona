@@ -293,6 +293,10 @@
             groupToRemove.$delete();
         };
 
+        $scope.syncGroupToWechat = function (group) {
+            console.log('Sync group to wechat', group);
+        };
+
         // 查看触达详情
         $scope.showCustomerReachingDetail = function(customerReaching) {
 

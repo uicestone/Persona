@@ -160,6 +160,7 @@
                                 <div ng-click="toggleInGroup($chip, $event)">
                                     {{ $chip.name }}
                                     <md-icon ng-click="editGroup($chip);$event.stopPropagation()">edit</md-icon>
+                                    <i class="fa fa-wechat" ng-click="syncGroupToWechat($chip)"></i>
                                     <md-icon ng-click="removeGroup($chip);$event.stopPropagation()">close</md-icon>
                                 </div>
                             </md-chip-template>

@@ -414,6 +414,9 @@
                 else {
                     return $http.post(api + 'wechat/' + wechat.appId + '/qrscene', qrScene);
                 }
+            },
+            syncUserGroup: function (appId, group) {
+                $http.post(api + 'wechat/' + appId + '/user-group/' + group._id);
             }
         }
     }
