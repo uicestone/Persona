@@ -31,9 +31,10 @@ module.exports = (router) => {
                 });
 
                 let mobiles = customers.filter(customer => customer.mobile).map(customer => customer.mobile);
+                let chunk;
 
-                while (mobiles) {
-                    const chunk = mobiles.splice(0, 100);
+                while (mobiles.length) {
+                    chunk = mobiles.splice(0, 100);
 
                     aliyunClient.SingleSendSms({
                         SignName: '智关',
