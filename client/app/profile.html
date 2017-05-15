@@ -50,8 +50,8 @@
                         <label>已绑定公众号</label>
                     </md-input-container>
                     <div class="row">
-                        <div class="col-md-4">
-                            <div class="wechat text-center" ng-repeat="wechat in brand.wechats">
+                        <div class="col-md-4" ng-repeat="wechat in brand.wechats">
+                            <div class="wechat text-center">
                                 <img class="logo" ng-src="{{ wechat.logoUrl }}">
                                 <div class="actions">
                                     <md-button class="btn md-primary" ng-click="sync(wechat)">同步</md-button>
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="wechat text-center" ng-repeat="wechat in brand.wechats">
+                            <div class="wechat text-center">
                                 <a ng-href="{{ wechatAuthUrl }}"><i class="fa fa-plus" style="font-size:150px;color:#d6d6d6;padding:23px 0"></i></a>
                             </div>
                         </div>
