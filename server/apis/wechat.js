@@ -272,11 +272,19 @@ module.exports = (router) => {
     .post((req, res) => {
         const tagId = req.body.tagId;
         const mediaId = req.body.mediaId;
+        const text = req.body.text;
 
         WechatApi(req.params.appId).then(wechatApi => {
-            wechatApi.massSendNewsByTag(mediaId, tagId, (err, result) => {
-                res.json(result);
-            });
+            if (text) {
+                wechatApi.massSendTextByTag(text, tagId, (err, result) => {
+                    res.json(result);
+                });
+            }
+            else {
+                wechatApi.massSendNewsByTag(mediaId, tagId, (err, result) => {
+                    res.json(result);
+                });
+            }
         });
     });
 

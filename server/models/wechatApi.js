@@ -95,6 +95,16 @@ WechatApi.prototype.massSendNewsByTag = function (mediaId, receivers, callback) 
     this.massSendByTag(opts, receivers, callback);
 };
 
+WechatApi.prototype.massSendTextByTag = function (content, receivers, callback) {
+    const opts = {
+        "text": {
+            "content": content
+        },
+        "msgtype": "text"
+    };
+    this.massSendByTag(opts, receivers, callback);
+};
+
 module.exports = (appId) => {
 
     let wechat;
