@@ -79,7 +79,8 @@ module.exports = (router) => {
                     query.find({
                         [key]: {$in: value.split(',')}
                     })
-                } else {
+                }
+                else {
                     query.find({
                         [key]: value
                     });

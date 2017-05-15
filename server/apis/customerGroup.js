@@ -57,6 +57,11 @@ module.exports = (router) => {
                             [key]: {$exists: false}
                         });
                     }
+                    else if (value.indexOf(',') > -1) {
+                        query.find({
+                            [key]: {$in: value.split(',')}
+                        })
+                    }
                     else {
                         query.find({
                             [key]: value
