@@ -356,9 +356,9 @@
 
         $scope.saveQrScene = function(qrScene) {
             $mdBottomSheet.hide();
-            wechatService.saveQrScene($scope.wechat, qrScene).then(function () {
+            wechatService.saveQrScene($scope.wechatDetail, qrScene).then(function () {
                 $scope.scene = undefined;
-                $scope.getWechat($scope.wechat);
+                $scope.getWechat($scope.wechatDetail);
             });
         };
 
