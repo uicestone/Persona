@@ -56,7 +56,7 @@ module.exports = (router) => {
             }
 
             preciseKeys.forEach((key) => {
-                var value;
+                let value;
 
                 try {
                     value = JSON.parse(req.query[key]);
@@ -75,7 +75,11 @@ module.exports = (router) => {
                         [key]: {$exists: false}
                     });
                 }
-                else {
+                else if (value.indexOf(',') > -1) {
+                    query.find({
+                        [key]: {$in: value.split(',')}
+                    })
+                } else {
                     query.find({
                         [key]: value
                     });

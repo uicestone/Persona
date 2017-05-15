@@ -159,7 +159,7 @@
 
             preciseSearchText.split('&').forEach(function(pairString) {
                 
-                var match = pairString.match(/(\S+)=(\S+)/);
+                var match = pairString.match(/([^=]+)=([^=]+)/);
                 var key, value;
                 var param;
 
