@@ -130,6 +130,8 @@ module.exports = (router) => {
 
                 let message = camelcaseKeys(result.xml);
 
+                message.appId = req.params.appId;
+
                 message.toOpenId = message.toUserName;
                 message.fromOpenId = message.fromUserName;
                 message.type = message.msgType;
