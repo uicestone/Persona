@@ -30,28 +30,30 @@ module.exports = (router) => {
                     AccessKeySecret: process.env.ALIYUN_ACCESS_KEY_SECRET
                 });
 
-                const mobiles = customers.filter(customer => customer.mobile).map(customer => customer.mobile);
+                let mobiles = customers.filter(customer => customer.mobile).map(customer => customer.mobile);
 
-                console.log('正在发送短信给:', mobiles);
+                while (mobiles) {
+                    const chunk = mobiles.splice(0, 100);
 
-                aliyunClient.SingleSendSms({
-                    SignName: '智关',
-                    TemplateCode: req.body.templateCode,
-                    RecNum: customers.filter(customer => customer.mobile).map(customer => customer.mobile).join(','),
-                    ParamString: '{}'
-                }, (err, res, body) => {
+                    aliyunClient.SingleSendSms({
+                        SignName: '智关',
+                        TemplateCode: req.body.templateCode,
+                        RecNum: chunk.join(','),
+                        ParamString: '{}'
+                    }, (err, res, body) => {
 
-                    if (err) {
-                        console.error(err);
-                        return;
-                    }
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
 
-                    customerReaching.sendAt = new Date();
-                    customerReaching.succeeded = customers.length;
-                    customerReaching.failed = 0;
-                    customerReaching.save();
-                    console.log('短信发送完成', body);
-                });
+                        customerReaching.sendAt = new Date();
+                        customerReaching.succeeded = customers.length;
+                        customerReaching.failed = 0;
+                        customerReaching.save();
+                        console.log('短信发送请求已提交', body);
+                    });                    
+                }
 
                 res.json(customerReaching);
             }).catch(err => {
