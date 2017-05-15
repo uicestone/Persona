@@ -26,9 +26,9 @@
         .service('regionService', ['$http', '$sce', regionService])
         .service('wechatService', ['$http', '$mdToast', wechatService])
         .constant('userRolesConstant', [
-            {name: 'admin', label: '平台管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'reach-customer', 'set-channel', 'set-data', 'set-user']},
+            {name: 'admin', label: '平台管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'reach-customer', 'set-channel', 'set-data', 'set-user', 'edit-brand']},
             {name: 'brand_admin', label: '品牌管理者', abilities: ['edit-project', 'list-project', 'timing-project', 'image-customer', 'reach-customer', 'set-data', 'edit-brand']},
-            {name: 'project_admin', label: '品牌执行者', abilities: ['list-project', 'timing-project', 'image-customer', 'set-data', 'edit-brand']}
+            {name: 'project_admin', label: '品牌执行者', abilities: ['list-project', 'timing-project', 'image-customer', 'set-data']}
         ]);
 
     function httpInterceptorService($q, $window, $location, $injector) {

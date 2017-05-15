@@ -86,7 +86,18 @@
                     </div>
                 </md-tab>
                 <md-tab label="场景触达" md-active="currentTab=='scene'" md-on-select="selectTab('scene')">
-                    <div class="md-padding">
+                    <div class="text-center" ng-if="brand.wechats.length==0" style="padding:100px">
+                        <h3 style="color:#7d7d7d;font-weight:normal">
+                            <i class="fa fa-wechat" style="font-size: 100px"></i>
+                        </h3>
+                        <h3 style="color:#7d7d7d;font-weight:normal;font-size: 18px">
+                            如需使用微信触达及场景触达，请至个人中心绑定微信公众号，并授权第三方平台管理，谢谢
+                        </h3>
+                        <div ng-if="$parent.user.can('edit-brand')" class="actions" style="margin-top:20px">
+                            <md-button href="#!/profile" class="btn btn-lg btn-w-lg md-raised md-primary">个人中心</md-button>
+                        </div>
+                    </div>
+                    <div class="md-padding" ng-if="brand.wechats.length>0">
                         <form>
                             <md-input-container>
                                 <md-select ng-model="wechat" placeholder="选择公众号" ng-change="getWechat(wechat)">
