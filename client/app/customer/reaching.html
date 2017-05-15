@@ -52,7 +52,7 @@
                             </div>
                         </form>
                         <div class="row">
-                            <div class="col-md-4" ng-repeat="newsMaterial in wechatDetail.newsMaterials | limitTo:10">
+                            <div class="col-md-4" ng-repeat="newsMaterial in wechatDetail.newsMaterials | filter:searchMaterialTitle | limitTo:10">
                                 <div class="news-material">
                                     <div class="date">更新于{{ newsMaterial.update_time * 1000 | date:'y年M月d日' }}</div>
                                     <div ng-if="newsMaterial.content.news_item.length === 1">
