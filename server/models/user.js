@@ -7,9 +7,9 @@ const userSchema = new Schema({
     brand: {name: String, _id: Schema.Types.ObjectId},
     roles: [String],
     username: String,
-    password: String,
     email: String,
-    token: String
+    password: {type: String, select: false},
+    token: {type: String, select: false}
 });
 
 userSchema.index({name:1}, {unique:true});
