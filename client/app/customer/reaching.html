@@ -11,12 +11,16 @@
                                     <md-option ng-repeat="customerGroup in customerGroups" ng-value="customerGroup">{{ customerGroup.name }}</md-option>
                                 </md-select>
                             </md-input-container>
+                            <md-input-container flex="30">
+                                <label>阿里云短信模板ID</label>
+                                <input ng-model="newCustomerReaching.templateCode">
+                            </md-input-container>
                         </div>
                         <br>
-                        <md-input-container>
+                        <!-- <md-input-container>
                             <label>短信内容</label>
                             <textarea rows="5" ng-model="newCustomerReaching.content"></textarea>
-                        </md-input-container>
+                        </md-input-container> -->
                         <div style="text-align:right">
                             <md-button ng-click="saveCustomerReaching(newCustomerReaching)" class="md-primary md-raised">发送短信</md-button>
                         </div>
@@ -121,7 +125,7 @@
                                 <th md-column>用户组</th>
                                 <th md-column>编辑时间</th>
                                 <th md-column>发送时间</th>
-                                <th md-column>内容</th>
+                                <th md-column>模板ID</th>
                                 <th md-column>操作</th>
                             </tr>
                         </thead>
@@ -131,7 +135,7 @@
                                 <td md-cell>{{ customerReaching.group.name }}</td>
                                 <td md-cell>{{ customerReaching.updatedAt | date:'y-MM-dd HH:mm:ss' }}</td>
                                 <td md-cell>{{ customerReaching.sendAt | date:'y-MM-dd HH:mm:ss' }}</td>
-                                <td md-cell>{{ customerReaching.content }}</td>
+                                <td md-cell>{{ customerReaching.templateCode }}</td>
                                 <td md-cell>
                                     <md-icon class="md-primary" ng-click="showCustomerReachingDetail(customerReaching)">info_outline</md-icon>
                                     <md-icon class="md-primary" ng-click="reloadCustomerReaching(customerReaching)">refresh</md-icon>

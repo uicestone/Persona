@@ -30,12 +30,22 @@ module.exports = (router) => {
                     AccessKeySecret: process.env.ALIYUN_ACCESS_KEY_SECRET
                 });
 
+                const mobiles = customers.filter(customer => customer.mobile).map(customer => customer.mobile);
+
+                console.log('正在发送短信给:', mobiles);
+
                 aliyunClient.SingleSendSms({
                     SignName: '智关',
-                    TemplateCode: 'SMS_57690023',
-                    RecNum: customers.map(customer => customer.mobile).join(','),
+                    TemplateCode: req.body.templateCode,
+                    RecNum: customers.filter(customer => customer.mobile).map(customer => customer.mobile).join(','),
                     ParamString: '{}'
                 }, (err, res, body) => {
+
+                    if (err) {
+                        console.error(err);
+                        return;
+                    }
+
                     customerReaching.sendAt = new Date();
                     customerReaching.succeeded = customers.length;
                     customerReaching.failed = 0;
