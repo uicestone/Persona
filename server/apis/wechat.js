@@ -5,8 +5,10 @@ const Brand = require('../models/brand.js');
 const Customer = require('../models/customer.js');
 const CustomerGroup = require('../models/customerGroup.js');
 const Wechat = require('../models/wechat.js');
+const WechatMessage = require('../models/wechatMessage.js');
 const WechatApi = require('../models/wechatApi.js');
 const WechatAuth = require('../models/wechatAuth.js');
+const camelcaseKeys = require('camelcase-keys');
 
 module.exports = (router) => {
     
@@ -79,7 +81,6 @@ module.exports = (router) => {
                         wechatInfo,
                         {upsert: true, new: true}
                     ).exec().then(wechat => {
-                        console.log(wechat);
                         Brand.findOne({name: req.user.brand.name}).then(brand => {
                             const wechatIndex = brand.wechats.map(wechat => wechat.appId).indexOf(wechat.appId);
                             if (wechatIndex === -1) {
@@ -111,91 +112,135 @@ module.exports = (router) => {
     router.route('/wechat/:appId')
 
     .post((req, res) => {
-        WechatApi(req.params.appId).then(wechatApi => {
-            if (req.body.sync) {
 
-                let syncFinalPromises = [];
+        if (req.query.nonce) {
 
-                wechatApi.getFollowers((err, result) => {
-                    let openIds = result.data.openid;
-                    let getUsersPromises = [];
-                    while (openIds.length > 0) {
-                        openIdsChunk = openIds.splice(0, 100);
-                        getUsersPromises.push(new Promise((resolve, reject) => {
-                            wechatApi.batchGetUsers(openIdsChunk, function (err, result) {
-                                if (err) {
-                                    reject(err);
-                                }
-                                resolve(result.user_info_list);
+            let cryptor = new wechatCrypto(process.env.COMPONENT_TOKEN, process.env.COMPONENT_ENCODING_AES_KEY, process.env.COMPONENT_APP_ID);
+
+            devSign = cryptor.getSignature(req.query.timestamp, req.query.nonce, req.body.xml.Encrypt[0]);
+
+            if (devSign !== req.query.msg_signature) {
+                res.status(403).json({message:'Invalid signature.'});
+                return;
+            }
+
+            const xmlMessage = cryptor.decrypt(req.body.xml.Encrypt[0]).message;
+            
+            xmlParseString(xmlMessage, {async: false, trim: true, explicitArray: false}, (err, result) => {
+
+                let message = camelcaseKeys(result.xml);
+
+                message.toOpenId = message.toUserName;
+                message.fromOpenId = message.fromUserName;
+                message.type = message.msgType;
+                message.id = message.msgId;
+                message.createdAt = new Date(message.createTime * 1000);
+
+                if (message.picUrl) {
+                    message.url = message.picUrl;
+                }
+
+                if (message.locationX && message.locationY) {
+                    message.latitute = message.locationX;
+                    message.longitude = message.locationY;
+                }
+
+                let wechatMessage = new WechatMessage(message);
+
+                wechatMessage.save();
+
+                console.log(`[${new Date()}] 收到微信消息`, wechatMessage);
+            });
+
+            res.send('success').end();
+        }
+        else {
+            WechatApi(req.params.appId).then(wechatApi => {
+                if (req.body.sync) {
+
+                    let syncFinalPromises = [];
+
+                    wechatApi.getFollowers((err, result) => {
+                        let openIds = result.data.openid;
+                        let getUsersPromises = [];
+                        while (openIds.length > 0) {
+                            openIdsChunk = openIds.splice(0, 100);
+                            getUsersPromises.push(new Promise((resolve, reject) => {
+                                wechatApi.batchGetUsers(openIdsChunk, function (err, result) {
+                                    if (err) {
+                                        reject(err);
+                                    }
+                                    resolve(result.user_info_list);
+                                });
+                            }));
+                        }
+                        Promise.all(getUsersPromises).then(result => {
+                            const users = result.reduce((prev, current) => {
+                                return prev.concat(current);
+                            }, []);
+
+                            users.forEach(user => {
+
+                                const customer = {
+                                    name: user.nickname,
+                                    openId: user.openid,
+                                    sex: 0 ? '未知' : (1 ? '男' : '女'),
+                                    city: user.city,
+                                    province: user.province,
+                                    country: user.country,
+                                    avatarUrl: user.headimgurl,
+                                    tags: user.tagid_list,
+                                    brand: req.user.brand.name
+                                };
+
+                                const promise = Customer.findOneAndUpdate(
+                                    {openId: user.openid},
+                                    customer,
+                                    {upsert: true}
+                                ).exec();
+
+                                syncFinalPromises.push(promise);
                             });
-                        }));
-                    }
-                    Promise.all(getUsersPromises).then(result => {
-                        const users = result.reduce((prev, current) => {
-                            return prev.concat(current);
-                        }, []);
+                        });
+                    });
 
-                        users.forEach(user => {
+                    wechatApi.getMaterialCount((err, result) => {
+                        const newsCount = result.news_count;
+                        let getMaterialsPromises = [];
+                        for (let offset = 0; offset < newsCount; offset += 20) {
+                            getMaterialsPromises.push(new Promise((resolve, reject) => {
+                                wechatApi.getMaterials('news', offset, 20, function (err, result) {
+                                    if (err) {
+                                        reject(err);
+                                    }
+                                    result.item.forEach(item => {
+                                        item.content.news_item.forEach(newsItem => {
+                                            delete newsItem.content;
+                                        })
+                                    });
+                                    resolve(result.item);
+                                });
+                            }));
+                        }
+                        Promise.all(getMaterialsPromises).then(result => {
+                            const newsMaterials = result.reduce((prev, current) => {
+                                return prev.concat(current);
+                            }, []);
 
-                            const customer = {
-                                name: user.nickname,
-                                openId: user.openid,
-                                sex: 0 ? '未知' : (1 ? '男' : '女'),
-                                city: user.city,
-                                province: user.province,
-                                country: user.country,
-                                avatarUrl: user.headimgurl,
-                                tags: user.tagid_list,
-                                brand: req.user.brand.name
-                            };
-
-                            const promise = Customer.findOneAndUpdate(
-                                {openId: user.openid},
-                                customer,
-                                {upsert: true}
-                            ).exec();
-
+                            const promise = Wechat.findOneAndUpdate({appId: req.params.appId}, {newsMaterials: newsMaterials}).exec();
                             syncFinalPromises.push(promise);
                         });
                     });
-                });
 
-                wechatApi.getMaterialCount((err, result) => {
-                    const newsCount = result.news_count;
-                    let getMaterialsPromises = [];
-                    for (let offset = 0; offset < newsCount; offset += 20) {
-                        getMaterialsPromises.push(new Promise((resolve, reject) => {
-                            wechatApi.getMaterials('news', offset, 20, function (err, result) {
-                                if (err) {
-                                    reject(err);
-                                }
-                                result.item.forEach(item => {
-                                    item.content.news_item.forEach(newsItem => {
-                                        delete newsItem.content;
-                                    })
-                                });
-                                resolve(result.item);
-                            });
-                        }));
-                    }
-                    Promise.all(getMaterialsPromises).then(result => {
-                        const newsMaterials = result.reduce((prev, current) => {
-                            return prev.concat(current);
-                        }, []);
-
-                        const promise = Wechat.findOneAndUpdate({appId: req.params.appId}, {newsMaterials: newsMaterials}).exec();
-                        syncFinalPromises.push(promise);
+                    Promise.all(syncFinalPromises).then(() => {
+                        res.json({message: '同步已完成'});
                     });
-                });
+                }
 
-                Promise.all(syncFinalPromises).then(() => {
-                    res.json({message: '同步已完成'});
-                });
-            }
-
-        }).catch(err => {
-            console.error(err);
-        });
+            }).catch(err => {
+                console.error(err);
+            });
+        }
     })
 
     .get((req, res) => {
