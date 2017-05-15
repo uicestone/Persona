@@ -80,11 +80,16 @@ module.exports = (router) => {
                         {upsert: true, new: true}
                     ).exec().then(wechat => {
                         console.log(wechat);
-                        Brand.findOneAndUpdate(
-                            {name: req.user.brand.name},
-                            {$addToSet: {wechats: wechat}},
-                            {upsert: true, new: true}
-                        ).exec();
+                        Brand.findOne({name: req.user.brand.name}).then(brand => {
+                            const wechatIndex = brand.wechats.map(wechat => wechat.appId).indexOf(wechat.appId);
+                            if (wechatIndex === -1) {
+                                brand.wechats.push(wechat);
+                            }
+                            else {
+                                brand.wechats[wechatIndex] = wechat;
+                            }
+                            brand.save();
+                        });
                     });
 
                 });
