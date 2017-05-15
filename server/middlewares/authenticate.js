@@ -2,7 +2,7 @@ const User = require('../models/user');
 
 module.exports = function(req, res, next) {
 
-    const strictAuth = !['/api/auth/login', '/api/wechat-auth'].some(path => req.originalUrl.match(new RegExp('^' + path)));
+    const strictAuth = !['/api/auth/login', '/api/wechat'].some(path => req.originalUrl.match(new RegExp('^' + path)));
 
     const token = req.get('authorization') || req.query.token;
 
