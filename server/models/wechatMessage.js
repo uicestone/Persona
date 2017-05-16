@@ -6,6 +6,9 @@ const wechatMessageSchema = new Schema({
     toOpenId: String,
     fromOpenId: String,
     type: String,
+    event: String,
+    eventKey: String, // 扫码事件，菜单点击事件
+    ticket: String, // 扫码事件
     content: String,
     id: String,
     mediaId: String, // 语音，图片，视频消息
@@ -14,8 +17,9 @@ const wechatMessageSchema = new Schema({
     url: String, // 图片消息
     latitute: Number,
     longitude: Number,
-    scale: Number,
-    label: String,
+    scale: Number, // 位置消息的缩放
+    label: String, // 位置消息的地理标签
+    precision: Number, // 上报地理位置事件的精度
     thumbMediaId: String,
     createdAt: Date
 });
