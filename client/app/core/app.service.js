@@ -401,7 +401,8 @@
                 $mdToast.show($mdToast.simple('同步已开始').position('top right'));
                 return $http.post(api + 'wechat/' + wechat.appId, {sync: true})
                 .then(function (response) {
-                    $mdToast.show($mdToast.simple(response.data.message).position('top right'));
+                    // response.data
+                    $mdToast.show($mdToast.simple('同步已完成').position('top right'));
                 });
             },
             get: function (appId) {
@@ -417,6 +418,12 @@
             },
             syncUserGroup: function (appId, group) {
                 $http.post(api + 'wechat/' + appId + '/user-group/' + group._id);
+            },
+            massSend: function (appId, tagId, mediaId) {
+                $http.post(api + 'wechat/' + appId + '/mass-send', {
+                    tagId: tagId,
+                    mediaId: mediaId
+                });
             }
         }
     }

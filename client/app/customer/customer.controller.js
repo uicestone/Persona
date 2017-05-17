@@ -297,6 +297,10 @@
             console.log('Sync group to wechat', group);
         };
 
+        $scope.syncNewsMaterials = function (wechat) {
+            wechatService.sync(wechat);
+        };
+
         // 查看触达详情
         $scope.showCustomerReachingDetail = function(customerReaching) {
 
@@ -383,7 +387,16 @@
         $scope.getWechat = function (wechat) {
             wechatService.get(wechat.appId).then(function (response) {
                 $scope.wechatDetail = response.data;
+                $scope.wechatDetail.newsMaterials.forEach(function (newsMaterial) {
+                    newsMaterial.content.newsItem.forEach(function (item) {
+                        item.thumbUrl = item.thumbUrl.replace(/http:\/\/mmbiz\.qpic\.cn\//, 'http://qpic.stirad.com/');
+                    });
+                });
             });
+        };
+
+        $scope.sendNewsMaterial = function (wechat, customerGroup, newsMaterial) {
+            wechatService.massSend(wechat.appId, customerGroup.wechatTagId, newsMaterial.mediaId);
         };
     }
 

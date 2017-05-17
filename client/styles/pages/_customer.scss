@@ -56,7 +56,6 @@
 
 .customer-reaching {
     .news-material {
-        margin: 2px;
         background: white;
 
         .date {
@@ -74,10 +73,12 @@
                     .title {
                         position: absolute;
                         bottom: 0;
+                        left: 0;
+                        right: 0;
                         font-size: 16px;
-                        background: #909090;
+                        background: rgba(0, 0, 0, 0.5);
                         color: white;
-                        padding: 4px;
+                        padding: 4px 8px;
                         margin: 0;
                     }
                     img {
@@ -87,7 +88,7 @@
                 &:not(.first) {
                     .title {
                         float: left;
-                        width: 60%;
+                        width: 58%;
                         color: #565656;
                         font-size: 17px;
                         line-height: 1.5;

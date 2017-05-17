@@ -220,17 +220,20 @@ module.exports = (router) => {
                                             delete newsItem.content;
                                         })
                                     });
-                                    resolve(result.item);
+                                    resolve(camelcaseKeys(result, {deep: true}));
                                 });
                             }));
                         }
                         Promise.all(getMaterialsPromises).then(result => {
                             const newsMaterials = result.reduce((prev, current) => {
-                                return prev.concat(current);
+                                return prev.concat(current.item);
                             }, []);
 
                             const promise = Wechat.findOneAndUpdate({appId: req.params.appId}, {newsMaterials: newsMaterials}).exec();
                             syncFinalPromises.push(promise);
+                        })
+                        .catch(err => {
+                            console.error(err);
                         });
                     });
 
@@ -292,7 +295,11 @@ module.exports = (router) => {
         Promise.all([groupPromise, customersPromise, wechatApiPromise]).then((result) => {
             const [group, customers, wechatApi] = result;
             const openIds = customers.map(customer => customer.get('openId'));
-            console.log(customers);
+
+            if (!group) {
+                throw `Group not found: ${req.params.groupId}`;
+            }
+            
             wechatApi.getTags(function (err, result) {
                 const existingTag = result.tags.filter(tag => tag.name === group.name)[0];
                 if (existingTag) {
@@ -304,6 +311,9 @@ module.exports = (router) => {
                     createTagAndInsertUsers(wechatApi, group, openIds);
                 }
             });
+        })
+        .catch(err => {
+            console.error(err);
         });
 
         function createTagAndInsertUsers (wechatApi, group, openIds) {

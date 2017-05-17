@@ -46,7 +46,7 @@
                                 </md-select>
                             </md-input-container>
                             <md-input-container class="pull-right">
-                                <md-button class="btn md-raised md-primary">同步图文</md-button>
+                                <md-button class="btn md-raised md-primary" ng-click="syncNewsMaterials(wechat)" ng-disabled="!wechat">同步图文</md-button>
                             </md-input-container>
                             <div class="form-group">
                                 <div class="input-group" style="width: calc(100% - 2px);">
@@ -55,42 +55,47 @@
                                 </div>
                             </div>
                         </form>
-                        <div class="row">
-                            <div class="col-md-4" ng-repeat="newsMaterial in wechatDetail.newsMaterials | filter:searchMaterialTitle | limitTo:10">
-                                <div class="news-material">
-                                    <div class="date">更新于{{ newsMaterial.update_time * 1000 | date:'y年M月d日' }}</div>
-                                    <div ng-if="newsMaterial.content.news_item.length === 1">
-                                        <div class="single" ng-repeat="newsItem in newsMaterial.content.news_item">
-                                            <a ng-href="{{ newsItem.url }}"><h2 class="title">{{ newsItem.title }}</h2>
-                                            <img ng-src="{{ newsItem.thumb_url }}"></a>
+                        <div>
+                            <md-radio-group ng-model="selectedNewsMaterial" layout="row" layout-wrap layout-align="space-between">
+                                <div flex="30" ng-repeat="newsMaterial in wechatDetail.newsMaterials | filter:searchMaterialTitle | limitTo:10" style="max-width:32.5%;margin:2px">
+                                    <div class="news-material">
+                                        <div class="date">
+                                            更新于{{ newsMaterial.updateTime * 1000 | date:'y年M月d日' }}
+                                            <md-radio-button ng-value="newsMaterial" class="md-primary pull-right" aria-label="select"></md-radio-button>
                                         </div>
-                                    </div>
-                                    <div class="multiple" ng-if="newsMaterial.content.news_item.length > 1">
-                                        <div ng-repeat="newsItem in newsMaterial.content.news_item">
-                                            <hr ng-if="$index>0">
-                                            <div class="item clearfix" ng-class="{first:$index==0}">
-                                                <a target="_blank" ng-href="{{ newsItem.url }}"><h2 class="title">{{ newsItem.title }}</h2>
-                                                <img ng-src="{{ newsItem.thumb_url }}"></a>
+                                        <div ng-if="newsMaterial.content.newsItem.length==1">
+                                            <div class="single" ng-repeat="newsItem in newsMaterial.content.newsItem">
+                                                <a ng-href="{{ newsItem.url }}" target="_blank"><h2 class="title">{{ newsItem.title }}</h2>
+                                                <img ng-src="{{ newsItem.thumbUrl }}"></a>
+                                            </div>
+                                        </div>
+                                        <div class="multiple" ng-if="newsMaterial.content.newsItem.length > 1">
+                                            <div ng-repeat="newsItem in newsMaterial.content.newsItem">
+                                                <hr ng-if="$index>0">
+                                                <div class="item clearfix" ng-class="{first:$index==0}">
+                                                    <a target="_blank" ng-href="{{ newsItem.url }}"><h2 class="title">{{ newsItem.title }}</h2>
+                                                    <img ng-src="{{ newsItem.thumbUrl }}"></a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </md-radio-group>
                         </div>
                         <form>
                             <md-input-container>
-                                <md-select ng-model="customerGroup" placeholder="选择用户组">
-                                    <md-option ng-repeat="customerGroup in customerGroups">{{ customerGroup.name }}</md-option>
+                                <md-select ng-model="selectedCustomerGroup" placeholder="选择用户组">
+                                    <md-option ng-repeat="customerGroup in customerGroups | filter:{wechatTagId:1}" ng-value="customerGroup">{{ customerGroup.name }}</md-option>
                                 </md-select>
                             </md-input-container>
                             <md-input-container class="pull-right">
-                                <md-button class="btn md-raised md-primary">点击发送</md-button>
+                                <md-button class="btn md-raised md-primary" ng-click="sendNewsMaterial(wechat, selectedCustomerGroup, selectedNewsMaterial)" ng-disabled="!wechat || !selectedNewsMaterial || !selectedCustomerGroup">点击发送</md-button>
                             </md-input-container>
                         </form>
                     </div>
                 </md-tab>
                 <md-tab label="场景触达" md-active="currentTab=='scene'" md-on-select="selectTab('scene')">
-                    <div class="text-center" ng-if="brand.wechats.length==0" style="padding:100px">
+                    <div class="text-center" ng-if="!brand || brand.wechats.length==0" style="padding:100px">
                         <h3 style="color:#7d7d7d;font-weight:normal">
                             <i class="fa fa-wechat" style="font-size: 100px"></i>
                         </h3>
