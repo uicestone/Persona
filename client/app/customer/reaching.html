@@ -27,7 +27,7 @@
                     </md-content>
                 </md-tab>
                 <md-tab label="微信触达" md-active="currentTab=='wechat'" md-on-select="selectTab('wechat')">
-                    <div class="text-center" ng-if="!brand || brand.wechats.length==0" style="padding:100px">
+                    <div class="text-center" ng-if="!brand._id || brand.wechats.length==0" style="padding:100px">
                         <h3 style="color:#7d7d7d;font-weight:normal">
                             <i class="fa fa-wechat" style="font-size: 100px"></i>
                         </h3>
@@ -95,7 +95,7 @@
                     </div>
                 </md-tab>
                 <md-tab label="场景触达" md-active="currentTab=='scene'" md-on-select="selectTab('scene')">
-                    <div class="text-center" ng-if="!brand || brand.wechats.length==0" style="padding:100px">
+                    <div class="text-center" ng-if="!brand._id || brand.wechats.length==0" style="padding:100px">
                         <h3 style="color:#7d7d7d;font-weight:normal">
                             <i class="fa fa-wechat" style="font-size: 100px"></i>
                         </h3>
