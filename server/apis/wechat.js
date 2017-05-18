@@ -76,12 +76,23 @@ module.exports = (router) => {
                         return;
                     }
 
-                    Wechat.findOneAndUpdate(
-                        {appId: wechatInfo.appId},
-                        wechatInfo,
-                        {upsert: true, new: true}
-                    ).exec().then(wechat => {
-                        Brand.findOne({name: req.user.brand.name}).then(brand => {
+                    Brand.findOne({name: req.user.brand.name}).exec()
+                    .then(brand => {
+                        if (!brand) {
+                            brand = new Brand({name: req.user.brand.name});
+                            return brand.save();
+                        }
+                        else {
+                            return brand;
+                        }
+                    })
+                    .then(brand => {
+                        Wechat.findOneAndUpdate(
+                            {appId: wechatInfo.appId},
+                            wechatInfo,
+                            {upsert: true, new: true}
+                        ).exec()
+                        .then(wechat => {
                             const wechatIndex = brand.wechats.map(wechat => wechat.appId).indexOf(wechat.appId);
                             if (wechatIndex === -1) {
                                 brand.wechats.push(wechat);
@@ -92,7 +103,6 @@ module.exports = (router) => {
                             brand.save();
                         });
                     });
-
                 });
 
                 res.redirect(`${req.query.homeUrl}/#!${req.query.intendedUri}`);
