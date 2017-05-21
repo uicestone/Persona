@@ -109,7 +109,7 @@ module.exports = (router) => {
             if(req.query.inGroup) {
                 query.find({
                     'group._id': {
-                        $all: Array.isArray(req.query.inGroup) ? req.query.inGroup : [req.query.inGroup]
+                        $in: Array.isArray(req.query.inGroup) ? req.query.inGroup : [req.query.inGroup]
                     }
                 });
             }

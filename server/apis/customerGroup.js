@@ -91,7 +91,7 @@ module.exports = (router) => {
                 if(customerGroup.query.inGroup && customerGroup.query.inGroup.length) {
                     query.find({
                         'group._id': {
-                            $all: Array.isArray(customerGroup.query.inGroup) ? customerGroup.query.inGroup : [customerGroup.query.inGroup]
+                            $in: Array.isArray(customerGroup.query.inGroup) ? customerGroup.query.inGroup : [customerGroup.query.inGroup]
                         }
                     });
                 }
