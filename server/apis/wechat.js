@@ -350,7 +350,7 @@ module.exports = (router) => {
         function createTagAndInsertUsers (wechatApi, group, openIds) {
             wechatApi.createTag(group.name, (err, result) => {
                 const tag = result.tag;
-                group.wechatTagId = tag.id;
+                group.wechat.tagId = tag.id;
                 group.save();
                 wechatApi.batchTagging(openIds, tag.id, (err, result) => {
                     res.json({message: '用户组同步完成'});
