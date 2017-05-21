@@ -182,7 +182,7 @@ module.exports = (router) => {
                         getUsersPromises.push(new Promise((resolve, reject) => {
                             wechatApi.getTags((err, result) => {
                                 let tagMap = {};
-                                result.tags.forEach(tag => {
+                                result.tags.filter(tag => !tag.name.match(/@Persona$/)).forEach(tag => {
                                     tagMap[tag.id] = tag.name;
                                 });
                                 resolve(tagMap);

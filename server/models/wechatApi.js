@@ -18,7 +18,7 @@ WechatApi.prototype.createTag = function (name, callback) {
     // POST数据例子：{"tag":{"name":"test"}}
     const url = this.prefix + 'tags/create?access_token=' + this.token.accessToken;
     const data = {
-        "tag": {"name": name}
+        "tag": {"name": `${name}@Persona`}
     };
     this.request(url, postJSON(data), wrapper(callback));
 };
