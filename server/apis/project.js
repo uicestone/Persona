@@ -162,7 +162,8 @@ module.exports = (router) => {
                 uv: {$sum: 1},
                 converts: {$sum: {$cond: {if: "$converted", then: 1, else: 0}}},
                 timeStay: {$avg: "$stayedFor"},
-                shares: {$sum: {$cond: {if: "$shared", then: 1, else: 0}}}
+                shares: {$sum: {$cond: {if: "$shared", then: 1, else: 0}}},
+                payments: {$sum: {$cond: {if: "$paid", then: 1, else: 0}}}
             }
         }]).then((result) => {
             res.send(result);
@@ -254,7 +255,19 @@ module.exports = (router) => {
             record.createdAt = record.createdAt ? new Date(record.createdAt) : new Date();
             record.project = req.params.projectId;
 
-            Channel.findOne({_id:channelId})
+            let query;
+
+            if (channelId) {
+                query = Channel.findOne({_id: channelId});
+            }
+            else if (req.query.spid) {
+                query = Channel.findOne({spid: req.query.spid});
+            }
+            else {
+                throw 'No channel id.';
+            }
+
+            query
             .then((channel) => {
                 if(!channel)
                     throw '';
