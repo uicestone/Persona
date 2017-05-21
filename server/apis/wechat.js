@@ -107,7 +107,8 @@ module.exports = (router) => {
 
                 res.redirect(`${req.query.homeUrl}/#!${req.query.intendedUri}`);
             });
-        } else {
+        }
+        else {
             wechatAuth.getPreAuthCode((err, reply) => {
                 if (err) {
                     console.error(err);
@@ -168,6 +169,7 @@ module.exports = (router) => {
         }
         else {
             WechatApi(req.params.appId).then(wechatApi => {
+                
                 if (req.body.sync) {
 
                     let syncFinalPromises = [];
@@ -175,6 +177,18 @@ module.exports = (router) => {
                     wechatApi.getFollowers((err, result) => {
                         let openIds = result.data.openid;
                         let getUsersPromises = [];
+
+                        getUsersPromises.push(Wechat.findOne({appId: req.params.appId}));
+                        getUsersPromises.push(new Promise((resolve, reject) => {
+                            wechatApi.getTags((err, result) => {
+                                let tagMap = {};
+                                result.tags.forEach(tag => {
+                                    tagMap[tag.id] = tag.name;
+                                });
+                                resolve(tagMap);
+                            });
+                        }));
+
                         while (openIds.length > 0) {
                             openIdsChunk = openIds.splice(0, 100);
                             getUsersPromises.push(new Promise((resolve, reject) => {
@@ -186,7 +200,10 @@ module.exports = (router) => {
                                 });
                             }));
                         }
+
                         Promise.all(getUsersPromises).then(result => {
+                            const wechat = result.shift();
+                            const tagMap = result.shift();
                             const users = result.reduce((prev, current) => {
                                 return prev.concat(current);
                             }, []);
@@ -201,8 +218,9 @@ module.exports = (router) => {
                                     province: user.province,
                                     country: user.country,
                                     avatarUrl: user.headimgurl,
-                                    tags: user.tagid_list,
-                                    brand: req.user.brand.name
+                                    tags: user.tagid_list.map(id => tagMap[id]),
+                                    brand: req.user.brand.name,
+                                    wechat: {appId: req.params.appId, _id: wechat._id, name: wechat.name}
                                 };
 
                                 const promise = Customer.findOneAndUpdate(
@@ -217,8 +235,10 @@ module.exports = (router) => {
                     });
 
                     wechatApi.getMaterialCount((err, result) => {
+
                         const newsCount = result.news_count;
                         let getMaterialsPromises = [];
+                        
                         for (let offset = 0; offset < newsCount; offset += 20) {
                             getMaterialsPromises.push(new Promise((resolve, reject) => {
                                 wechatApi.getMaterials('news', offset, 20, function (err, result) {
@@ -234,6 +254,7 @@ module.exports = (router) => {
                                 });
                             }));
                         }
+
                         Promise.all(getMaterialsPromises).then(result => {
                             const newsMaterials = result.reduce((prev, current) => {
                                 return prev.concat(current.item);
