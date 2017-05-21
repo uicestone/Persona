@@ -42,7 +42,7 @@ module.exports = (router) => {
 
             const arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
             const advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
-            const utilQueryParams = ['token', 'export', 'fields', 'limit', 'page', 'skip'];
+            const utilQueryParams = ['token', 'export', 'fields', 'limit', 'page', 'skip', 'wechatRegion', 'wechatSubscribeBefore', 'wechatSubscribeAfter'];
             
             // 精准搜索字段
             const preciseKeys = Object.keys(req.query).filter((key) => {
@@ -131,6 +131,25 @@ module.exports = (router) => {
                     });
                 }
             });
+
+            if (req.query.wechatRegion) {
+                req.query.wechatRegion.split(' ').forEach(region => {
+                    query.find({$or: [
+                        {city: region},
+                        {province: region}
+                    ]});
+                });
+            }
+
+            if (req.query.wechatSubscribeAfter) {
+                console.log(new Date(req.query.wechatSubscribeAfter));
+                query.find({'wechat.subscribedAt': {$gte: new Date(req.query.wechatSubscribeAfter)}});
+            }
+
+            if (req.query.wechatSubscribeBefore) {
+                console.log(new Date(req.query.wechatSubscribeBefore));
+                query.find({'wechat.subscribedAt': {$lte: new Date(req.query.wechatSubscribeBefore)}});
+            }
 
             // 非平台管理员只能看到本品牌的访客
             if(req.user.roles.indexOf('admin') === -1) {

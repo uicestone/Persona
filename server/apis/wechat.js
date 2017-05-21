@@ -220,7 +220,7 @@ module.exports = (router) => {
                                     avatarUrl: user.headimgurl,
                                     tags: user.tagid_list.map(id => tagMap[id]),
                                     brand: req.user.brand.name,
-                                    wechat: {appId: req.params.appId, _id: wechat._id, name: wechat.name}
+                                    wechat: {appId: req.params.appId, _id: wechat._id, name: wechat.name, subscribedAt: new Date(user.subscribe_time * 1000)}
                                 };
 
                                 const promise = Customer.findOneAndUpdate(

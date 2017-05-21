@@ -167,6 +167,36 @@
                         </md-chips>
                     </md-content>
                 </md-tab>
+                <md-tab label="微信公众号">
+                    <md-content class="md-padding" layout="row">
+                        <md-input-container>
+                            <label>微信公众号</label>
+                            <md-select ng-model="query['wechat.appId']">
+                                <md-option ng-repeat="wechat in brand.wechats" ng-value="wechat.appId">{{ wechat.name }}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>性别</label>
+                            <md-select ng-model="query.sex">
+                                <md-option value="男">男</md-option>
+                                <md-option value="女">女</md-option>
+                                <md-option value="未知">未知</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>地区</label>
+                            <input ng-model="query.wechatRegion">
+                        </md-input-container>
+                        <md-input-container>
+                            <label>关注时间晚于</label>
+                            <md-datepicker ng-model="query.wechatSubscribeAfter" md-hide-icons="calendar"></md-datepicker>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>关注时间早于</label>
+                            <md-datepicker ng-model="query.wechatSubscribeBefore" md-hide-icons="calendar"></md-datepicker>
+                        </md-input-container>
+                    </md-content>
+                </md-tab>
             </md-tabs>
             <br>
             <div class="actions text-right">
