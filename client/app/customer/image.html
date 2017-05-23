@@ -160,7 +160,7 @@
                                 <div ng-click="toggleInGroup($chip, $event)">
                                     {{ $chip.name }}
                                     <md-icon ng-click="editGroup($chip);$event.stopPropagation()">edit</md-icon>
-                                    <i class="fa fa-wechat" ng-click="syncGroupToWechat($chip)"></i>
+                                    <i class="fa fa-wechat" ng-if="$chip.wechat" ng-click="syncGroupToWechat($chip);$event.stopPropagation()"></i>
                                     <md-icon ng-click="removeGroup($chip);$event.stopPropagation()">close</md-icon>
                                 </div>
                             </md-chip-template>
@@ -171,7 +171,7 @@
                     <md-content class="md-padding" layout="row">
                         <md-input-container>
                             <label>微信公众号</label>
-                            <md-select ng-model="query['wechat.appId']">
+                            <md-select ng-model="query.wechatAppId">
                                 <md-option ng-repeat="wechat in brand.wechats" ng-value="wechat.appId">{{ wechat.name }}</md-option>
                             </md-select>
                         </md-input-container>

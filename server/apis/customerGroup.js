@@ -1,5 +1,6 @@
 const CustomerGroup = require('../models/customerGroup.js');
 const Customer = require('../models/customer.js');
+const Wechat = require('../models/wechat.js');
 
 module.exports = (router) => {
 
@@ -10,7 +11,7 @@ module.exports = (router) => {
     router.route('/customer-group')
 
         // create a customer group
-        .post((req, res) => {
+        .post(async (req, res) => {
             
             let customerGroup = new CustomerGroup(req.body);      // create a new instance of the CustomerGroup model
 
@@ -18,110 +19,137 @@ module.exports = (router) => {
             if(req.user.roles.indexOf('admin') === -1) {
                 customerGroup.brand = req.user.brand.name;
             }
+
+            if (customerGroup.query.wechatAppId) {
+                const wechat = await Wechat.findOne({appId: customerGroup.query.wechatAppId});
+                customerGroup.wechat = wechat;
+            }
             
             // save the customer group and check for errors
-            customerGroup.save().then((customerGroup) => {
+            await customerGroup.save();
 
-                res.json(customerGroup);
+            res.json(customerGroup);
 
-                let query = Customer.find();
+            let query = Customer.find();
 
-                const arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
-                const advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
-                const utilQueryParams = ['token', 'export', 'fields', 'limit', 'page', 'skip'];
-                
-                // 精准搜索字段
-                const preciseKeys = Object.keys(customerGroup.query).filter((key) => {
-                    return arrayQueryParams.indexOf(key) === -1
-                    && advancedQueryParams.indexOf(key) === -1
-                    && utilQueryParams.indexOf(key) === -1;
-                });
+            const arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
+            const advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
+            const utilQueryParams = ['token', 'export', 'fields', 'limit', 'page', 'skip', 'wechatAppId', 'wechatRegion', 'wechatSubscribeBefore', 'wechatSubscribeAfter'];
+            
+            // 精准搜索字段
+            const preciseKeys = Object.keys(customerGroup.query).filter((key) => {
+                return arrayQueryParams.indexOf(key) === -1
+                && advancedQueryParams.indexOf(key) === -1
+                && utilQueryParams.indexOf(key) === -1;
+            });
 
-                preciseKeys.forEach((key) => {
-                    let value;
+            preciseKeys.forEach((key) => {
+                let value;
 
-                    try {
-                        value = JSON.parse(customerGroup.query[key]);
-                    }
-                    catch(e) {
-                        value = customerGroup.query[key];
-                    }
-
-                    if (value === '*') {
-                        query.find({
-                            [key]: {$exists: true}
-                        });
-                    }
-                    else if (value === '-') {
-                        query.find({
-                            [key]: {$exists: false}
-                        });
-                    }
-                    else if (value.indexOf && value.indexOf(',') > -1) {
-                        query.find({
-                            [key]: {$in: value.split(',')}
-                        })
-                    }
-                    else {
-                        query.find({
-                            [key]: value
-                        });
-                    }
-                });
-
-                // 包含标签
-                if(customerGroup.query.withTags && customerGroup.query.withTags.length) {
-                    query.find({
-                        tags: {
-                            $all: Array.isArray(customerGroup.query.withTags) ? customerGroup.query.withTags : [customerGroup.query.withTags]
-                        }
-                    });
+                try {
+                    value = JSON.parse(customerGroup.query[key]);
+                }
+                catch(e) {
+                    value = customerGroup.query[key];
                 }
 
-                // 排除标签
-                if(customerGroup.query.withoutTags && customerGroup.query.withoutTags.length) {
+                if (value === '*') {
                     query.find({
-                        tags: {
-                            $nin: Array.isArray(customerGroup.query.withoutTags) ? customerGroup.query.withoutTags : [customerGroup.query.withoutTags]
-                        }
+                        [key]: {$exists: true}
                     });
                 }
-
-                // 在访客组
-                if(customerGroup.query.inGroup && customerGroup.query.inGroup.length) {
+                else if (value === '-') {
                     query.find({
-                        'group._id': {
-                            $in: Array.isArray(customerGroup.query.inGroup) ? customerGroup.query.inGroup : [customerGroup.query.inGroup]
-                        }
+                        [key]: {$exists: false}
                     });
                 }
-
-                // 不在访客组
-                if(customerGroup.query.notInGroup && customerGroup.query.notInGroup.length) {
+                else if (value.indexOf && value.indexOf(',') > -1) {
                     query.find({
-                        'group._id': {
-                            $nin: Array.isArray(customerGroup.query.notInGroup) ? customerGroup.query.notInGroup : [customerGroup.query.notInGroup]
-                        }
+                        [key]: {$in: value.split(',')}
+                    })
+                }
+                else {
+                    query.find({
+                        [key]: value
                     });
                 }
+            });
 
-                // 维度过滤
-                advancedQueryParams.forEach((attribute) => {
-                    if(customerGroup.query[attribute]) {
-                        query.find({
-                            [attribute]: {$lte: customerGroup.query[attribute] / 100, $gt: (customerGroup.query[attribute] - 10) / 100}
-                        });
+            // 包含标签
+            if(customerGroup.query.withTags && customerGroup.query.withTags.length) {
+                query.find({
+                    tags: {
+                        $all: Array.isArray(customerGroup.query.withTags) ? customerGroup.query.withTags : [customerGroup.query.withTags]
                     }
                 });
+            }
 
-                // 非平台管理员只能看到本品牌的访客
-                if(req.user.roles.indexOf('admin') === -1) {
+            // 排除标签
+            if(customerGroup.query.withoutTags && customerGroup.query.withoutTags.length) {
+                query.find({
+                    tags: {
+                        $nin: Array.isArray(customerGroup.query.withoutTags) ? customerGroup.query.withoutTags : [customerGroup.query.withoutTags]
+                    }
+                });
+            }
+
+            // 在访客组
+            if(customerGroup.query.inGroup && customerGroup.query.inGroup.length) {
+                query.find({
+                    'group._id': {
+                        $in: Array.isArray(customerGroup.query.inGroup) ? customerGroup.query.inGroup : [customerGroup.query.inGroup]
+                    }
+                });
+            }
+
+            // 不在访客组
+            if(customerGroup.query.notInGroup && customerGroup.query.notInGroup.length) {
+                query.find({
+                    'group._id': {
+                        $nin: Array.isArray(customerGroup.query.notInGroup) ? customerGroup.query.notInGroup : [customerGroup.query.notInGroup]
+                    }
+                });
+            }
+
+            // 维度过滤
+            advancedQueryParams.forEach((attribute) => {
+                if(customerGroup.query[attribute]) {
                     query.find({
-                        brand: req.user.brand.name
+                        [attribute]: {$lte: customerGroup.query[attribute] / 100, $gt: (customerGroup.query[attribute] - 10) / 100}
                     });
                 }
+            });
 
-                return query.setOptions({multi: true}).update({
+            if (customerGroup.query.wechatAppId) {
+                query.find({'wechat.appId': customerGroup.query.wechatAppId});
+            }
+
+            if (customerGroup.query.wechatRegion) {
+                customerGroup.query.wechatRegion.split(' ').forEach(region => {
+                    query.find({$or: [
+                        {city: region},
+                        {province: region}
+                    ]});
+                });
+            }
+
+            if (customerGroup.query.wechatSubscribeAfter) {
+                query.find({'wechat.subscribedAt': {$gte: new Date(customerGroup.query.wechatSubscribeAfter)}});
+            }
+
+            if (customerGroup.query.wechatSubscribeBefore) {
+                query.find({'wechat.subscribedAt': {$lte: new Date(customerGroup.query.wechatSubscribeBefore)}});
+            }
+
+            // 非平台管理员只能看到本品牌的访客
+            if(req.user.roles.indexOf('admin') === -1) {
+                query.find({
+                    brand: req.user.brand.name
+                });
+            }
+
+            try {
+                const result = await query.setOptions({multi: true}).update({
                     $addToSet: {
                         group: {
                             _id: customerGroup._id,
@@ -129,9 +157,10 @@ module.exports = (router) => {
                         }
                     }
                 })
-            }).then((result) => {
+
                 console.log(result.nModified + ' customers added to group: ' + customerGroup.name);
-            }).catch(err => {
+            }
+            catch (err) {
                 if (err.code === 11000) {
                     res.status(409).json({message:'无法创建重复数据'});
                     console.error(err.message);
@@ -140,8 +169,7 @@ module.exports = (router) => {
                     console.error(err);
                     res.status(500);
                 }
-            });
-            
+            }
         })
 
         // get all the customer groups

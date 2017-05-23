@@ -42,7 +42,7 @@ module.exports = (router) => {
 
             const arrayQueryParams = ['withTags', 'withoutTags', 'inGroup', 'notInGroup']
             const advancedQueryParams = ['rank', 'consumingWilling', 'consumingFrequency', 'consumingTendency', 'comsumingAbility', 'consumingReturning', 'consumingLayalty', 'creditRanking', 'consumingDriven'];
-            const utilQueryParams = ['token', 'export', 'fields', 'limit', 'page', 'skip', 'wechatRegion', 'wechatSubscribeBefore', 'wechatSubscribeAfter'];
+            const utilQueryParams = ['token', 'export', 'fields', 'limit', 'page', 'skip', 'wechatAppId', 'wechatRegion', 'wechatSubscribeBefore', 'wechatSubscribeAfter'];
             
             // 精准搜索字段
             const preciseKeys = Object.keys(req.query).filter((key) => {
@@ -132,6 +132,10 @@ module.exports = (router) => {
                 }
             });
 
+            if (req.query.wechatAppId) {
+                query.find({'wechat.appId': req.query.wechatAppId});
+            }
+
             if (req.query.wechatRegion) {
                 req.query.wechatRegion.split(' ').forEach(region => {
                     query.find({$or: [
@@ -142,12 +146,10 @@ module.exports = (router) => {
             }
 
             if (req.query.wechatSubscribeAfter) {
-                console.log(new Date(req.query.wechatSubscribeAfter));
                 query.find({'wechat.subscribedAt': {$gte: new Date(req.query.wechatSubscribeAfter)}});
             }
 
             if (req.query.wechatSubscribeBefore) {
-                console.log(new Date(req.query.wechatSubscribeBefore));
                 query.find({'wechat.subscribedAt': {$lte: new Date(req.query.wechatSubscribeBefore)}});
             }
 

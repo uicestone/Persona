@@ -271,7 +271,11 @@
 
         $scope.updateGroup = function(group) {
             var isNew = !group._id;
-            group.$save();
+            group.$save().then(function(group) {
+                if (isNew) {
+                    wechatService.syncUserGroup(group.wechat.appId, group);
+                }
+            });
             $mdToast.show($mdToast.simple((isNew ? '创建' : '更新') + '分组成功').position('top right'));
             $mdBottomSheet.hide();
             $scope.group = undefined;
@@ -294,7 +298,7 @@
         };
 
         $scope.syncGroupToWechat = function (group) {
-            console.log('Sync group to wechat', group);
+            wechatService.syncUserGroup(group.wechat.appId, group);
         };
 
         $scope.syncNewsMaterials = function (wechat) {
