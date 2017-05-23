@@ -129,6 +129,11 @@ module.exports = (appId) => {
             const wechatAuth = WechatAuth();
             return new Promise((resolve, reject) => {
                 wechatAuth.refreshAuthToken(wechat.appId, wechat.refreshToken, function(err, result) {
+                    
+                    if (err) {
+                        reject(err);
+                    }
+
                     WechatAuth.saveAuthorizerAccessToken(wechat.appId, result.authorizer_access_token, result.expires_in);
                     resolve(result.authorizer_access_token);
                 });
