@@ -178,9 +178,9 @@
                         <md-input-container>
                             <label>性别</label>
                             <md-select ng-model="query.sex">
+                                <md-option value="">全部</md-option>
                                 <md-option value="男">男</md-option>
                                 <md-option value="女">女</md-option>
-                                <md-option value="未知">未知</md-option>
                             </md-select>
                         </md-input-container>
                         <md-input-container>
@@ -200,6 +200,7 @@
             </md-tabs>
             <br>
             <div class="actions text-right">
+                <md-button ng-if="hasQuery()" ng-click="clearQuery()" class="md-raised md-primary btn">清空筛选</md-button>
                 <md-button ng-click="editGroup()" class="md-raised md-primary btn">定义分组</md-button>
                 <md-button ng-href="#!/customer/reaching" class="md-raised md-primary btn">用户触达</md-button>
                 <md-button ng-click="exportToXlsx()" class="md-raised md-primary btn">导出表格</md-button>

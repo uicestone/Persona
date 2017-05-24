@@ -17,6 +17,14 @@
             $scope.query.limit = 20;
         }
 
+        if ($scope.query.wechatSubscribeBefore) {
+            $scope.query.wechatSubscribeBefore = new Date($scope.query.wechatSubscribeBefore);
+        }
+
+        if ($scope.query.wechatSubscribeAfter) {
+            $scope.query.wechatSubscribeAfter = new Date($scope.query.wechatSubscribeAfter);
+        }
+
         // 检测query的变化并改变路由
         $scope.$watch('query', function(query) {
 
@@ -75,6 +83,17 @@
         $scope.getCustomers = function() {};
 
         $scope.showingCustomerFields = [];
+
+        // 清空筛选条件
+        $scope.clearQuery = function () {
+            $scope.query = {page: 1, limit: 20};
+        };
+
+        $scope.hasQuery = function () {
+            return Object.keys($scope.query).some(function (key) {
+                return ['page', 'limit'].indexOf(key) === -1;
+            });
+        };
 
         // 显示字段
         $scope.showCustomerField = function(field) {
