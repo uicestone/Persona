@@ -213,7 +213,7 @@ module.exports = (router) => {
                                 const customer = {
                                     name: user.nickname,
                                     openId: user.openid,
-                                    sex: 0 ? '未知' : (1 ? '男' : '女'),
+                                    sex: user.sex > 0 ? (user.sex === 1 ? '男' : '女') : '未知',
                                     city: user.city,
                                     province: user.province,
                                     country: user.country,
