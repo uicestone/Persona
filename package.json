@@ -44,7 +44,7 @@
     "yargs": "^6.0.0"
   },
   "engines": {
-    "node": ">=6.9.2"
+    "node": ">=7.10.0"
   },
   "dependencies": {
     "ali-push": "^0.1.8",
