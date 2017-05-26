@@ -85,7 +85,7 @@
                         <form>
                             <md-input-container>
                                 <md-select ng-model="selectedCustomerGroup" placeholder="选择用户组">
-                                    <md-option ng-repeat="customerGroup in customerGroups | filter:{wechatTagId:1}" ng-value="customerGroup">{{ customerGroup.name }}</md-option>
+                                    <md-option ng-repeat="customerGroup in customerGroups | filter:{wechat:1}" ng-value="customerGroup">{{ customerGroup.name }}</md-option>
                                 </md-select>
                             </md-input-container>
                             <md-input-container class="pull-right">
