@@ -3,7 +3,8 @@
 
     angular.module('app.customer')
     .controller('customerCtrl', ['$scope', '$window', '$location', '$mdBottomSheet', '$mdToast', 'customerService', 'customerGroupService', 'customerFieldService', 'customerReachingService', 'brandService', 'wechatService', customerCtrl])
-    .controller('customerCollectingCtrl', ['$scope', '$route', '$location', 'customerService', customerCollectingCtrl]);
+    .controller('customerCollectingCtrl', ['$scope', '$route', '$location', 'customerService', customerCollectingCtrl])
+    .filter('isWechat', isWechatFilter);
 
     function customerCtrl($scope, $window, $location, $mdBottomSheet, $mdToast, customerService, customerGroupService, customerFieldService, customerReachingService, brandService, wechatService) {
         
@@ -438,6 +439,14 @@
         $scope.showDetail = function (customer) {
             $location.url('/customer/collecting/' + customer._id);
         };
+    }
+
+    function isWechatFilter () {
+        return function (groups, appId) {
+            return groups.filter(function (group) {
+                return group.wechat && group.wechat.appId === appId;
+            });
+        }
     }
     
 })(); 
