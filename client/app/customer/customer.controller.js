@@ -361,10 +361,12 @@
         }
 
         $scope.saveCustomerReaching = function(customerReaching) {
-            customerReaching.$save().then(function() {
-                $scope.newCustomerReaching = new customerReachingService();
-                $scope.getCustomerReachings();
-            });
+            if (confirm('即将立即发送短信模板 ' + $scope.newCustomerReaching.templateCode + ' 到用户组 ' + $scope.newCustomerReaching.group.name)) {
+                customerReaching.$save().then(function() {
+                    $scope.newCustomerReaching = new customerReachingService();
+                    $scope.getCustomerReachings();
+                });
+            }
         };
 
         $scope.reloadCustomerReaching = function(customerReaching) {
