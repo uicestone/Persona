@@ -3,13 +3,13 @@
         <div class="col-lg-12 clearfix">
             <ul class="steps-indicator steps-5">
                 <li class="editing">
-                    <a>
+                    <a ng-href="#!/wizard/create-project/{{ project._id }}?editing={{isEditing}}">
                         <span class="icon"><md-icon>create</md-icon></span>
                         创建项目
                     </a>
                 </li>
                 <li class="editing">
-                    <a>
+                    <a ng-href="#!/wizard/set-kpi/{{ project._id }}?editing={{isEditing}}">
                         <span class="icon"><md-icon>assessment</md-icon></span>
                         设置KPI
                     </a>

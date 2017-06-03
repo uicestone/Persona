@@ -68,3 +68,7 @@
         margin-top: 40px;
     }
 }
+
+.steps-indicator li.current, .steps-indicator li.editing {
+    pointer-events: all;
+}
