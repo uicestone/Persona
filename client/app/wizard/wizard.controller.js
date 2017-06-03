@@ -40,7 +40,7 @@
             $scope.project = projectService.get({id:$route.current.params.id});
         }
         else {
-            $scope.project = new projectService();
+            $scope.project = new projectService({region: []});
             if(!$scope.$parent.user.can('set-user')) {
                 $scope.project.manager = $scope.$parent.user;
             }
