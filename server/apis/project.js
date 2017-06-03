@@ -48,8 +48,6 @@ module.exports = (router) => {
                 skip = (req.query.page - 1) * limit;
             }
 
-            query.limit(limit).skip(skip);
-
             if (req.user.roles.indexOf('project_admin') > -1) {
                 query.find({
                     'executive._id': req.user._id
