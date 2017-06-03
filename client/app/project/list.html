@@ -6,7 +6,7 @@
                 <div class="panel-heading">
                     <div class="panel-title">项目管理</div>
                 </div>
-                <div class="panel-body" ng-if="!projects.$resolved || projects.length>0">
+                <div class="panel-body">
                     <form ng-submit="getProjects()" class="filters" layout="row">
                         <md-input-container flex="1">
                             <label>开始时间晚于</label>
@@ -19,6 +19,7 @@
                         <md-input-container flex="1">
                             <label>投放平台</label>
                             <md-select ng-model="query.platform">
+                                <md-option ng-value="null">全部</md-option>
                                 <md-option ng-repeat="platform in platforms" value="{{ platform }}">{{ platform }}</md-option>
                             </md-select>
                         </md-input-container>
@@ -26,53 +27,54 @@
                             <md-button type="submit" class="md-primary md-raised" style="min-height:29px;min-width:70px"><md-icon>search</md-icon></md-button>
                         </md-input-container>
                     </form>
-                    <md-card>
-                        <md-table-container>
-                            <table md-table md-progress="projectsPromise" style="background:white">
-                                <thead md-head md-order="query.order" md-on-reorder="getProjects">
-                                    <tr md-row>
-                                        <th md-column>项目名称</th>
-                                        <th md-column ng-if="$parent.user.can('set-user')">品牌</th>
-                                        <th md-column>投放平台</th>
-                                        <th md-column>管理者</th>
-                                        <th md-column>创建时间</th>
-                                        <th md-column>开始时间</th>
-                                        <th md-column>结束时间</th>
-                                        <th md-column>状态</th>
-                                    </tr>
-                                </thead>
-                                <tbody md-body>
-                                    <tr md-row ng-repeat="project in projects" ng-click="showProjectDetail(project)">
-                                        <td md-cell>{{ project.name }}</td>
-                                        <td md-cell ng-if="$parent.user.can('set-user')">{{ project.brand.name }}</td>
-                                        <td md-cell>{{ project.platform }}</td>
-                                        <td md-cell>{{ project.manager.name }}</td>
-                                        <td md-cell>{{ project.createdAt | date:'y/M/d' }}</td>
-                                        <td md-cell>{{ project.startDate | date:'y/M/d' }}</td>
-                                        <td md-cell>{{ project.endDate | date:'y/M/d' }}</td>
-                                        <td md-cell>{{ project.status }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </md-table-container>
+                    <div ng-if="!projects.$resolved || projects.length>0">
+                        <md-card>
+                            <md-table-container>
+                                <table md-table md-progress="projectsPromise" style="background:white">
+                                    <thead md-head md-order="query.order" md-on-reorder="getProjects">
+                                        <tr md-row>
+                                            <th md-column>项目名称</th>
+                                            <th md-column ng-if="$parent.user.can('set-user')">品牌</th>
+                                            <th md-column>投放平台</th>
+                                            <th md-column>管理者</th>
+                                            <th md-column>创建时间</th>
+                                            <th md-column>开始时间</th>
+                                            <th md-column>结束时间</th>
+                                            <th md-column>状态</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                        <tr md-row ng-repeat="project in projects" ng-click="showProjectDetail(project)">
+                                            <td md-cell>{{ project.name }}</td>
+                                            <td md-cell ng-if="$parent.user.can('set-user')">{{ project.brand.name }}</td>
+                                            <td md-cell>{{ project.platform }}</td>
+                                            <td md-cell>{{ project.manager.name }}</td>
+                                            <td md-cell>{{ project.createdAt | date:'y/M/d' }}</td>
+                                            <td md-cell>{{ project.startDate | date:'y/M/d' }}</td>
+                                            <td md-cell>{{ project.endDate | date:'y/M/d' }}</td>
+                                            <td md-cell>{{ project.status }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </md-table-container>
 
-                        <md-table-pagination md-limit="query.limit" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{ projects.$total }}" md-on-paginate="getProjects" md-page-select md-label="{of:'/', page:'页码', rowsPerPage:'每页条数'}"></md-table-pagination>
-                    </md-card>
+                            <md-table-pagination md-limit="query.limit" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{ projects.$total }}" md-on-paginate="getProjects" md-page-select md-label="{of:'/', page:'页码', rowsPerPage:'每页条数'}"></md-table-pagination>
+                        </md-card>
 
-                    <hr>
+                        <hr>
 
-                    <div class="actions text-right">
-                        <md-button href="#!/wizard/create-project/" class="md-raised md-primary" style="line-height:34px">创建项目</md-button>
+                        <div class="actions text-right">
+                            <md-button href="#!/wizard/create-project/" class="md-raised md-primary" style="line-height:34px">创建项目</md-button>
+                        </div>
                     </div>
-
-                </div>
-                <div class="panel-body text-center" ng-if="projects.$resolved && projects.length==0" style="padding:100px">
-                    <h3 style="color:#7d7d7d;font-weight:normal">
-                        对不起，您暂时没有任何项目
-                        <span ng-if="$parent.user.can('edit-project')">，您可以选择创建项目</span>
-                    </h3>
-                    <div ng-if="$parent.user.can('edit-project')" class="actions" style="margin-top:20px">
-                        <md-button href="#!/wizard/create-project/" class="btn-lg btn-w-lg md-raised md-primary" style="line-height:34px">创建项目</md-button>
+                    <div class="text-center" ng-if="projects.$resolved && projects.length==0" style="padding:100px">
+                        <h3 style="color:#7d7d7d;font-weight:normal">
+                            对不起，您暂时没有任何项目
+                            <span ng-if="$parent.user.can('edit-project')">，您可以选择创建项目</span>
+                        </h3>
+                        <div ng-if="$parent.user.can('edit-project')" class="actions" style="margin-top:20px">
+                            <md-button href="#!/wizard/create-project/" class="btn-lg btn-w-lg md-raised md-primary" style="line-height:34px">创建项目</md-button>
+                        </div>
                     </div>
                 </div>
             </div>
