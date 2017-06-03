@@ -159,7 +159,7 @@
                                     <p>{{ kpi.value }}</p>
                                 </div>
                                 <div class="baseline" flex layout="column">
-                                    <div ng-repeat="timing in kpi.timings" ng-if="timing.startDate && timing.endDate" class="channel" layout="row" layout-align="center end" style="margin-left:{{ startDatePercentage(timing) }}%;width:{{ durationPercentage(timing) }}%">
+                                    <div ng-repeat="timing in kpi.timings | orderBy:'endDate'" ng-if="timing.startDate && timing.endDate" class="channel" layout="row" layout-align="center end" style="margin-left:{{ startDatePercentage(timing) }}%;width:{{ durationPercentage(timing) }}%">
                                         <div class="channel-endpoint" flex="1" style="left:-15px">
                                             <div class="date">{{ timing.startDate | date:'M/d' }}</div>
                                         </div>
