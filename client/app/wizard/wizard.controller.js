@@ -106,12 +106,12 @@
         }
 
         $scope.startDatePercentage = function(item) {
-            const projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
+            var projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
             return (new Date(item.startDate) - new Date($scope.project.startDate)) / projectDuration * 100;
         };
 
         $scope.durationPercentage = function(item) {
-            const projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
+            var projectDuration = new Date($scope.project.endDate) - new Date($scope.project.startDate) + 86400000;
             return (new Date(item.endDate) - new Date(item.startDate)) / projectDuration * 100;
         };
 
@@ -139,6 +139,15 @@
             else {
                 // we remove this channel from project
                 $scope.project.channels = $scope.project.channels.filter(function(currentChannel) { return currentChannel._id !== channel._id; });
+
+                // uncheck channel in total list
+                var channelInList = $scope.channels.filter(function (channelInList) {
+                    return channelInList._id === channel._id;
+                })[0];
+
+                if (channelInList) {
+                    channelInList.selected = false;
+                }
             }
         };
 

@@ -40,7 +40,7 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-body">
-                <div class="col-md-5 col-lg-offset-1">
+                <div class="col-md-4 col-lg-offset-1">
                     <form>
                         <md-input-container class="md-block">
                             <label>搜索你想投放的渠道</label>
@@ -52,7 +52,7 @@
                         <table class="table" style="margin-bottom:0">
                             <tr ng-repeat="channel in channels | filter:channelKeyword">
                                 <td>{{ channel.name }}</td>
-                                <td>{{ channel.topic }}</td>
+                                <td style="width:80px">{{ channel.topic }}</td>
                                 <td>{{ channel.rank }}</td>
                                 <td>
                                     <md-input-container style="margin:0;padding:0">
@@ -63,20 +63,24 @@
                         </table>
                     </md-content>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <md-content md-whiteframe="2" style="height:280px;background:none">
                         <table class="table">
                             <thead>
-                                <tr><th>已选渠道</th><th>投放时间</th></tr>
+                                <tr><th>已选渠道</th><th>投放时间</th><th>操作</th></tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="channel in project.channels">
                                     <td>
-                                        <a href="" clipboard text="project.url+'?channel='+channel._id" on-copied="urlCopied()">{{ channel.name }}</a>
+                                        {{ channel.name }}
                                     </td>
                                     <td>
-                                        <md-datepicker ng-model="channel.startDate" md-min-date="project.startDate" md-max-date="channel.endDate < project.endDate ? channel.endDate : project.endDate" md-placeholder="开始时间" md-hide-icons="calendar"></md-datepicker>
+                                        <md-datepicker ng-model="channel.startDate" md-min-date="project.startDate" md-max-date="channel.endDate < project.endDate ? channel.endDate : project.endDate" md-placeholder="开始时间" md-hide-icons="calendar"></md-datepicker style="width:100px">
                                         <md-datepicker ng-model="channel.endDate" md-min-date="channel.startDate > project.startDate ? channel.startDate : project.startDate" md-max-date="project.endDate" md-placeholder="结束时间" md-hide-icons="calendar"></md-datepicker>
+                                    </td>
+                                    <td>
+                                        <md-icon class="md-primary" clipboard text="project.url+'?channel='+channel._id" on-copied="urlCopied()" style="cursor:pointer"><md-tooltip>复制URL</md-tooltip>link</md-icon>
+                                        <md-icon ng-click="channel.selected=false;updateProjectChannel(channel)">delete</md-icon>
                                     </td>
                                 </tr>
                             </tbody>
