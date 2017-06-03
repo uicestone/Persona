@@ -160,16 +160,19 @@
                 <md-tab label="渠道监控">
                     <h2 class="section-header">{{ project.name }}</h2>
                     <md-content class="md-padding">
-                        <div layout="row">
+                        <form layout="row" ng-submit="getKpiByChannels()">
                             <md-input-container flex="1">
                                 <label>开始时间</label>
-                                <md-datepicker ng-model="project.startDate" md-hide-icons="calendar"></md-datepicker>
+                                <md-datepicker ng-model="queryKpiByChannels.startDate" md-hide-icons="calendar"></md-datepicker>
                             </md-input-container>
                             <md-input-container flex="1">
                                 <label>结束时间</label>
-                                <md-datepicker ng-model="project.endDate" md-hide-icons="calendar"></md-datepicker>
+                                <md-datepicker ng-model="queryKpiByChannels.endDate" md-hide-icons="calendar"></md-datepicker>
                             </md-input-container>
-                        </div>
+                            <md-input-container flex="1">
+                                <md-button type="submit" class="md-primary md-raised" style="min-height:29px;min-width:70px"><md-icon>search</md-icon></md-button>
+                            </md-input-container>
+                        </form>
                         <div layout="row">
                             <table class="table table-hover table-bordered" flex="80" flex-offset="10" style="background:white">
                                 <thead>
@@ -259,16 +262,19 @@
                 <md-tab label="报表统计" md-active="true">
                     <h2 class="section-header">{{ project.name }}</h2>
                     <md-content class="md-padding">
-                        <div layout="row">
+                        <form layout="row" ng-submit="getCampaignRecords();getKpiByDate();getKpiByRegion();getKpiByDevice()">
                             <md-input-container flex="1">
                                 <label>开始时间</label>
-                                <md-datepicker ng-model="project.startDate" md-hide-icons="calendar"></md-datepicker>
+                                <md-datepicker ng-model="queryCampaignRecords.startDate" md-hide-icons="calendar"></md-datepicker>
                             </md-input-container>
                             <md-input-container flex="1">
                                 <label>结束时间</label>
-                                <md-datepicker ng-model="project.endDate" md-hide-icons="calendar"></md-datepicker>
+                                <md-datepicker ng-model="queryCampaignRecords.endDate" md-hide-icons="calendar"></md-datepicker>
                             </md-input-container>
-                        </div>
+                            <md-input-container flex="1">
+                                <md-button type="submit" class="md-primary md-raised" style="min-height:29px;min-width:70px"><md-icon>search</md-icon></md-button>
+                            </md-input-container>
+                        </form>
                         <div>
                             <md-card>
                                 <md-table-container>

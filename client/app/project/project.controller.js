@@ -141,8 +141,6 @@
         // 渠道监控图表数据
         if($scope.project) {
             
-            $scope.kpiByChannels = projectService.getKpiByChannels({id:$route.current.params.id});
-            
             $scope.queryCampaignRecords = {page: 1, limit: 10, id: $route.current.params.id};
             
             $scope.getCampaignRecords = function() {
@@ -152,10 +150,6 @@
             };
 
             $scope.getCampaignRecords();
-
-            $scope.kpiByDate = projectService.getKpiByDate({id:$route.current.params.id});
-            $scope.kpiByRegion = projectService.getKpiByRegion({id:$route.current.params.id});
-            $scope.kpiByDevice = projectService.getKpiByDevice({id:$route.current.params.id});
 
             $scope.kpiByChannelsTree = {};
 
@@ -173,14 +167,13 @@
             $scope.convertsByDeviceChart = {};
             $scope.convertsByRegionChart = {};
 
-            Promise.all([$scope.project.$promise, $scope.kpiByChannels.$promise]).then(function(result) {
+            $scope.queryKpiByChannels=  {};
 
-                var project = result[0];
-                var kpiByChannels = result[1];
+            $scope.getKpiByChannels = function () {projectService.getKpiByChannels(angular.extend($scope.queryKpiByChannels, {id:$route.current.params.id})).$promise.then(function(kpiByChannels) {
 
                 kpiByChannels.map(function(kpiPerChannel) {
-                    
-                    var channel = project.channels[kpiPerChannel._id - 1];
+
+                    var channel = $scope.project.channels[kpiPerChannel._id - 1];
 
                     kpiPerChannel.name = channel ? channel.name : '';
                     kpiPerChannel.users = kpiPerChannel.uv;
@@ -256,7 +249,7 @@
                     legend: {
                         orient : 'vertical',
                         x : 'left',
-                        data: project.channels.map(function(channel) {
+                        data: $scope.project.channels.map(function(channel) {
                             return channel.name;
                         })
                     },
@@ -554,9 +547,9 @@
                         }
                     ]
                 };
-            });
+            })};
 
-            $scope.kpiByDate.$promise.then(function(kpiByDate) {
+            $scope.getKpiByDate = function () {projectService.getKpiByDate(angular.extend($scope.queryKpiByChannels, {id:$route.current.params.id})).$promise.then(function(kpiByDate) {
 
                 $scope.uvByDateChart.options = {
                     title : {
@@ -638,9 +631,10 @@
                         }
                     ]
                 };
-            });
+            })};
 
-            $scope.kpiByRegion.$promise.then(function(kpiByRegion) {
+            $scope.getKpiByRegion = function () {projectService.getKpiByRegion(angular.extend($scope.queryKpiByChannels, {id:$route.current.params.id})).$promise.then(function(kpiByRegion) {
+
                 $scope.convertsByRegionChart.options = {
                     title: {
                         text: '转化率 - 区域分布',
@@ -688,9 +682,9 @@
                         }
                     ]
                 };
-            });
+            })};
             
-            $scope.kpiByDevice.$promise.then(function(kpiByDevice) {
+            $scope.getKpiByDevice = function () {projectService.getKpiByDevice(angular.extend($scope.queryKpiByChannels, {id:$route.current.params.id})).$promise.then(function(kpiByDevice) {
 
                 $scope.uvByDeviceChart.options = {
                     title : {
@@ -771,8 +765,9 @@
                         }
                     ]
                 };
+            })};
 
-            });            
+            $scope.getKpiByChannels(); $scope.getKpiByDate(); $scope.getKpiByRegion(); $scope.getKpiByDevice();          
         }
     }
 })(); 

@@ -152,8 +152,22 @@ module.exports = (router) => {
         });
 
     router.route('/project/:projectId/kpi-by-channels').get((req, res) => {
+
+        let match = {
+            project: Types.ObjectId(req.params.projectId),
+            accessedAt: {}
+        };
+
+        if (req.query.startDate) {
+            match.accessedAt.$gte = new Date(req.query.startDate);
+        }
+
+        if (req.query.endDate) {
+            match.accessedAt.$lt = new Date(req.query.endDate);
+        }
+
         Campaign.aggregate([{
-            $match: {project: Types.ObjectId(req.params.projectId)}
+            $match: match
         },{
             $group: {
                 _id: "$fromChannel",
@@ -169,8 +183,22 @@ module.exports = (router) => {
     });
 
     router.route('/project/:projectId/kpi-by-date').get((req, res) => {
+
+        let match = {
+            project: Types.ObjectId(req.params.projectId),
+            accessedAt: {}
+        };
+
+        if (req.query.startDate) {
+            match.accessedAt.$gte = new Date(req.query.startDate);
+        }
+
+        if (req.query.endDate) {
+            match.accessedAt.$lt = new Date(req.query.endDate);
+        }
+
         Campaign.aggregate([{
-            $match: {project: Types.ObjectId(req.params.projectId)}
+            $match: match
         },{
             $group: {
                 _id: {$dateToString: {format: "%Y-%m-%d", date: "$accessedAt"}},
@@ -185,8 +213,22 @@ module.exports = (router) => {
     });
 
     router.route('/project/:projectId/kpi-by-device').get((req, res) => {
+
+        let match = {
+            project: Types.ObjectId(req.params.projectId),
+            accessedAt: {}
+        };
+
+        if (req.query.startDate) {
+            match.accessedAt.$gte = new Date(req.query.startDate);
+        }
+
+        if (req.query.endDate) {
+            match.accessedAt.$lt = new Date(req.query.endDate);
+        }
+
         Campaign.aggregate([{
-            $match: {project: Types.ObjectId(req.params.projectId)}
+            $match: match
         },{
             $group: {
                 _id: "$device",
@@ -199,8 +241,22 @@ module.exports = (router) => {
     });
 
     router.route('/project/:projectId/kpi-by-region').get((req, res) => {
+        
+        let match = {
+            project: Types.ObjectId(req.params.projectId),
+            accessedAt: {}
+        };
+
+        if (req.query.startDate) {
+            match.accessedAt.$gte = new Date(req.query.startDate);
+        }
+
+        if (req.query.endDate) {
+            match.accessedAt.$lt = new Date(req.query.endDate);
+        }
+
         Campaign.aggregate([{
-            $match: {project: Types.ObjectId(req.params.projectId)}
+            $match: match
         },{
             $group: {
                 _id: "$province",
@@ -218,6 +274,14 @@ module.exports = (router) => {
             let skip = +req.query.skip || 0;
 
             let query = Campaign.find({project: req.params.projectId});
+
+            if (req.query.startDate) {
+                query.find({accessedAt: {$gte: new Date(req.query.startDate)}});
+            }
+
+            if (req.query.endDate) {
+                query.find({accessedAt: {$lt: new Date(req.query.endDate)}});
+            }
 
             if(req.query.page && !skip) {
                 skip = (req.query.page - 1) * limit;
