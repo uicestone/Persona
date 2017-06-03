@@ -39,15 +39,14 @@
             <br><br>
         </div>
         <div class="panel panel-default">
+            <form name="setChannel" ng-submit="setChannel.$valid && saveProject(project, isEditing || 'wizard/set-timing')">
             <div class="panel-body">
                 <div class="col-md-4 col-lg-offset-1">
-                    <form>
-                        <md-input-container class="md-block">
-                            <label>搜索你想投放的渠道</label>
-                            <md-icon>search</md-icon>
-                            <input ng-model="channelKeyword">
-                        </md-input-container>
-                    </form>
+                    <md-input-container class="md-block">
+                        <label>搜索你想投放的渠道</label>
+                        <md-icon>search</md-icon>
+                        <input ng-model="channelKeyword">
+                    </md-input-container>
                     <md-content md-whiteframe="2" style="height:212px;background:none">
                         <table class="table" style="margin-bottom:0">
                             <tr ng-repeat="channel in channels | filter:channelKeyword">
@@ -75,8 +74,8 @@
                                         {{ channel.name }}
                                     </td>
                                     <td>
-                                        <md-datepicker ng-model="channel.startDate" md-min-date="project.startDate" md-max-date="channel.endDate < project.endDate ? channel.endDate : project.endDate" md-placeholder="开始时间" md-hide-icons="calendar"></md-datepicker style="width:100px">
-                                        <md-datepicker ng-model="channel.endDate" md-min-date="channel.startDate > project.startDate ? channel.startDate : project.startDate" md-max-date="project.endDate" md-placeholder="结束时间" md-hide-icons="calendar"></md-datepicker>
+                                        <md-datepicker ng-model="channel.startDate" md-min-date="project.startDate" md-max-date="channel.endDate < project.endDate ? channel.endDate : project.endDate" md-placeholder="开始时间" md-hide-icons="calendar" required></md-datepicker>
+                                        <md-datepicker ng-model="channel.endDate" md-min-date="channel.startDate > project.startDate ? channel.startDate : project.startDate" md-max-date="project.endDate" md-placeholder="结束时间" md-hide-icons="calendar" required></md-datepicker>
                                     </td>
                                     <td>
                                         <md-icon class="md-primary" clipboard text="project.url+'?channel='+channel._id" on-copied="urlCopied()" style="cursor:pointer"><md-tooltip>复制URL</md-tooltip>link</md-icon>
@@ -91,9 +90,9 @@
             <div class="wizard-actions text-center">
                 <md-button ng-if="!isEditing" ng-click="saveProject(project, 'wizard/set-kpi')" class="md-default">上一步</md-button>
                 <md-button ng-if="!isEditing" href="/#!/wizard/set-timing/{{ project._id }}" class="md-default btn">先跳过</md-button>
-                <md-button ng-if="!isEditing" ng-click="saveProject(project, 'wizard/set-timing')" class="md-raised md-primary">下一步</md-button>
-                <md-button ng-if="isEditing" ng-click="saveProject(project, true)" class="md-raised md-default btn">保存</md-button>
+                <md-button type="submit" class="md-raised md-primary">{{ isEditing ? '保存' : '下一步' }}</md-button>
             </div>
+            </form>
         </div>
     </div>
 </div>
