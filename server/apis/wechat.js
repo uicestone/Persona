@@ -120,6 +120,15 @@ module.exports = (router) => {
         }
     });
 
+    router.route('/wechat-oauth/url')
+
+    .get((req, res) => {
+        const wechatAuth = WechatAuth();
+        const redirectUrl = `${process.env.API_BASE}wechat-oauth?redirect_url=${req.query.redirect_url}`;
+        const url = wechatAuth.getOAuthURL(req.query.appid, redirectUrl, req.query.state, 'snsapi_userinfo');
+        res.send(url);
+    });
+
     router.route('/wechat/:appId')
 
     .post((req, res) => {
@@ -220,7 +229,7 @@ module.exports = (router) => {
                                     avatarUrl: user.headimgurl,
                                     tags: user.tagid_list.map(id => tagMap[id]),
                                     brand: req.user.brand.name,
-                                    wechat: {appId: req.params.appId, _id: wechat._id, name: wechat.name, subscribedAt: new Date(user.subscribe_time * 1000)}
+                                    wechat: {appId: req.params.appId, _id: wechat._id, name: wechat.name, subscribed: user.subscribe === 1, subscribedAt: new Date(user.subscribe_time * 1000)}
                                 };
 
                                 const promise = Customer.findOneAndUpdate(
