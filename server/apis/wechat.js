@@ -124,11 +124,37 @@ module.exports = (router) => {
     router.route('/wechat-oauth')
 
     .get((req, res) => {
+        
+        if (!req.user) {
+            res.status(401).send('请通过传入token等方式登录');
+            throw 'wechat-oauth unauthorized';
+        }
+
         const wechatAuth = WechatAuth();
         wechatAuth.getOAuthAccessToken(req.query.appid, req.query.code, function(err, reply) {
             const redirectUrl = new url.URL(req.query.state);
             redirectUrl.searchParams.set('openid', reply.openid);
             res.redirect(redirectUrl.toString());
+            wechatAuth.getUserInfo(reply.openid, reply.access_token, 'zh_CN', (err, user) => {
+                // update user info
+                const customer = {
+                    name: user.nickname,
+                    openId: user.openid,
+                    sex: user.sex > 0 ? (user.sex === 1 ? '男' : '女') : '未知',
+                    city: user.city,
+                    province: user.province,
+                    country: user.country,
+                    avatarUrl: user.headimgurl,
+                    brand: req.user.brand.name,
+                    wechat: {appId: req.params.appId}
+                };
+
+                Customer.findOneAndUpdate(
+                    {openId: user.openid},
+                    customer,
+                    {upsert: true}
+                ).exec();
+            });
         });
     });
 
