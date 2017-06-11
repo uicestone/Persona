@@ -123,13 +123,7 @@ module.exports = (router) => {
 
     router.route('/wechat-oauth')
 
-    .get((req, res) => {
-        
-        if (!req.user) {
-            res.status(401).send('请通过传入token等方式登录');
-            throw 'wechat-oauth unauthorized';
-        }
-
+    .get((req, res) => {        
         const wechatAuth = WechatAuth();
         wechatAuth.getOAuthAccessToken(req.query.appid, req.query.code, function(err, reply) {
             const redirectUrl = new url.URL(req.query.state);
@@ -161,6 +155,14 @@ module.exports = (router) => {
     router.route('/wechat-oauth/url')
 
     .get((req, res) => {
+
+        ['redirect_url', 'token', 'appid'].forEach(param => {
+            if (!req.query[param]) {
+                res.status(401).send(`缺少${param}`);
+                throw `wechat-oauth/url missing ${param}`;
+            }
+        });
+
         const wechatAuth = WechatAuth();
         const redirectUrl = `${process.env.API_BASE}wechat-oauth?appid=${req.query.appid}&token=${req.query.token}`;
         const url = wechatAuth.getOAuthURL(req.query.appid, redirectUrl, req.query.redirect_url, 'snsapi_userinfo');
