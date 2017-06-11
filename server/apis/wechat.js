@@ -9,6 +9,7 @@ const WechatMessage = require('../models/wechatMessage.js');
 const WechatApi = require('../models/wechatApi.js');
 const WechatAuth = require('../models/wechatAuth.js');
 const camelcaseKeys = require('camelcase-keys');
+const url = require('url');
 
 module.exports = (router) => {
     
@@ -125,7 +126,9 @@ module.exports = (router) => {
     .get((req, res) => {
         const wechatAuth = WechatAuth();
         wechatAuth.getOAuthAccessToken(req.query.appid, req.query.code, function(err, reply) {
-            res.redirect(req.query.state);
+            const redirectUrl = new url.URL(req.query.state);
+            redirectUrl.searchParams.set('openid', reply.openid);
+            res.redirect(redirectUrl.toString());
         });
     });
 
