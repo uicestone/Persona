@@ -120,13 +120,36 @@ module.exports = (router) => {
         }
     });
 
+    router.route('/wechat-oauth')
+
+    .get((req, res) => {
+        const wechatAuth = WechatAuth();
+        wechatAuth.getOAuthAccessToken(req.query.appid, req.query.code, function(err, reply) {
+            res.json(reply);
+        });
+    });
+
     router.route('/wechat-oauth/url')
 
     .get((req, res) => {
         const wechatAuth = WechatAuth();
-        const redirectUrl = `${process.env.API_BASE}wechat-oauth?redirect_url=${req.query.redirect_url}`;
+        const redirectUrl = `${process.env.API_BASE}wechat-oauth?appid=${req.query.appid}&redirect_url=${req.query.redirect_url}`;
         const url = wechatAuth.getOAuthURL(req.query.appid, redirectUrl, req.query.state, 'snsapi_userinfo');
-        res.send(url);
+        res.redirect(url);
+    });
+
+    router.route('/wechat/:appId/jsapi-config')
+
+    .get((req, res) => {
+        WechatApi(req.params.appId).then(wechatApi => {
+            wechatApi.getJsConfig({
+                debug: true,
+                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseWXPay'],
+                url: req.protocol + '://' + req.get('host') + req.originalUrl
+            }, (err, result) => {
+                res.json(result);
+            });
+        })
     });
 
     router.route('/wechat/:appId')
