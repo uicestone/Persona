@@ -146,7 +146,7 @@ module.exports = (router) => {
     .get((req, res) => {
         WechatApi(req.params.appId).then(wechatApi => {
             wechatApi.getJsConfig({
-                debug: true,
+                debug: req.query.debug,
                 jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseWXPay'],
                 url: req.protocol + '://' + req.get('host') + req.originalUrl
             }, (err, result) => {
