@@ -125,7 +125,7 @@ module.exports = (router) => {
     .get((req, res) => {
         const wechatAuth = WechatAuth();
         wechatAuth.getOAuthAccessToken(req.query.appid, req.query.code, function(err, reply) {
-            res.json(reply);
+            res.redirect(req.query.state);
         });
     });
 
@@ -133,8 +133,8 @@ module.exports = (router) => {
 
     .get((req, res) => {
         const wechatAuth = WechatAuth();
-        const redirectUrl = `${process.env.API_BASE}wechat-oauth?appid=${req.query.appid}&redirect_url=${req.query.redirect_url}`;
-        const url = wechatAuth.getOAuthURL(req.query.appid, redirectUrl, req.query.state, 'snsapi_userinfo');
+        const redirectUrl = `${process.env.API_BASE}wechat-oauth?appid=${req.query.appid}`;
+        const url = wechatAuth.getOAuthURL(req.query.appid, redirectUrl, req.query.redirect_url, 'snsapi_userinfo');
         res.redirect(url);
     });
 
