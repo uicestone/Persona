@@ -162,7 +162,7 @@ module.exports = (router) => {
 
     .get((req, res) => {
         const wechatAuth = WechatAuth();
-        const redirectUrl = `${process.env.API_BASE}wechat-oauth?appid=${req.query.appid}`;
+        const redirectUrl = `${process.env.API_BASE}wechat-oauth?appid=${req.query.appid}&token=${req.query.token}`;
         const url = wechatAuth.getOAuthURL(req.query.appid, redirectUrl, req.query.redirect_url, 'snsapi_userinfo');
         res.redirect(url);
     });
