@@ -153,18 +153,26 @@ module.exports = (router) => {
 
     router.route('/project/:projectId/kpi-by-channels').get((req, res) => {
 
-        let match = {
-            project: Types.ObjectId(req.params.projectId),
-            accessedAt: {}
+        const match = {
+            project: Types.ObjectId(req.params.projectId)
         };
 
-        if (req.query.startDate) {
-            match.accessedAt.$gte = new Date(req.query.startDate);
+        if (req.query.startDate || req.query.endDate) {
+            const matchAccessedAt = {};
+            if (req.query.startDate) {
+                matchAccessedAt.$gte = new Date(req.query.startDate);
+            }
+            if (req.query.endDate) {
+                matchAccessedAt.$lt = new Date(req.query.endDate);
+            }
+            match.accessedAt = matchAccessedAt;
         }
 
         if (req.query.endDate) {
             match.accessedAt.$lt = new Date(req.query.endDate);
         }
+
+        console.log(match);
 
         Campaign.aggregate([{
             $match: match
@@ -185,16 +193,18 @@ module.exports = (router) => {
     router.route('/project/:projectId/kpi-by-date').get((req, res) => {
 
         let match = {
-            project: Types.ObjectId(req.params.projectId),
-            accessedAt: {}
+            project: Types.ObjectId(req.params.projectId)
         };
 
-        if (req.query.startDate) {
-            match.accessedAt.$gte = new Date(req.query.startDate);
-        }
-
-        if (req.query.endDate) {
-            match.accessedAt.$lt = new Date(req.query.endDate);
+        if (req.query.startDate || req.query.endDate) {
+            const matchAccessedAt = {};
+            if (req.query.startDate) {
+                matchAccessedAt.$gte = new Date(req.query.startDate);
+            }
+            if (req.query.endDate) {
+                matchAccessedAt.$lt = new Date(req.query.endDate);
+            }
+            match.accessedAt = matchAccessedAt;
         }
 
         Campaign.aggregate([{
@@ -216,15 +226,18 @@ module.exports = (router) => {
 
         let match = {
             project: Types.ObjectId(req.params.projectId),
-            accessedAt: {}
+            device: {$exists: true}
         };
 
-        if (req.query.startDate) {
-            match.accessedAt.$gte = new Date(req.query.startDate);
-        }
-
-        if (req.query.endDate) {
-            match.accessedAt.$lt = new Date(req.query.endDate);
+        if (req.query.startDate || req.query.endDate) {
+            const matchAccessedAt = {};
+            if (req.query.startDate) {
+                matchAccessedAt.$gte = new Date(req.query.startDate);
+            }
+            if (req.query.endDate) {
+                matchAccessedAt.$lt = new Date(req.query.endDate);
+            }
+            match.accessedAt = matchAccessedAt;
         }
 
         Campaign.aggregate([{
@@ -244,15 +257,18 @@ module.exports = (router) => {
         
         let match = {
             project: Types.ObjectId(req.params.projectId),
-            accessedAt: {}
+            province: {$exists: true}
         };
 
-        if (req.query.startDate) {
-            match.accessedAt.$gte = new Date(req.query.startDate);
-        }
-
-        if (req.query.endDate) {
-            match.accessedAt.$lt = new Date(req.query.endDate);
+        if (req.query.startDate || req.query.endDate) {
+            const matchAccessedAt = {};
+            if (req.query.startDate) {
+                matchAccessedAt.$gte = new Date(req.query.startDate);
+            }
+            if (req.query.endDate) {
+                matchAccessedAt.$lt = new Date(req.query.endDate);
+            }
+            match.accessedAt = matchAccessedAt;
         }
 
         Campaign.aggregate([{
