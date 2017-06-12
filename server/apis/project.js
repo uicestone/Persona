@@ -172,8 +172,6 @@ module.exports = (router) => {
             match.accessedAt.$lt = new Date(req.query.endDate);
         }
 
-        console.log(match);
-
         Campaign.aggregate([{
             $match: match
         },{
