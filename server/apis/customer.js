@@ -176,7 +176,9 @@ module.exports = (router) => {
                     data.push(head);
 
                     customers.forEach(customer => {
-                        let line = fields.map(field => customer[field.key]);
+                        let line = fields.map(field => {
+                            return customer.toObject()[field.key]
+                        });
                         line.unshift(customer._id);
                         line.push(customer.tags.join(' '));
                         data.push(line);
