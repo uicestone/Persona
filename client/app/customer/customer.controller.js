@@ -340,9 +340,18 @@
         $scope.exportToXlsx = function() {
 
             var queryString = Object.keys($scope.query).filter(function(key) {
+                console.log($scope.query[key]);
                 return key !== 'page' && key !== 'limit';
             }).map(function(key) {
-                return key + '=' + $scope.query[key];
+                if (angular.isArray($scope.query[key])) {
+                    return $scope.query[key].map(function (value) {
+                        return key + '=' + value
+                    }).join('&');
+                } else {
+                    return key + '=' + $scope.query[key];
+                }
+            }).filter(function (param) {
+                return param;
             }).join('&');
 
             var fieldsString = $scope.showingCustomerFields.map(function(field) {
