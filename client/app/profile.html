@@ -40,8 +40,9 @@
                                 <p style="height:30px;line-height:30px;margin-bottom:23px">{{ user.brand.name }}</p>
                             </md-input-container>
                         </div>
-                        <div flex class="text-right">
-                            <md-button ng-click="updateUser(user)">保存</md-button>
+                        <div flex layout="column" layout-align="start end">
+                            <md-button ng-click="updateUser(user)"><md-icon>save</md-icon> 保存</md-button>
+                            <md-button clipboard text="token" ng-click="tokenCopied()"><md-icon>content_copy</md-icon> 令牌</md-button>
                         </div>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 
     angular.module('app.page')
     .controller('invoiceCtrl', ['$scope', '$window', invoiceCtrl])
-    .controller('authCtrl', ['$scope', '$window', '$location', '$http', 'authService', 'brandService', 'wechatService', 'userRolesConstant', authCtrl]);
+    .controller('authCtrl', ['$scope', '$window', '$location', '$http', '$mdToast', 'authService', 'brandService', 'wechatService', 'userRolesConstant', authCtrl]);
 
     function invoiceCtrl($scope, $window) {
         var printContents, originalContents, popupWin;
@@ -18,7 +18,7 @@
         }
     }
 
-    function authCtrl($scope, $window, $location, $http, authService, brandService, wechatService, userRolesConstant) {
+    function authCtrl($scope, $window, $location, $http, $mdToast, authService, brandService, wechatService, userRolesConstant) {
 
         $scope.login = function() {
             $scope.$parent.$parent.user = authService.login($scope.username, $scope.password);
@@ -62,6 +62,12 @@
 
         $scope.sync = function (wechat) {
             wechatService.sync(wechat);
+        };
+
+        $scope.token = window.localStorage.getItem('token');
+
+        $scope.tokenCopied = function () {
+            $mdToast.show($mdToast.simple('Token令牌已复制到剪贴板').position('top right'));
         };
     }
 
