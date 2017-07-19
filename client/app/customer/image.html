@@ -1,7 +1,7 @@
 <div class="page" ng-controller="customerCtrl">
-    <div class="row ui-section">
+    <div class="row ui-section customer-image">
         <div class="col-md-12">
-            <md-tabs class="project-detail customer-image" md-dynamic-height md-border-bottom>
+            <md-tabs class="project-detail" md-dynamic-height md-border-bottom>
                 <md-tab label="用户画像">
                     <md-content class="md-padding">
                         <div class="filters" layout="row">
@@ -29,24 +29,6 @@
                                     <span md-highlight-text="withTagsSearchText">{{ item }}</span>
                                 </md-autocomplete>
                             </md-chips>
-                        </div>
-                        <br>
-                        <div layout="row" layout-align="start start">
-                            <ul flex as-sortable ng-model="showingCustomerFields" class="list-inline showing-fields">
-                                <li as-sortable-item ng-repeat="field in showingCustomerFields" style="padding:0">
-                                    <label as-sortable-item-handle class="label label-info" style="margin-right:5px">
-                                        {{ field.label }}
-                                        <span ng-click="hideCustomerField(field)">
-                                            <md-icon class="close-button">close</md-icon>
-                                        </span>
-                                    </label>
-                                </li>
-                            </ul>
-                            <div flex="1" layout="row" layout-align="end center">
-                                <md-autocomplete placeholder="新增显示字段" md-items="field in getPossibleFields(searchOtherFieldsText)" md-search-text="searchOtherFieldsText" md-item-text="field.label" md-selected-item="newShowField" md-min-length="0" md-no-cache="true" md-selected-item-change="showCustomerField(newShowField)">
-                                    <span>{{ field.label }}</span>
-                                </md-autocomplete>
-                            </div>
                         </div>
                     </md-content>
                 </md-tab>
@@ -134,23 +116,6 @@
                             </div>
                         </form>
                         <br>
-                        <div layout="row" layout-align="start start">
-                            <ul flex as-sortable ng-model="showingCustomerFields" class="list-inline showing-fields">
-                                <li as-sortable-item ng-repeat="field in showingCustomerFields" style="padding:0">
-                                    <label as-sortable-item-handle class="label label-info" style="margin-right:5px">
-                                        {{ field.label }}
-                                        <span ng-click="hideCustomerField(field)">
-                                            <md-icon class="close-button">close</md-icon>
-                                        </span>
-                                    </label>
-                                </li>
-                            </ul>
-                            <div flex="1" layout="row" layout-align="end center">
-                                <md-autocomplete placeholder="新增显示字段" md-items="field in getPossibleFields(searchOtherFieldsText)" md-search-text="searchOtherFieldsText" md-item-text="field.label" md-selected-item="newShowField" md-min-length="0" md-no-cache="true" md-selected-item-change="showCustomerField(newShowField)">
-                                    <span>{{ field.label }}</span>
-                                </md-autocomplete>
-                            </div>
-                        </div>
                     </md-content>
                 </md-tab>
                 <md-tab label="用户分组">
@@ -199,11 +164,30 @@
                 </md-tab>
             </md-tabs>
             <br>
-            <div class="actions text-right">
-                <md-button ng-if="hasQuery()" ng-click="clearQuery()" class="md-raised md-primary btn">清空筛选</md-button>
-                <md-button ng-click="editGroup()" class="md-raised md-primary btn">定义分组</md-button>
-                <md-button ng-href="#!/customer/reaching" class="md-raised md-primary btn">用户触达</md-button>
-                <md-button ng-click="exportToXlsx()" class="md-raised md-primary btn">导出表格</md-button>
+            <div layout="row" layout-margin>
+                <div flex layout="row" layout-align="start start">
+                    <ul flex as-sortable ng-model="showingCustomerFields" class="list-inline showing-fields">
+                        <li as-sortable-item ng-repeat="field in showingCustomerFields" style="padding:0">
+                            <label as-sortable-item-handle class="label label-info" style="margin-right:5px">
+                                {{ field.label }}
+                                <span ng-click="hideCustomerField(field)">
+                                    <md-icon class="close-button">close</md-icon>
+                                </span>
+                            </label>
+                        </li>
+                    </ul>
+                    <div flex="1" layout="row" layout-align="end center">
+                        <md-autocomplete placeholder="新增显示字段" md-items="field in getPossibleFields(searchOtherFieldsText)" md-search-text="searchOtherFieldsText" md-item-text="field.label" md-selected-item="newShowField" md-min-length="0" md-no-cache="true" md-selected-item-change="showCustomerField(newShowField)">
+                            <span>{{ field.label }}</span>
+                        </md-autocomplete>
+                    </div>
+                </div>
+                <div class="actions text-right">
+                    <md-button ng-if="hasQuery()" ng-click="clearQuery()" class="md-raised md-primary btn">清空筛选</md-button>
+                    <md-button ng-click="editGroup()" class="md-raised md-primary btn">定义分组</md-button>
+                    <md-button ng-href="#!/customer/reaching" class="md-raised md-primary btn">用户触达</md-button>
+                    <md-button ng-click="exportToXlsx()" class="md-raised md-primary btn">导出表格</md-button>
+                </div>
             </div>
             <br>
             <md-card style="margin:2px">
