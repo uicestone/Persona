@@ -60,7 +60,7 @@
         });
 
         // 访客字段
-        $scope.customerFields = customerFieldService.query();
+        $scope.customerFields = customerFieldService.query({limit:9999});
         
         $scope.customerFields.$promise.then(function(customerFields){
             $scope.customerFieldKeys = {};
