@@ -153,49 +153,23 @@
 
             $scope.kpiByChannelsTree = {};
 
-            $scope.uvByChannelsChart = {};
             $scope.pvByChannelsChart = {};
-            $scope.convertsByChannelsChart = {};
-            $scope.convertRateByChannelsChart = {};
-            $scope.usersByChannelsChart = {};
+            $scope.uvByChannelsChart = {};
+            $scope.sharesByChannelsChart = {};
+            $scope.registersByChannelsChart = {};
+            $scope.registerRateByChannelsChart = {};
             $scope.timeStayByChannelsChart = {};
-            $scope.shareRateByChannelsChart = {};
 
-            $scope.uvByDateChart = {};
-            $scope.convertsByDateChart = {}
-            $scope.uvByDeviceChart = {};
-            $scope.convertsByDeviceChart = {};
-            $scope.convertsByRegionChart = {};
+            $scope.viewsByDateChart = {};
+            $scope.registersByDateChart = {}
+            $scope.registersByDeviceChart = {};
+            $scope.registersByRegionChart = {};
 
             $scope.queryKpiByChannels=  {};
 
+            $scope.chartColors = ['#2ec7c9','#b6a2de', '#5ab1ef', '#ffb980', '#6ed0ff', '#ffbfe0', '#e9f58a', '#67e8c5'];
+
             $scope.getKpiByChannels = function () {projectService.getKpiByChannels(angular.extend($scope.queryKpiByChannels, {id:$route.current.params.id})).$promise.then(function(kpiByChannels) {
-
-                kpiByChannels.map(function(kpiPerChannel) {
-
-                    var channel = $scope.project.channels[kpiPerChannel._id - 1];
-
-                    kpiPerChannel.name = channel ? channel.name : '';
-                    kpiPerChannel.users = kpiPerChannel.uv;
-                    kpiPerChannel.pv = kpiPerChannel.uv * 4;
-                    kpiPerChannel.convertRate = kpiPerChannel.converts / kpiPerChannel.users;
-                    kpiPerChannel.shareRate = kpiPerChannel.shares / kpiPerChannel.users;
-
-                    $scope.kpiByChannelsTree[kpiPerChannel.name] = {};
-
-                    Object.keys(kpiPerChannel).forEach(function(kpiKey) {
-
-                        if(!$scope.kpiNames[kpiKey]) {
-                            return;
-                        }
-
-                        $scope.kpiByChannelsTree[kpiPerChannel.name][$scope.kpiNames[kpiKey]] = kpiPerChannel[kpiKey];
-                    });
-
-                    return kpiPerChannel;
-                });
-
-                $scope.chartColors = ['#2ec7c9','#b6a2de', '#5ab1ef', '#ffb980'];
 
                 $scope.uvByChannelsChart.options = {
                     title : {
@@ -206,11 +180,16 @@
                         trigger: 'item',
                         formatter: "{a} <br/>{b} : {c} ({d}%)"
                     },
+                    itemStyle : {
+                        normal : {
+                            color:function(d){ return $scope.chartColors[d.dataIndex]; }
+                        }
+                    },
                     legend: {
                         orient : 'vertical',
                         x : 'left',
-                        data: kpiByChannels.map(function(kpiPerChannel) {
-                            return kpiPerChannel.name;
+                        data: kpiByChannels.uv.map(function(channel) {
+                            return channel._id.name;
                         })
                     },
                     toolbox: {
@@ -227,15 +206,29 @@
                             type:'pie',
                             radius : '55%',
                             center: ['50%', '60%'],
-                            data: kpiByChannels.map(function(kpiPerChannel) {
+                            data: kpiByChannels.uv.map(function(kpiPerChannel) {
                                 return {
-                                    name: kpiPerChannel.name,
-                                    value: kpiPerChannel.uv
+                                    name: kpiPerChannel._id.name,
+                                    value: kpiPerChannel.count
                                 };
                             })
                         }
                     ]
                 };
+
+                $scope.pvByPage = {};
+
+                kpiByChannels.pv.forEach(function (channel) {
+                    channel.pages.forEach(function (page) {
+                        if (!$scope.pvByPage[page.name]) {
+                            $scope.pvByPage[page.name] = [];
+                        }
+                        $scope.pvByPage[page.name].push({
+                            channel:channel._id.name,
+                            views: page.views
+                        });
+                    });
+                });
 
                 $scope.pvByChannelsChart.options = {
                     title : {
@@ -243,14 +236,71 @@
                         x:'center'
                     },
                     tooltip : {
+                        trigger: 'axis'
+                    },
+                    itemStyle : {
+                        normal : {
+                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    calculable : true,
+                    yAxis : [
+                        {
+                            type : 'category',
+                            data : kpiByChannels.pv.map(function(kpiPerChannel) {
+                                return kpiPerChannel._id.name;
+                            })
+                        }
+                    ],
+                    xAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : Object.keys($scope.pvByPage).map(function (pageName) {
+                        return {
+                            name: pageName,
+                            type: 'bar',
+                            data: $scope.pvByPage[pageName].map(function (pvPerChannel) {
+                                return pvPerChannel.views
+                            }),
+                            stack: 'PV'
+                        }
+                    })
+                };
+
+                $scope.registersByChannelsChart.options = {
+                    title : {
+                        text: '获取用户数',
+                        x:'center'
+                    },
+                    tooltip : {
                         trigger: 'item',
                         formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    itemStyle : {
+                        normal : {
+                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                        }
                     },
                     legend: {
                         orient : 'vertical',
                         x : 'left',
-                        data: $scope.project.channels.map(function(channel) {
-                            return channel.name;
+                        data: kpiByChannels.uv.map(function(channel) {
+                            return channel._id.name;
                         })
                     },
                     toolbox: {
@@ -267,27 +317,49 @@
                             type:'pie',
                             radius : '55%',
                             center: ['50%', '60%'],
-                            data: kpiByChannels.map(function(kpiPerChannel) {
+                            data: kpiByChannels.register.map(function(kpiPerChannel) {
                                 return {
-                                    name: kpiPerChannel.name,
-                                    value: kpiPerChannel.pv
+                                    name: kpiPerChannel._id.name,
+                                    value: kpiPerChannel.count
                                 };
                             })
                         }
                     ]
                 };
 
-                $scope.convertsByChannelsChart.options = {
+                $scope.sharesByPage = {};
+
+                kpiByChannels.share.forEach(function (channel) {
+                    channel.pages.forEach(function (page) {
+                        if (!$scope.sharesByPage[page.name]) {
+                            $scope.sharesByPage[page.name] = [];
+                        }
+                        $scope.sharesByPage[page.name].push({
+                            channel:channel._id.name,
+                            shares: page.shares
+                        });
+                    });
+                });
+
+                $scope.sharesByChannelsChart.options = {
                     title : {
-                        text: '转化数',
+                        text: '分享数',
                         x:'center'
                     },
                     tooltip : {
                         trigger: 'axis'
                     },
-                    // legend: {
-                    //     data:[]
-                    // },
+                    itemStyle : {
+                        normal : {
+                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
                     toolbox: {
                         show : true,
                         feature : {
@@ -296,57 +368,44 @@
                         }
                     },
                     calculable : true,
-                    xAxis : [
+                    yAxis : [
                         {
                             type : 'category',
-                            data : kpiByChannels.map(function(kpiPerChannel) {
-                                return kpiPerChannel.name;
+                            data : kpiByChannels.share.map(function(kpiPerChannel) {
+                                return kpiPerChannel._id.name;
                             })
                         }
                     ],
-                    yAxis : [
+                    xAxis : [
                         {
                             type : 'value'
                         }
                     ],
-                    series : [
-                        {
-                            name:'转化数',
-                            type:'bar',
-                            data: kpiByChannels.map(function(kpiPerChannel) {
-                                return kpiPerChannel.converts;
+                    series : Object.keys($scope.sharesByPage).map(function (pageName) {
+                        return {
+                            name: pageName,
+                            type: 'bar',
+                            data: $scope.sharesByPage[pageName].map(function (pvPerChannel) {
+                                return pvPerChannel.shares
                             }),
-                            markPoint : {
-                                data : [
-                                    {type : 'max', name: '最多'},
-                                    {type : 'min', name: '最少'}
-                                ]
-                            },
-                            itemStyle : {
-                                normal : {
-                                    color:function(d){ return $scope.chartColors[d.dataIndex]; }
-                                }
-                            }
-                            // markLine : {
-                            //     data : [
-                            //         {type : 'average', name: 'Average'}
-                            //     ]
-                            // }
+                            stack: '分享'
                         }
-                    ]
+                    })
                 };
 
-                $scope.convertRateByChannelsChart.options = {
+                $scope.registerRateByChannelsChart.options = {
                     title : {
-                        text: '转化率',
+                        text: '获取用户率',
                         x:'center'
                     },
                     tooltip : {
                         trigger: 'axis'
                     },
-                    // legend: {
-                    //     data:[]
-                    // },
+                    itemStyle : {
+                        normal : {
+                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                        }
+                    },
                     toolbox: {
                         show : true,
                         feature : {
@@ -358,8 +417,8 @@
                     xAxis : [
                         {
                             type : 'category',
-                            data : kpiByChannels.map(function(kpiPerChannel) {
-                                return kpiPerChannel.name;
+                            data : kpiByChannels.register.map(function (registersPerChannel) {
+                                return registersPerChannel._id.name;
                             })
                         }
                     ],
@@ -370,74 +429,15 @@
                     ],
                     series : [
                         {
-                            name:'转化率',
-                            type:'bar',
-                            data: kpiByChannels.map(function(kpiPerChannel) {
-                                return kpiPerChannel.convertRate;
-                            }),
-                            itemStyle : {
-                                normal : {
-                                    color:function(d){ return $scope.chartColors[d.dataIndex]; }
-                                }
-                            }
-                            // markLine : {
-                            //     data : [
-                            //         {type : 'average', name: 'Average'}
-                            //     ]
-                            // }
-                        }
-                    ]
-                };
-
-                $scope.usersByChannelsChart.options = {
-                    title : {
-                        text: '获取用户数',
-                        x:'center'
-                    },
-                    tooltip : {
-                        trigger: 'axis'
-                    },
-                    // legend: {
-                    //     data:[]
-                    // },
-                    toolbox: {
-                        show : true,
-                        feature : {
-                            restore : {show: true, title: "刷新"},
-                            saveAsImage : {show: true, title: "保存为图片"}
-                        }
-                    },
-                    calculable : true,
-                    xAxis : [
-                        {
-                            type : 'category',
-                            data : kpiByChannels.map(function(kpiPerChannel) {
-                                return kpiPerChannel.name;
+                            name: '获取用户率',
+                            type: 'bar',
+                            data: kpiByChannels.register.map(function (registersPerChannel) {
+                                var count = registersPerChannel.count;
+                                var uv = kpiByChannels.uv.filter(function (uvPerChannel) {
+                                    return uvPerChannel._id._id === registersPerChannel._id._id;
+                                })[0].count;
+                                return count/uv;
                             })
-                        }
-                    ],
-                    yAxis : [
-                        {
-                            type : 'value'
-                        }
-                    ],
-                    series : [
-                        {
-                            name:'获取用户数',
-                            type:'bar',
-                            data: kpiByChannels.map(function(kpiPerChannel) {
-                                return kpiPerChannel.users;
-                            }),
-                            itemStyle : {
-                                normal : {
-                                    color:function(d){ return $scope.chartColors[d.dataIndex]; }
-                                }
-                            }
-                            // markLine : {
-                            //     data : [
-                            //         {type : 'average', name: 'Average'}
-                            //     ]
-                            // }
                         }
                     ]
                 };
@@ -453,6 +453,11 @@
                     // legend: {
                     //     data:[]
                     // },
+                    itemStyle : {
+                        normal : {
+                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                        }
+                    },
                     toolbox: {
                         show : true,
                         feature : {
@@ -503,9 +508,11 @@
                     tooltip : {
                         trigger: 'axis'
                     },
-                    // legend: {
-                    //     data:[]
-                    // },
+                    itemStyle : {
+                        normal : {
+                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                        }
+                    },
                     toolbox: {
                         show : true,
                         feature : {
@@ -539,11 +546,6 @@
                                     color:function(d){ return $scope.chartColors[d.dataIndex]; }
                                 }
                             }
-                            // markLine : {
-                            //     data : [
-                            //         {type : 'average', name: 'Average'}
-                            //     ]
-                            // }
                         }
                     ]
                 };
@@ -551,10 +553,14 @@
 
             $scope.getKpiByDate = function () {projectService.getKpiByDate(angular.extend($scope.queryKpiByChannels, {id:$route.current.params.id})).$promise.then(function(kpiByDate) {
 
-                $scope.uvByDateChart.options = {
+                $scope.viewsByDateChart.options = {
                     title : {
-                        text: '访问数 - 日期分布',
+                        text: '受访情况 - 日期分布',
                         x:'center'
+                    },
+                    legend: {
+                        data: ['页面访问数', '独立访客数'],
+                        x: 'left'
                     },
                     tooltip : {
                         trigger: 'axis',
@@ -582,7 +588,15 @@
                     ],
                     series : [
                         {
-                            name:'UV',
+                            name:'页面访问数',
+                            type:'line',
+                            data:kpiByDate.map(function(kpiPerDate) {
+                                return [kpiPerDate._id, kpiPerDate.pv]
+                            }),
+                            itemStyle: {normal: {areaStyle: {type: 'default'}}}
+                        },
+                        {
+                            name:'独立访客数',
                             type:'line',
                             data:kpiByDate.map(function(kpiPerDate) {
                                 return [kpiPerDate._id, kpiPerDate.uv]
@@ -592,9 +606,9 @@
                     ]
                 };
 
-                $scope.convertsByDateChart.options = {
+                $scope.registersByDateChart.options = {
                     title : {
-                        text: '转化率 - 日期分布',
+                        text: '获取用户数 - 日期分布',
                         x:'center'
                     },
                     toolbox: {
@@ -616,10 +630,10 @@
                     ],
                     series : [
                         {
-                            name:'转化率',
+                            name:'获取用户数',
                             type:'line',
                             data: kpiByDate.map(function(kpiPerDate) {
-                                return [kpiPerDate._id, kpiPerDate.converts]
+                                return [kpiPerDate._id, kpiPerDate.registers]
                             }),
                             markPoint : {
                                 data : [

@@ -173,7 +173,7 @@
                                 <md-button type="submit" class="md-primary md-raised" style="min-height:29px;min-width:70px"><md-icon>search</md-icon></md-button>
                             </md-input-container>
                         </form>
-                        <div layout="row">
+                        <!-- <div layout="row">
                             <table class="table table-hover table-bordered" flex="80" flex-offset="10" style="background:white">
                                 <thead>
                                     <tr>
@@ -191,12 +191,12 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
+                        </div> -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
-                                    <div class="panel-heading">UV</div>
+                                    <div class="panel-heading">独立访客数</div>
                                     <div class="panel-body">
                                         <div data-echarts data-options="uvByChannelsChart.options" style="height: 350px"></div>
                                     </div>
@@ -205,7 +205,7 @@
                             <div class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
-                                    <div class="panel-heading">PV</div>
+                                    <div class="panel-heading">页面访问数</div>
                                     <div class="panel-body">
                                         <div data-echarts data-options="pvByChannelsChart.options" style="height: 350px"></div>
                                     </div>
@@ -214,45 +214,54 @@
                             <div class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
-                                    <div class="panel-heading">转化数</div>
-                                    <div class="panel-body">
-                                        <div data-echarts data-options="convertsByChannelsChart.options" style="height: 350px"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="panel panel-default panel-minimal">
-                                    <div class="divider divider-md"></div>
-                                    <div class="panel-heading">转化率</div>
-                                    <div class="panel-body">
-                                        <div data-echarts data-options="convertRateByChannelsChart.options" style="height: 350px"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="panel panel-default panel-minimal">
-                                    <div class="divider divider-md"></div>
                                     <div class="panel-heading">获取用户数</div>
                                     <div class="panel-body">
-                                        <div data-echarts data-options="usersByChannelsChart.options" style="height: 350px"></div>
+                                        <div data-echarts data-options="registersByChannelsChart.options" style="height: 350px"></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
-                                    <div class="panel-heading">平均停留时间</div>
+                                    <div class="panel-heading">获取用户率</div>
                                     <div class="panel-body">
-                                        <div data-echarts data-options="timeStayByChannelsChart.options" style="height: 350px"></div>
+                                        <div data-echarts data-options="registerRateByChannelsChart.options" style="height: 350px"></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
-                                    <div class="panel-heading">分享率</div>
+                                    <div class="panel-heading">分享数</div>
                                     <div class="panel-body">
-                                        <div data-echarts data-options="shareRateByChannelsChart.options" style="height: 350px"></div>
+                                        <div data-echarts data-options="sharesByChannelsChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">下单数</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="ordersByChannelsChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">订单付款数</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="paymentsByChannelsChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">订单付款率</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="paymentRateByChannelsChart.options" style="height: 350px"></div>
                                     </div>
                                 </div>
                             </div>
@@ -313,10 +322,9 @@
                             <div class="col-md-12">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
-                                    <div class="panel-heading">访问数</div>
+                                    <div class="panel-heading">受访情况</div>
                                     <div class="panel-body">
-                                        <div data-echarts data-options="uvByDateChart.options" style="height: 350px"></div>
-                                        <div data-echarts data-options="uvByDeviceChart.options" style="height: 350px"></div>
+                                        <div data-echarts data-options="viewsByDateChart.options" style="height: 350px"></div>
                                     </div>
                                 </div>
                             </div>
@@ -325,11 +333,11 @@
                             <div class="col-md-12">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
-                                    <div class="panel-heading">转化率</div>
+                                    <div class="panel-heading">获客情况</div>
                                     <div class="panel-body">
+                                        <div data-echarts data-options="registersByDateChart.options" style="height: 350px"></div>
                                         <div data-echarts data-options="convertsByRegionChart.options" style="height: 350px"></div>
                                         <div data-echarts data-options="convertsByDeviceChart.options" style="height: 350px"></div>
-                                        <div data-echarts data-options="convertsByDateChart.options" style="height: 350px"></div>
                                     </div>
                                 </div>
                             </div>

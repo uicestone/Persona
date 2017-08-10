@@ -14,7 +14,8 @@ const campaignSchema = new Schema({
     shared: Boolean,
     fromChannel: {_id: Schema.Types.ObjectId, name: String},
     project: Schema.Types.ObjectId,
-    createdAt: Date
+    time: Date,
+    price: Number
 }, {
     strict: false
 });

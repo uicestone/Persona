@@ -293,7 +293,7 @@
             create: {method: 'POST', interceptor: {response: projectResponseInterceptor}},
             update: {method: 'PUT', interceptor: {response: projectResponseInterceptor}},
             get: {method: 'GET', interceptor: {response: projectResponseInterceptor}},
-            getKpiByChannels: {method: 'GET', url: api + 'project/:id/kpi-by-channels', isArray: true},
+            getKpiByChannels: {method: 'GET', url: api + 'project/:id/kpi-by-channels', isArray: false},
             getKpiByDate: {method: 'GET', url: api + 'project/:id/kpi-by-date', isArray: true},
             getKpiByDevice: {method: 'GET', url: api + 'project/:id/kpi-by-device', isArray: true},
             getKpiByRegion: {method: 'GET', url: api + 'project/:id/kpi-by-region', isArray: true},

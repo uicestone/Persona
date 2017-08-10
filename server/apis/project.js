@@ -151,73 +151,148 @@ module.exports = (router) => {
             });
         });
 
-    router.route('/project/:projectId/kpi-by-channels').get((req, res) => {
+    router.route('/project/:projectId/kpi-by-channels').get(async (req, res) => {
 
         const match = {
             project: Types.ObjectId(req.params.projectId)
         };
 
         if (req.query.startDate || req.query.endDate) {
-            const matchAccessedAt = {};
+            const matchTime = {};
             if (req.query.startDate) {
-                matchAccessedAt.$gte = new Date(req.query.startDate);
+                matchTime.$gte = new Date(req.query.startDate);
             }
             if (req.query.endDate) {
-                matchAccessedAt.$lt = new Date(req.query.endDate);
+                matchTime.$lt = new Date(req.query.endDate);
             }
-            match.accessedAt = matchAccessedAt;
+            match.time = matchTime;
         }
 
         if (req.query.endDate) {
-            match.accessedAt.$lt = new Date(req.query.endDate);
+            match.time.$lt = new Date(req.query.endDate);
         }
 
-        Campaign.aggregate([{
+        const uvByChannel = await Campaign.aggregate([{
             $match: match
-        },{
+        }, {
             $group: {
                 _id: "$fromChannel",
-                uv: {$sum: 1},
-                converts: {$sum: {$cond: {if: "$converted", then: 1, else: 0}}},
-                timeStay: {$avg: "$stayedFor"},
-                shares: {$sum: {$cond: {if: "$shared", then: 1, else: 0}}},
-                payments: {$sum: {$cond: {if: "$paid", then: 1, else: 0}}}
+                uniqueIds: {$addToSet: {$ifNull: ["$openId", "$tempId"]}}
             }
-        }]).then((result) => {
-            res.send(result);
+        }, {
+            $project: {
+                count: {$size: "$uniqueIds"}
+            }
+        }]);
+
+        const pvByChannel = await Campaign.aggregate([{
+            $match: Object.assign({visited: {$exists: true}}, match)
+        }, {
+            $group: {
+                _id: {fromChannel: "$fromChannel", name: "$visited"},
+                count: {$sum: 1}
+            }
+        }, {
+            $group: {
+                _id: "$_id.fromChannel",
+                pages: {$push: {name: "$_id.name", views: "$count"}},
+                count: {$sum: "$count"}
+            }
+        }]);
+
+        const sharesByChannel = await Campaign.aggregate([{
+            $match: Object.assign({shared: {$exists: true}}, match)
+        }, {
+            $group: {
+                _id: {fromChannel: "$fromChannel", name: "$shared"},
+                count: {$sum: 1}
+            }
+        }, {
+            $group: {
+                _id: "$_id.fromChannel",
+                pages: {$push: {name: "$_id.name", shares: "$count"}},
+                count: {$sum: "$count"}
+            }
+        }]);
+
+        const registersByChannel = await Campaign.aggregate([{
+            $match: Object.assign({mobile: {$exists: true}}, match)
+        }, {
+            $group: {
+                _id: "$fromChannel",
+                count: {$sum: 1}
+            }
+        }]);
+
+        const ordersByChannel = await Campaign.aggregate([{
+            $match: Object.assign({ordered: {$exists: true}}, match)
+        }, {
+            $group: {
+                _id: "$fromChannel",
+                count: {$sum: 1},
+                price: {$sum: "$price"}
+            }
+        }]);
+
+        const paymentsByChannel = await Campaign.aggregate([{
+            $match: Object.assign({paid: {$exists: true}}, match)
+        }, {
+            $group: {
+                _id: "$fromChannel",
+                count: {$sum: 1},
+                price: {$sum: "$price"}
+            }
+        }]);
+
+        res.json({
+            pv: pvByChannel,
+            uv: uvByChannel,
+            share: sharesByChannel,
+            register: registersByChannel,
+            order: ordersByChannel,
+            pay: paymentsByChannel
         });
     });
 
-    router.route('/project/:projectId/kpi-by-date').get((req, res) => {
+    router.route('/project/:projectId/kpi-by-date').get(async (req, res) => {
 
         let match = {
             project: Types.ObjectId(req.params.projectId)
         };
 
         if (req.query.startDate || req.query.endDate) {
-            const matchAccessedAt = {};
+            const matchTime = {};
             if (req.query.startDate) {
-                matchAccessedAt.$gte = new Date(req.query.startDate);
+                matchTime.$gte = new Date(req.query.startDate);
             }
             if (req.query.endDate) {
-                matchAccessedAt.$lt = new Date(req.query.endDate);
+                matchTime.$lt = new Date(req.query.endDate);
             }
-            match.accessedAt = matchAccessedAt;
+            match.time = matchTime;
         }
 
-        Campaign.aggregate([{
+        const kpiByDate = await Campaign.aggregate([{
             $match: match
-        },{
+        }, {
             $group: {
-                _id: {$dateToString: {format: "%Y-%m-%d", date: "$accessedAt"}},
-                uv: {$sum: 1},
-                converts: {$sum: {$cond: {if: "$converted", then: 1, else: 0}}}
+                _id: {$dateToString: {format: "%Y-%m-%d", date: "$time"}},
+                uniqueIds: {$addToSet: {$ifNull: ["$openId", "$tempId"]}},
+                registers: {$sum: {$cond: ["$mobile", 1, 0]}},
+                pv: {$sum: {$cond: ["$visited", 1, 0]}}
             }
         }, {
-            $sort: {_id: 1}
-        }]).then((result) => {
-            res.send(result);
-        });
+            $project: {
+                uv: {$size: "$uniqueIds"},
+                pv: "$pv",
+                registers: "$registers"
+            }
+        }, {
+            $sort: {
+                _id: 1
+            }
+        }]);
+
+        res.send(kpiByDate);
     });
 
     router.route('/project/:projectId/kpi-by-device').get((req, res) => {
@@ -228,14 +303,14 @@ module.exports = (router) => {
         };
 
         if (req.query.startDate || req.query.endDate) {
-            const matchAccessedAt = {};
+            const matchTime = {};
             if (req.query.startDate) {
-                matchAccessedAt.$gte = new Date(req.query.startDate);
+                matchTime.$gte = new Date(req.query.startDate);
             }
             if (req.query.endDate) {
-                matchAccessedAt.$lt = new Date(req.query.endDate);
+                matchTime.$lt = new Date(req.query.endDate);
             }
-            match.accessedAt = matchAccessedAt;
+            match.time = matchTime;
         }
 
         Campaign.aggregate([{
@@ -259,14 +334,14 @@ module.exports = (router) => {
         };
 
         if (req.query.startDate || req.query.endDate) {
-            const matchAccessedAt = {};
+            const matchTime = {};
             if (req.query.startDate) {
-                matchAccessedAt.$gte = new Date(req.query.startDate);
+                matchTime.$gte = new Date(req.query.startDate);
             }
             if (req.query.endDate) {
-                matchAccessedAt.$lt = new Date(req.query.endDate);
+                matchTime.$lt = new Date(req.query.endDate);
             }
-            match.accessedAt = matchAccessedAt;
+            match.time = matchTime;
         }
 
         Campaign.aggregate([{
@@ -290,11 +365,11 @@ module.exports = (router) => {
             let query = Campaign.find({project: req.params.projectId});
 
             if (req.query.startDate) {
-                query.find({accessedAt: {$gte: new Date(req.query.startDate)}});
+                query.find({time: {$gte: new Date(req.query.startDate)}});
             }
 
             if (req.query.endDate) {
-                query.find({accessedAt: {$lt: new Date(req.query.endDate)}});
+                query.find({time: {$lt: new Date(req.query.endDate)}});
             }
 
             if(req.query.page && !skip) {
