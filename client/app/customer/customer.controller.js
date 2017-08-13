@@ -401,13 +401,6 @@
             });
         };
 
-        $scope.removeScene = function(sceneToRemove) {
-            sceneToRemove.$delete();
-            $scope.scenes = $scope.scenes.filter(function(scene) {
-                return scene._id !== sceneToRemove._id;
-            });
-        };
-
         $scope.selectTab = function (tab) {
             $location.search('tab', tab);
         };
