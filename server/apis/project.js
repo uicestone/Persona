@@ -378,7 +378,7 @@ module.exports = (router) => {
 
             query.count()
             .then((total) => {
-                return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
+                return Promise.all([total, query.find().sort({time:-1}).limit(limit).skip(skip).exec()]);
             })
             .then((result) => {
                 let [total, page] = result;
