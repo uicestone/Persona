@@ -151,8 +151,6 @@
 
             $scope.getCampaignRecords();
 
-            $scope.kpiByChannelsTree = {};
-
             $scope.pvByChannelsChart = {};
             $scope.uvByChannelsChart = {};
             $scope.sharesByChannelsChart = {};
@@ -165,11 +163,22 @@
             $scope.registersByDeviceChart = {};
             $scope.registersByRegionChart = {};
 
-            $scope.queryKpiByChannels=  {};
+            $scope.queryKpi = {};
+
+            $scope.$watch('queryCampaignRecords', function (queryCampaignRecords) {
+                var queryKpi = {};
+                ['startDate', 'endDate'].forEach(function (key) {
+                    if (queryCampaignRecords[key]) {
+                        queryKpi[key] = queryCampaignRecords[key];
+                    }
+                    $scope.queryKpi = queryKpi;
+                });
+                console.log($scope.queryKpi);
+            }, true);
 
             $scope.chartColors = ['#2ec7c9','#b6a2de', '#5ab1ef', '#ffb980', '#6ed0ff', '#ffbfe0', '#e9f58a', '#67e8c5'];
 
-            $scope.getKpiByChannels = function () {projectService.getKpiByChannels(angular.extend($scope.queryKpiByChannels, {id:$route.current.params.id})).$promise.then(function(kpiByChannels) {
+            $scope.getKpiByChannels = function () {projectService.getKpiByChannels(angular.extend($scope.queryKpi, {id:$route.current.params.id})).$promise.then(function(kpiByChannels) {
 
                 $scope.uvByChannelsChart.options = {
                     title : {
@@ -551,7 +560,7 @@
                 };
             })};
 
-            $scope.getKpiByDate = function () {projectService.getKpiByDate(angular.extend($scope.queryKpiByChannels, {id:$route.current.params.id})).$promise.then(function(kpiByDate) {
+            $scope.getKpiByDate = function () {projectService.getKpiByDate(angular.extend($scope.queryKpi, {id:$route.current.params.id})).$promise.then(function(kpiByDate) {
 
                 $scope.viewsByDateChart.options = {
                     title : {
@@ -647,7 +656,7 @@
                 };
             })};
 
-            $scope.getKpiByRegion = function () {projectService.getKpiByRegion(angular.extend($scope.queryKpiByChannels, {id:$route.current.params.id})).$promise.then(function(kpiByRegion) {
+            $scope.getKpiByRegion = function () {projectService.getKpiByRegion(angular.extend($scope.queryKpi, {id:$route.current.params.id})).$promise.then(function(kpiByRegion) {
 
                 $scope.convertsByRegionChart.options = {
                     title: {
@@ -698,7 +707,7 @@
                 };
             })};
             
-            $scope.getKpiByDevice = function () {projectService.getKpiByDevice(angular.extend($scope.queryKpiByChannels, {id:$route.current.params.id})).$promise.then(function(kpiByDevice) {
+            $scope.getKpiByDevice = function () {projectService.getKpiByDevice(angular.extend($scope.queryKpi, {id:$route.current.params.id})).$promise.then(function(kpiByDevice) {
 
                 $scope.uvByDeviceChart.options = {
                     title : {
