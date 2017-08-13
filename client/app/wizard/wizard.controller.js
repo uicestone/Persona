@@ -30,7 +30,7 @@
             }
         })
 
-        $scope.kpiNames = ['PV', 'UV', '转化数', '转化率', '获取用户数', '平均停留时间', '分享率'];
+        $scope.kpiNames = ['PV', 'UV', '平均停留时间', '获取用户数', '分享数', '分享率', '下单数', '转化数', '转化率', '无效订单数', '热名单数', '潜在客户数'];
 
         $scope.channels = channelService.query({limit:1000});
 

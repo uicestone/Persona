@@ -257,7 +257,8 @@ module.exports = (router) => {
     router.route('/project/:projectId/kpi-by-date').get(async (req, res) => {
 
         let match = {
-            project: Types.ObjectId(req.params.projectId)
+            project: Types.ObjectId(req.params.projectId),
+            time: {$exists: true}
         };
 
         if (req.query.startDate || req.query.endDate) {
@@ -278,13 +279,15 @@ module.exports = (router) => {
                 _id: {$dateToString: {format: "%Y-%m-%d", date: "$time"}},
                 uniqueIds: {$addToSet: {$ifNull: ["$openId", "$tempId"]}},
                 registers: {$sum: {$cond: ["$mobile", 1, 0]}},
-                pv: {$sum: {$cond: ["$visited", 1, 0]}}
+                pv: {$sum: {$cond: ["$visited", 1, 0]}},
+                stayingTime: {$avg: {$cond: ["$stayingTime", "$stayingTime", null]}}
             }
         }, {
             $project: {
                 uv: {$size: "$uniqueIds"},
                 pv: "$pv",
-                registers: "$registers"
+                registers: "$registers",
+                stayingTime: "$stayingTime"
             }
         }, {
             $sort: {

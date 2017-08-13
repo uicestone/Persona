@@ -30,7 +30,7 @@
             }
         })
 
-        $scope.kpiNames = {pv:'PV', uv:'UV', converts:'转化数', convertRate:'转化率', users:'获取用户数', timeStay:'平均停留时间', shareRate:'分享率'};
+        $scope.kpiNames = {pv:'PV', uv:'UV', 'shares': '分享数', 'registers': '获取用户数', registerRate:'获取用户率', stayingTime:'平均停留时间'};
 
         $scope.users = userService.query();
 
@@ -156,9 +156,12 @@
             $scope.sharesByChannelsChart = {};
             $scope.registersByChannelsChart = {};
             $scope.registerRateByChannelsChart = {};
-            $scope.timeStayByChannelsChart = {};
+            $scope.ordersByChannelsChart = {};
+            $scope.paymentsByChannelsChart = {};
+            $scope.paymentRateByChannelsChart = {};
 
             $scope.viewsByDateChart = {};
+            $scope.stayingTimeByDateChart = {};
             $scope.registersByDateChart = {}
             $scope.registersByDeviceChart = {};
             $scope.registersByRegionChart = {};
@@ -173,7 +176,6 @@
                     }
                     $scope.queryKpi = queryKpi;
                 });
-                console.log($scope.queryKpi);
             }, true);
 
             $scope.chartColors = ['#2ec7c9','#b6a2de', '#5ab1ef', '#ffb980', '#6ed0ff', '#ffbfe0', '#e9f58a', '#67e8c5'];
@@ -451,21 +453,26 @@
                     ]
                 };
 
-                $scope.timeStayByChannelsChart.options = {
+                $scope.ordersByChannelsChart.options = {
                     title : {
-                        text: '平均停留时间',
+                        text: '下单用户数',
                         x:'center'
                     },
                     tooltip : {
-                        trigger: 'axis'
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
                     },
-                    // legend: {
-                    //     data:[]
-                    // },
                     itemStyle : {
                         normal : {
-                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                            color:function(d){ return $scope.chartColors[d.dataIndex]; }
                         }
+                    },
+                    legend: {
+                        orient : 'vertical',
+                        x : 'left',
+                        data: kpiByChannels.order.map(function(channel) {
+                            return channel._id.name;
+                        })
                     },
                     toolbox: {
                         show : true,
@@ -475,43 +482,70 @@
                         }
                     },
                     calculable : true,
-                    xAxis : [
-                        {
-                            type : 'category',
-                            data : kpiByChannels.map(function(kpiPerChannel) {
-                                return kpiPerChannel.name;
-                            })
-                        }
-                    ],
-                    yAxis : [
-                        {
-                            type : 'value'
-                        }
-                    ],
                     series : [
                         {
-                            name:'平均停留时间',
-                            type:'bar',
-                            data: kpiByChannels.map(function(kpiPerChannel) {
-                                return kpiPerChannel.timeStay;
-                            }),
-                            itemStyle : {
-                                normal : {
-                                    color:function(d){ return $scope.chartColors[d.dataIndex]; }
-                                }
-                            }
-                            // markLine : {
-                            //     data : [
-                            //         {type : 'average', name: 'Average'}
-                            //     ]
-                            // }
+                            name:'渠道',
+                            type:'pie',
+                            radius : '55%',
+                            center: ['50%', '60%'],
+                            data: kpiByChannels.order.map(function(kpiPerChannel) {
+                                return {
+                                    name: kpiPerChannel._id.name,
+                                    value: kpiPerChannel.count
+                                };
+                            })
                         }
                     ]
                 };
 
-                $scope.shareRateByChannelsChart.options = {
+                $scope.paymentsByChannelsChart.options = {
                     title : {
-                        text: '分享率',
+                        text: '付款用户数',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    itemStyle : {
+                        normal : {
+                            color:function(d){ return $scope.chartColors[d.dataIndex]; }
+                        }
+                    },
+                    legend: {
+                        orient : 'vertical',
+                        x : 'left',
+                        data: kpiByChannels.pay.map(function(channel) {
+                            return channel._id.name;
+                        })
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    calculable : true,
+                    series : [
+                        {
+                            name:'渠道',
+                            type:'pie',
+                            radius : '55%',
+                            center: ['50%', '60%'],
+                            data: kpiByChannels.pay.map(function(kpiPerChannel) {
+                                return {
+                                    name: kpiPerChannel._id.name,
+                                    value: kpiPerChannel.count
+                                };
+                            })
+                        }
+                    ]
+                };
+
+                $scope.paymentRateByChannelsChart.options = {
+                    title : {
+                        text: '下单用户付款率',
                         x:'center'
                     },
                     tooltip : {
@@ -533,8 +567,8 @@
                     xAxis : [
                         {
                             type : 'category',
-                            data : kpiByChannels.map(function(kpiPerChannel) {
-                                return kpiPerChannel.name;
+                            data : kpiByChannels.order.map(function (ordersPerChannel) {
+                                return ordersPerChannel._id.name;
                             })
                         }
                     ],
@@ -545,16 +579,15 @@
                     ],
                     series : [
                         {
-                            name:'分享率',
-                            type:'bar',
-                            data: kpiByChannels.map(function(kpiPerChannel) {
-                                return kpiPerChannel.shareRate;
-                            }),
-                            itemStyle : {
-                                normal : {
-                                    color:function(d){ return $scope.chartColors[d.dataIndex]; }
-                                }
-                            }
+                            name: '下单用户付款率',
+                            type: 'bar',
+                            data: kpiByChannels.order.map(function (ordersPerChannel) {
+                                var count = ordersPerChannel.count;
+                                var payments = kpiByChannels.pay.filter(function (paymentsPerChannel) {
+                                    return paymentsPerChannel._id._id === ordersPerChannel._id._id;
+                                })[0].count;
+                                return payments/count;
+                            })
                         }
                     ]
                 };
@@ -609,6 +642,47 @@
                             type:'line',
                             data:kpiByDate.map(function(kpiPerDate) {
                                 return [kpiPerDate._id, kpiPerDate.uv]
+                            }),
+                            itemStyle: {normal: {areaStyle: {type: 'default'}}}
+                        }
+                    ]
+                };
+
+                $scope.stayingTimeByDateChart.options = {
+                    title : {
+                        text: '访问时长 - 日期分布',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {
+                            type : 'shadow'
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'time'
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'平均访问时长',
+                            type:'line',
+                            data:kpiByDate.map(function(kpiPerDate) {
+                                return [kpiPerDate._id, kpiPerDate.stayingTime]
                             }),
                             itemStyle: {normal: {areaStyle: {type: 'default'}}}
                         }
