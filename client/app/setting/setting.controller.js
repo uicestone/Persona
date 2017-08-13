@@ -63,6 +63,10 @@
         };
 
         $scope.removeChannel = function(channelToRemove) {
+            if (!confirm('确定要删除渠道 ' + channelToRemove.name + ' 吗？')) {
+                return;
+            }
+
             channelToRemove.$delete();
             $scope.channels = $scope.channels.filter(function(channel) {
                 return channel._id !== channelToRemove._id;
