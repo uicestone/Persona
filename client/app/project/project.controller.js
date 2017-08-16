@@ -674,7 +674,8 @@
                     ],
                     yAxis : [
                         {
-                            type : 'value'
+                            type : 'value',
+                            name : '秒'
                         }
                     ],
                     series : [
@@ -682,7 +683,7 @@
                             name:'平均访问时长',
                             type:'line',
                             data:kpiByDate.map(function(kpiPerDate) {
-                                return [kpiPerDate._id, kpiPerDate.stayingTime]
+                                return [kpiPerDate._id, Number((kpiPerDate.stayingTime / 1000).toFixed(2))]
                             }),
                             itemStyle: {normal: {areaStyle: {type: 'default'}}}
                         }
