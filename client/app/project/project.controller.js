@@ -75,8 +75,6 @@
             $scope.projectsPromise = $scope.projects.$promise;
         }
 
-        $scope.colors = ['#F88', '#8F8', '#88F', '#8FF', '#F8F', '#FF8']
-
         $scope.navigateQuarter = function(offset) {
             $scope.timelineStartDate.add(offset, 'quarters');
         };
@@ -635,7 +633,8 @@
                             data:kpiByDate.map(function(kpiPerDate) {
                                 return [kpiPerDate._id, kpiPerDate.pv]
                             }),
-                            itemStyle: {normal: {areaStyle: {type: 'default'}}}
+                            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                            smooth: true
                         },
                         {
                             name:'独立访客数',
@@ -643,9 +642,11 @@
                             data:kpiByDate.map(function(kpiPerDate) {
                                 return [kpiPerDate._id, kpiPerDate.uv]
                             }),
-                            itemStyle: {normal: {areaStyle: {type: 'default'}}}
+                            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                            smooth: true
                         }
-                    ]
+                    ],
+                    color: $scope.chartColors
                 };
 
                 $scope.stayingTimeByDateChart.options = {
@@ -685,9 +686,11 @@
                             data:kpiByDate.map(function(kpiPerDate) {
                                 return [kpiPerDate._id, Number((kpiPerDate.stayingTime / 1000).toFixed(2))]
                             }),
-                            itemStyle: {normal: {areaStyle: {type: 'default'}}}
+                            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                            smooth: true
                         }
-                    ]
+                    ],
+                    color: $scope.chartColors
                 };
 
                 $scope.registersByDateChart.options = {
@@ -725,9 +728,11 @@
                                     {type : 'min', name: '最少'}
                                 ]
                             },
-                            itemStyle: {normal: {areaStyle: {type: 'default'}}}
+                            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                            smooth: true
                         }
-                    ]
+                    ],
+                    color: $scope.chartColors
                 };
             })};
 
