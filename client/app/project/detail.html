@@ -214,6 +214,24 @@
                             <div class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
+                                    <div class="panel-heading">平均访问时长</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="stayingTimeByChannelsChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">跳出率</div>
+                                    <div class="panel-body">
+                                        <div data-echarts data-options="escapeRateByChannelsChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
                                     <div class="panel-heading">获取用户数</div>
                                     <div class="panel-body">
                                         <div data-echarts data-options="registersByChannelsChart.options" style="height: 350px"></div>
@@ -324,6 +342,8 @@
                                     <div class="panel-body">
                                         <div data-echarts data-options="viewsByDateChart.options" style="height: 350px"></div>
                                         <div data-echarts data-options="stayingTimeByDateChart.options" style="height: 350px"></div>
+                                        <div data-echarts data-options="sharesByDateChart.options" style="height: 350px"></div>
+                                        <div data-echarts data-options="escapeRateByDateChart.options" style="height: 350px"></div>
                                     </div>
                                 </div>
                             </div>
@@ -335,8 +355,8 @@
                                     <div class="panel-heading">获客情况</div>
                                     <div class="panel-body">
                                         <div data-echarts data-options="registersByDateChart.options" style="height: 350px"></div>
-                                        <div data-echarts data-options="convertsByRegionChart.options" style="height: 350px"></div>
-                                        <div data-echarts data-options="convertsByDeviceChart.options" style="height: 350px"></div>
+                                        <div data-echarts data-options="registersByRegionChart.options" style="height: 350px"></div>
+                                        <div data-echarts data-options="registersByDeviceChart.options" style="height: 350px"></div>
                                     </div>
                                 </div>
                             </div>

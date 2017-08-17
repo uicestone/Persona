@@ -151,6 +151,8 @@
 
             $scope.pvByChannelsChart = {};
             $scope.uvByChannelsChart = {};
+            $scope.stayingTimeByChannelsChart = {};
+            $scope.escapeRateByChannelsChart = {};
             $scope.sharesByChannelsChart = {};
             $scope.registersByChannelsChart = {};
             $scope.registerRateByChannelsChart = {};
@@ -160,6 +162,8 @@
 
             $scope.viewsByDateChart = {};
             $scope.stayingTimeByDateChart = {};
+            $scope.sharesByDateChart = {};
+            $scope.escapeRateByDateChart = {};
             $scope.registersByDateChart = {}
             $scope.registersByDeviceChart = {};
             $scope.registersByRegionChart = {};
@@ -289,6 +293,100 @@
                             stack: 'PV'
                         }
                     })
+                };
+
+                $scope.stayingTimeByChannelsChart.options = {
+                    title : {
+                        text: '平均访问时长',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    itemStyle : {
+                        normal : {
+                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : kpiByChannels.stay.map(function (stayingTimePerChannel) {
+                                return stayingTimePerChannel._id.name;
+                            })
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name: '平均访问时长',
+                            type: 'bar',
+                            data: kpiByChannels.stay.map(function (stayingTimePerChannel) {
+                                return Number((stayingTimePerChannel.time / 1000).toFixed(2));
+                            })
+                        }
+                    ]
+                };
+
+                $scope.escapeRateByChannelsChart.options = {
+                    title : {
+                        text: '跳出率',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    itemStyle : {
+                        normal : {
+                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            data : kpiByChannels.escape.map(function (escapeRatePerChannel) {
+                                return escapeRatePerChannel._id.name;
+                            })
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name: '跳出率',
+                            type: 'bar',
+                            data: kpiByChannels.register.map(function (escapeRatePerChannel) {
+                                var count = escapeRatePerChannel.count;
+                                var uv = kpiByChannels.uv.filter(function (uvPerChannel) {
+                                    return uvPerChannel._id._id === escapeRatePerChannel._id._id;
+                                })[0].count;
+                                return count/uv;
+                            })
+                        }
+                    ]
                 };
 
                 $scope.registersByChannelsChart.options = {
@@ -690,7 +788,98 @@
                             smooth: true
                         }
                     ],
-                    color: $scope.chartColors
+                    color: $scope.chartColors.slice(1)
+                };
+
+                $scope.sharesByDateChart.options = {
+                    title : {
+                        text: '分享数 - 日期分布',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {
+                            type : 'shadow'
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'time'
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'分享数',
+                            type:'line',
+                            data:kpiByDate.map(function(kpiPerDate) {
+                                return [kpiPerDate._id, kpiPerDate.shares]
+                            }),
+                            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                            smooth: true
+                        }
+                    ],
+                    color: $scope.chartColors.slice(2)
+                };
+
+                $scope.escapeRateByDateChart.options = {
+                    title : {
+                        text: '跳出率 - 日期分布',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {
+                            type : 'shadow'
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'time'
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value',
+                            axisLabel: {
+                                formatter: function (value) {
+                                    return (value * 100).toFixed(1) + '%';
+                                }
+                            }
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'跳出率',
+                            type:'line',
+                            data:kpiByDate.map(function(kpiPerDate) {
+                                return [kpiPerDate._id, kpiPerDate.escapeRate]
+                            }),
+                            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                            smooth: true
+                        }
+                    ],
+                    color: $scope.chartColors.slice(3)
                 };
 
                 $scope.registersByDateChart.options = {
@@ -732,15 +921,15 @@
                             smooth: true
                         }
                     ],
-                    color: $scope.chartColors
+                    color: $scope.chartColors.slice(4)
                 };
             })};
 
             $scope.getKpiByRegion = function () {projectService.getKpiByRegion(angular.extend($scope.queryKpi, {id:$route.current.params.id})).$promise.then(function(kpiByRegion) {
 
-                $scope.convertsByRegionChart.options = {
+                $scope.registersByRegionChart.options = {
                     title: {
-                        text: '转化率 - 区域分布',
+                        text: '获取用户数 - 区域分布',
                         left: 'center'
                     },
                     tooltip: {
@@ -748,7 +937,7 @@
                     },
                     visualMap: {
                         min: 0,
-                        max: 2500,
+                        max: kpiByRegion.length ? Math.max.apply(null, kpiByRegion.map(function (kpiPerRegion) { return kpiPerRegion.register; })) : 1,
                         left: 'left',
                         top: 'bottom',
                         // text: ['高','低'],           // 文本，默认为数值文本
@@ -767,7 +956,7 @@
                     },
                     series: [
                         {
-                            name: '转化率',
+                            name: '获取用户数',
                             type: 'map',
                             mapType: 'china',
                             roam: false,
@@ -780,13 +969,13 @@
                                 }
                             },
                             data: kpiByRegion.map(function(kpiPerRegion) {
-                                return {name: kpiPerRegion._id.replace(/省|市|自治区/, ''), value: kpiPerRegion.converts}
+                                return {name: kpiPerRegion._id.replace(/省|市|自治区/, ''), value: kpiPerRegion.register}
                             })
                         }
                     ]
                 };
             })};
-            
+
             $scope.getKpiByDevice = function () {projectService.getKpiByDevice(angular.extend($scope.queryKpi, {id:$route.current.params.id})).$promise.then(function(kpiByDevice) {
 
                 $scope.uvByDeviceChart.options = {

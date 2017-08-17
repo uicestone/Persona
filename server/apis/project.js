@@ -200,6 +200,36 @@ module.exports = (router) => {
             }
         }]);
 
+        const stayingTimeByChannel = await Campaign.aggregate([{
+            $match: Object.assign({stayingTime: {$exists: true}}, match)
+        }, {
+            $group: {
+                _id: "$fromChannel",
+                time: {$avg: "$stayingTime"}
+            }
+        }]);
+
+        const escapeByChannel = await Campaign.aggregate([
+            {
+                $match: Object.assign({visited: {$exists: true}}, match)
+            },
+            {
+                $group: {
+                    _id : {date:{$dateToString: {format: "%Y-%m-%d", date: "$time"}}, fromChannel:"$fromChannel", uniqueUser:{$ifNull: ["$openId", "$tempId"]}},
+                    count: {$sum : 1},
+               }
+            },
+            {
+                $match: {count:1}
+            },
+            {
+                $group: {
+                    _id:"$_id.fromChannel",
+                    count:{$sum:1}
+                }
+            }
+        ]);
+
         const sharesByChannel = await Campaign.aggregate([{
             $match: Object.assign({shared: {$exists: true}}, match)
         }, {
@@ -247,6 +277,8 @@ module.exports = (router) => {
         res.json({
             pv: pvByChannel,
             uv: uvByChannel,
+            stay: stayingTimeByChannel,
+            escape: escapeByChannel,
             share: sharesByChannel,
             register: registersByChannel,
             order: ordersByChannel,
@@ -280,20 +312,47 @@ module.exports = (router) => {
                 uniqueIds: {$addToSet: {$ifNull: ["$openId", "$tempId"]}},
                 registers: {$sum: {$cond: ["$mobile", 1, 0]}},
                 pv: {$sum: {$cond: ["$visited", 1, 0]}},
-                stayingTime: {$avg: {$cond: ["$stayingTime", "$stayingTime", null]}}
+                stayingTime: {$avg: {$cond: ["$stayingTime", "$stayingTime", null]}},
+                shares: {$sum: {$cond: ["$shared", 1, 0]}}
             }
         }, {
             $project: {
                 uv: {$size: "$uniqueIds"},
                 pv: "$pv",
                 registers: "$registers",
-                stayingTime: "$stayingTime"
+                stayingTime: "$stayingTime",
+                shares: "$shares"
             }
         }, {
             $sort: {
                 _id: 1
             }
         }]);
+
+        const escapeByDate = await Campaign.aggregate([
+            {
+                $match: Object.assign({visited: {$exists: true}}, match)
+            },
+            {
+                $group: {
+                    _id : {
+                        date:{$dateToString: {format: "%Y-%m-%d", date: "$time"}},
+                        uniqueUser:{$ifNull: ["$openId", "$tempId"]}},
+                    count: {$sum : 1}
+                }},
+            {
+                $match: {count:1}
+            },
+            {
+                $group: {_id:"$_id.date", count:{$sum:1}}
+            }
+        ]);
+
+        kpiByDate.forEach(kpiPerDate => {
+            const date = kpiPerDate._id;
+            const escapeThatDate = escapeByDate.filter(escapePerDate => escapePerDate._id === date)[0];
+            kpiPerDate.escapeRate = escapeThatDate ? escapeThatDate.count / kpiPerDate.uv : 0;
+        });
 
         res.send(kpiByDate);
     });
