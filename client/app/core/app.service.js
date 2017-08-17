@@ -416,6 +416,9 @@
                     return $http.post(api + 'wechat/' + wechat.appId + '/qrscene', qrScene);
                 }
             },
+            getQrSceneKpiByDate: function (appId, qrSceneId) {
+                return $http.get(api + 'wechat/' + appId + '/qrscene/' + qrSceneId + '/kpi-by-date');
+            },
             syncUserGroup: function (appId, group) {
                 $http.post(api + 'wechat/' + appId + '/user-group/' + group._id);
             },

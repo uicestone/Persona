@@ -167,13 +167,15 @@
                                 <td md-cell>
                                     <div layout="row">
                                         <a ng-href="{{ scene.url }}" target="_blank" flex><md-icon class="md-primary">file_download</md-icon></a>
-                                        <md-icon class="" flex ng-click="">info_outline</md-icon>
+                                        <md-icon class="md-primary" flex ng-click="showQrSceneKpiByDate(wechatDetail.appId, scene.id)">show_chart</md-icon>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </md-table-container>
+                <div class="divider divider-md"></div>
+                <div ng-if="qrSceneKpiByDateChartOptions" data-echarts data-options="qrSceneKpiByDateChartOptions" style="height: 350px"></div>
             </md-card>
         </div>
     </div>

@@ -378,6 +378,33 @@ module.exports = (router) => {
 
     });
 
+    router.route('/wechat/:appId/qrscene/:sceneId/kpi-by-date')
+
+    .get(async (req, res) => {
+
+        const wechat = await Wechat.findOne({appId: req.params.appId});
+        const qrScene = wechat.qrScenes.filter(scene => scene.id === Number(req.params.sceneId))[0];
+
+        const kpiByDate = await WechatMessage.aggregate([
+            {
+                $match: {appId: wechat.appId}
+            },
+            {
+                $group: {
+                    _id : {$dateToString: {format: "%Y-%m-%d", date: "$createdAt"}},
+                    subscribe: {$sum: {$cond:[{$and:[{$eq:["$event",'subscribe']}, {$eq:["$eventKey",`qrscene_${qrScene.id}`]}]}, 1, 0]}},
+                    scan: {$sum: {$cond:[{$and:[{$eq:["$event",'SCAN']}, {$eq:["$eventKey", req.params.sceneId]}]}, 1, 0]}}
+                }
+            },
+            {
+                $sort: {_id: 1}
+            }
+        ]);
+
+        res.json(kpiByDate);
+
+    });
+
     router.route('/wechat/:appId/user-group/:groupId')
 
     .post((req, res) => {

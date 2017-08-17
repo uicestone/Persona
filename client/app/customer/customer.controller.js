@@ -401,6 +401,72 @@
             });
         };
 
+        $scope.chartColors = ['#2ec7c9','#b6a2de', '#5ab1ef', '#ffb980', '#6ed0ff', '#ffbfe0', '#e9f58a', '#67e8c5'];
+
+        $scope.qrSceneKpiByDateChartOptions = null;
+
+        $scope.showQrSceneKpiByDate = function (appId, qrSceneId) {
+            
+            wechatService.getQrSceneKpiByDate(appId, qrSceneId).then(function (res) {
+                const qrSceneKpiByDate = res.data;
+                $scope.qrSceneKpiByDateChartOptions = {
+                    title : {
+                        text: '场景触达情况 - 日期分布',
+                        x:'center'
+                    },
+                    legend: {
+                        data: ['场景关注', '场景扫码'],
+                        x: 'left'
+                    },
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {
+                            type : 'shadow'
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'time'
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'场景关注',
+                            type:'line',
+                            data: qrSceneKpiByDate.map(function(qrSceneKpiPerDate) {
+                                return [qrSceneKpiPerDate._id, qrSceneKpiPerDate.subscribe]
+                            }),
+                            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                            smooth: true
+                        },
+                        {
+                            name:'场景扫码',
+                            type:'line',
+                            data: qrSceneKpiByDate.map(function(qrSceneKpiPerDate) {
+                                return [qrSceneKpiPerDate._id, qrSceneKpiPerDate.scan]
+                            }),
+                            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                            smooth: true
+                        }
+                    ],
+                    color: $scope.chartColors
+                };
+            });
+        };
+
         $scope.selectTab = function (tab) {
             $location.search('tab', tab);
         };
