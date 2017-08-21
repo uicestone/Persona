@@ -183,7 +183,7 @@ module.exports = (router) => {
             $project: {
                 count: {$size: "$uniqueIds"}
             }
-        }]);
+        }]).allowDiskUse(true);
 
         const pvByChannel = await Campaign.aggregate([{
             $match: Object.assign({visited: {$exists: true}}, match)
@@ -198,7 +198,7 @@ module.exports = (router) => {
                 pages: {$push: {name: "$_id.name", views: "$count"}},
                 count: {$sum: "$count"}
             }
-        }]);
+        }]).allowDiskUse(true);
 
         const stayingTimeByChannel = await Campaign.aggregate([{
             $match: Object.assign({stayingTime: {$exists: true}}, match)
@@ -207,7 +207,7 @@ module.exports = (router) => {
                 _id: "$fromChannel",
                 time: {$avg: "$stayingTime"}
             }
-        }]);
+        }]).allowDiskUse(true);
 
         const escapeByChannel = await Campaign.aggregate([
             {
@@ -228,7 +228,7 @@ module.exports = (router) => {
                     count:{$sum:1}
                 }
             }
-        ]);
+        ]).allowDiskUse(true);
 
         const sharesByChannel = await Campaign.aggregate([{
             $match: Object.assign({shared: {$exists: true}}, match)
@@ -243,7 +243,7 @@ module.exports = (router) => {
                 pages: {$push: {name: "$_id.name", shares: "$count"}},
                 count: {$sum: "$count"}
             }
-        }]);
+        }]).allowDiskUse(true);
 
         const registersByChannel = await Campaign.aggregate([{
             $match: Object.assign({mobile: {$exists: true}}, match)
@@ -262,7 +262,7 @@ module.exports = (router) => {
                 count: {$sum: 1},
                 price: {$sum: "$price"}
             }
-        }]);
+        }]).allowDiskUse(true);
 
         const paymentsByChannel = await Campaign.aggregate([{
             $match: Object.assign({paid: {$exists: true}}, match)
@@ -272,7 +272,7 @@ module.exports = (router) => {
                 count: {$sum: 1},
                 price: {$sum: "$price"}
             }
-        }]);
+        }]).allowDiskUse(true);
 
         res.json({
             pv: pvByChannel,
@@ -346,7 +346,7 @@ module.exports = (router) => {
             {
                 $group: {_id:"$_id.date", count:{$sum:1}}
             }
-        ]);
+        ]).allowDiskUse(true);
 
         kpiByDate.forEach(kpiPerDate => {
             const date = kpiPerDate._id;
@@ -383,7 +383,7 @@ module.exports = (router) => {
                 uv: {$sum: 1},
                 converts: {$sum: {$cond: {if: "$converted", then: 1, else: 0}}}
             }
-        }]).then((result) => {
+        }]).allowDiskUse(true).then((result) => {
             res.send(result);
         });
     });
@@ -413,7 +413,7 @@ module.exports = (router) => {
                 _id: "$province",
                 converts: {$sum: {$cond: {if: "$converted", then: 1, else: 0}}}
             }
-        }]).then((result) => {
+        }]).allowDiskUse(true).then((result) => {
             res.send(result);
         });
     });
