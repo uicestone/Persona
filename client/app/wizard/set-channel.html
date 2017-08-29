@@ -78,7 +78,8 @@
                                         <md-datepicker ng-model="channel.endDate" md-min-date="channel.startDate > project.startDate ? channel.startDate : project.startDate" md-max-date="project.endDate" md-placeholder="结束时间" md-hide-icons="calendar" required></md-datepicker>
                                     </td>
                                     <td>
-                                        <md-icon class="md-primary" clipboard text="project.url+'?channel='+channel._id" on-copied="urlCopied()" style="cursor:pointer"><md-tooltip>复制URL</md-tooltip>link</md-icon>
+                                        <md-icon class="md-primary" clipboard text="channel._id" on-copied="copied('渠道ID')" style="cursor:pointer"><md-tooltip>复制渠道ID</md-tooltip>fingerprint</md-icon>
+                                        <!-- <md-icon class="md-primary" clipboard text="project.url+'?channel='+channel._id" on-copied="copied('链接')" style="cursor:pointer"><md-tooltip>复制URL</md-tooltip>link</md-icon> -->
                                         <md-icon ng-click="channel.selected=false;updateProjectChannel(channel)">delete</md-icon>
                                     </td>
                                 </tr>

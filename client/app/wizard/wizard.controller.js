@@ -151,8 +151,8 @@
             }
         };
 
-        $scope.urlCopied = function() {
-            $mdToast.show($mdToast.simple('链接已复制到剪贴板').position('top right'));
+        $scope.copied = function(title) {
+            $mdToast.show($mdToast.simple(title + ' 已复制到剪贴板').position('top right'));
         };
 
         $scope.getUsers = function(roles, name) {
