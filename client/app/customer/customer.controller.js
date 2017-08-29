@@ -491,8 +491,8 @@
 
         $scope.sendNewsMaterial = function (wechat, customerGroup, newsMaterial) {
             wechatService.massSend(wechat.appId, customerGroup.wechat.tagId, newsMaterial.mediaId).then(function (result) {
-                if (result.errcode) {
-                    $mdToast.show($mdToast.simple('微信图文发送错误: ' + result.errmsg).position('top right'));
+                if (result.data.errcode) {
+                    $mdToast.show($mdToast.simple('微信图文发送错误: ' + result.data.errmsg).position('top right'));
                 }
                 else {
                     $mdToast.show($mdToast.simple('微信图文发送成功').position('top right'));
