@@ -490,7 +490,7 @@
         };
 
         $scope.sendNewsMaterial = function (wechat, customerGroup, newsMaterial) {
-            wechatService.massSend(wechat.appId, customerGroup.wechatTagId, newsMaterial.mediaId);
+            wechatService.massSend(wechat.appId, customerGroup.wechat.tagId, newsMaterial.mediaId);
         };
     }
 
