@@ -420,10 +420,10 @@
                 return $http.get(api + 'wechat/' + appId + '/qrscene/' + qrSceneId + '/kpi-by-date');
             },
             syncUserGroup: function (appId, group) {
-                $http.post(api + 'wechat/' + appId + '/user-group/' + group._id);
+                return $http.post(api + 'wechat/' + appId + '/user-group/' + group._id);
             },
             massSend: function (appId, tagId, mediaId) {
-                $http.post(api + 'wechat/' + appId + '/mass-send', {
+                return $http.post(api + 'wechat/' + appId + '/mass-send', {
                     tagId: tagId,
                     mediaId: mediaId
                 });
