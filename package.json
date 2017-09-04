@@ -62,6 +62,8 @@
     "open-wechat-api": "^2.0.0",
     "redis": "^2.7.1",
     "socket.io": "^1.7.4",
-    "wechat-auth": "^1.1.2"
+    "wechat": "^2.1.0",
+    "wechat-auth": "^1.1.2",
+    "wechat-crypto": "0.0.2"
   }
 }

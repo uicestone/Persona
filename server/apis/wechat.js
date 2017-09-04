@@ -1,5 +1,5 @@
 const redisClient = require('redis').createClient();
-const wechatCrypto = require('../util/wechatCrypto.js');
+const wechatCrypto = require('wechat-crypto');
 const xmlParseString = require('xml2js').parseString;
 const Brand = require('../models/brand.js');
 const Customer = require('../models/customer.js');
