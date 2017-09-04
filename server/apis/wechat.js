@@ -29,9 +29,11 @@ module.exports = (router) => {
         const xmlMessage = cryptor.decrypt(req.body.xml.Encrypt[0]).message;
         
         xmlParseString(xmlMessage, {async: false, trim: true}, (err, result) => {
-            ticket = result.xml.ComponentVerifyTicket[0];
-            redisClient.setex('component_verify_ticket', 7000, ticket);
-            console.log(`[${new Date()}] ComponentVerifyTicket已更新：${ticket}`);
+            if (result.xml.ComponentVerifyTicket) {
+                ticket = result.xml.ComponentVerifyTicket[0];
+                redisClient.setex('component_verify_ticket', 7000, ticket);
+                console.log(`[${new Date()}] ComponentVerifyTicket已更新：${ticket}`);
+            }
         });
 
         res.send('success').end();
@@ -206,6 +208,90 @@ module.exports = (router) => {
 
                 message.appId = req.params.appId;
 
+                const timestamp = (new Date().getTime() / 1000).toFixed();
+                const nonce = parseInt((Math.random() * 100000000000), 10);
+
+                if (message.toUserName === 'gh_3c884a361561') {
+                    if (message.msgType === 'event') {
+                        const encryptedText = cryptor.encrypt(`<xml>
+                            <ToUserName><![CDATA[${message.fromUserName}]]></ToUserName>
+                            <FromUserName><![CDATA[gh_3c884a361561]]></FromUserName>
+                            <CreateTime>${timestamp}</CreateTime>
+                            <MsgType><![CDATA[text]]></MsgType>
+                            <Content><![CDATA[${message.event}from_callback]]></Content>
+                        </xml>`);
+
+                        const replyXml = `<xml>
+                            <Encrypt><![CDATA[${encryptedText}]]></Encrypt>
+                            <MsgSignature><![CDATA[${cryptor.getSignature(timestamp, nonce, encryptedText)}]]></MsgSignature>
+                            <TimeStamp>${timestamp}</TimeStamp>
+                            <Nonce>${nonce}</Nonce>
+                        </xml>`;
+
+                        res.send(replyXml).end();
+                    }
+                    if (message.msgType === 'text') {
+                        
+                        if (message.content === 'TESTCOMPONENT_MSG_TYPE_TEXT') {
+
+                            const encryptedText = cryptor.encrypt(`<xml>
+                                <ToUserName><![CDATA[${message.fromUserName}]]></ToUserName>
+                                <FromUserName><![CDATA[gh_3c884a361561]]></FromUserName>
+                                <CreateTime>${(new Date().getTime() / 1000).toFixed()}</CreateTime>
+                                <MsgType><![CDATA[text]]></MsgType>
+                                <Content><![CDATA[TESTCOMPONENT_MSG_TYPE_TEXT_callback]]></Content>
+                            </xml>`);
+
+                            const replyXml = `<xml>
+                                <Encrypt><![CDATA[${encryptedText}]]></Encrypt>
+                                <MsgSignature><![CDATA[${cryptor.getSignature(timestamp, nonce, encryptedText)}]]></MsgSignature>
+                                <TimeStamp>${timestamp}</TimeStamp>
+                                <Nonce>${nonce}</Nonce>
+                            </xml>`;
+
+                            res.send(replyXml).end();
+
+                            return;
+                        }
+
+                        const match = message.content.match(/^QUERY_AUTH_CODE\:(.*?)$/);
+                        
+                        if (match) {
+                            const wechatAuth = WechatAuth();
+                            const queryAuthCode = match[1];
+                            wechatAuth.getAuthToken(queryAuthCode, function(err, result) {
+                                const authorizationInfo = result.authorization_info;
+                                const appId = authorizationInfo.authorizer_appid;
+                                const accessToken = authorizationInfo.authorizer_access_token;
+                                const refreshToken = authorizationInfo.authorizer_refresh_token;
+                                const encryptedText = cryptor.encrypt(`<xml>
+                                    <ToUserName><![CDATA[${message.fromUserName}]]></ToUserName>
+                                    <FromUserName><![CDATA[gh_3c884a361561]]></FromUserName>
+                                    <CreateTime>${(new Date().getTime() / 1000).toFixed()}</CreateTime>
+                                    <MsgType><![CDATA[text]]></MsgType>
+                                    <Content><![CDATA[]]></Content>
+                                </xml>`);
+
+                                const replyXml = `<xml>
+                                    <Encrypt><![CDATA[${encryptedText}]]></Encrypt>
+                                    <MsgSignature><![CDATA[${cryptor.getSignature(timestamp, nonce, encryptedText)}]]></MsgSignature>
+                                    <TimeStamp>${timestamp}</TimeStamp>
+                                    <Nonce>${nonce}</Nonce>
+                                </xml>`;
+
+                                res.send(replyXml).end();
+
+                                setTimeout(() => {
+                                    WechatApi(appId, accessToken).then(wechatApi => {
+                                        wechatApi.sendText(message.fromUserName, `${queryAuthCode}_from_api`);
+                                    });
+                                }, 1000);
+                            });
+                        }
+                    }
+                    return;
+                }
+
                 message.toOpenId = message.toUserName;
                 message.fromOpenId = message.fromUserName;
                 message.type = message.msgType;
@@ -228,7 +314,7 @@ module.exports = (router) => {
                 console.log(`[${new Date()}] 收到微信消息`, wechatMessage);
             });
 
-            res.send('success').end();
+            // res.send('success').end();
         }
         else {
             WechatApi(req.params.appId).then(wechatApi => {
