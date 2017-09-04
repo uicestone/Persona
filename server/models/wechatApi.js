@@ -9,6 +9,8 @@ const postJSON = util.postJSON;
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
+bluebird.promisifyAll(WechatAuth);
+bluebird.promisifyAll(WechatApi);
 
 const redisClient = redis.createClient();
 
@@ -105,44 +107,24 @@ WechatApi.prototype.massSendTextByTag = function (content, receivers, callback) 
     this.massSendByTag(opts, receivers, callback);
 };
 
-module.exports = (appId) => {
-
-    let wechat;
-
-    return Wechat.findOne({appId: appId}).exec()
-
-    .then(w => {
-
-        if (!w) {
-            throw 'Wechat App ID not found';
+module.exports = async (appId, accessToken) => {
+    
+    if (!accessToken) {
+        const wechat = await Wechat.findOne({appId: appId});
+        
+        if (!wechat) {
+            throw 'Wechat App ID not found'; 
         }
 
-        wechat = w;
-        return redisClient.getAsync(`authorizer_access_token_${wechat.appId}`);
-    })
-    .then(accessToken => {
+        let accessToken = await redisClient.getAsync(`authorizer_access_token_${wechat.appId}`);
 
-        if (accessToken) {
-            return accessToken;
-        }
-        else {
+        if (!accessToken) {
             const wechatAuth = WechatAuth();
-            return new Promise((resolve, reject) => {
-                wechatAuth.refreshAuthToken(wechat.appId, wechat.refreshToken, function(err, result) {
-                    
-                    if (err) {
-                        reject(err);
-                    }
-
-                    WechatAuth.saveAuthorizerAccessToken(wechat.appId, result.authorizer_access_token, result.expires_in);
-                    resolve(result.authorizer_access_token);
-                });
-            });
+            const result = await wechatAuth.refreshAuthTokenAsync(wechat.appId, wechat.refreshToken);
+            accessToken = result.authorizer_access_token;
+            WechatAuth.saveAuthorizerAccessToken(wechat.appId, result.authorizer_access_token, result.expires_in);
         }
+    }
 
-    }).then(accessToken => {
-        return new WechatApi(wechat.appId, {authorizer_access_token: accessToken});
-    }).catch(err => {
-        console.error(err);
-    });
+    return new WechatApi(appId, {authorizer_access_token: accessToken});
 };
