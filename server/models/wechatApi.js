@@ -9,8 +9,6 @@ const postJSON = util.postJSON;
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
-bluebird.promisifyAll(WechatAuth);
-bluebird.promisifyAll(WechatApi);
 
 const redisClient = redis.createClient();
 
@@ -120,9 +118,10 @@ module.exports = async (appId, accessToken) => {
 
         if (!accessToken) {
             const wechatAuth = WechatAuth();
-            const result = await wechatAuth.refreshAuthTokenAsync(wechat.appId, wechat.refreshToken);
-            accessToken = result.authorizer_access_token;
-            WechatAuth.saveAuthorizerAccessToken(wechat.appId, result.authorizer_access_token, result.expires_in);
+            wechatAuth.refreshAuthToken(wechat.appId, wechat.refreshToken, function (err, result) {
+                accessToken = result.authorizer_access_token;
+                WechatAuth.saveAuthorizerAccessToken(wechat.appId, result.authorizer_access_token, result.expires_in);
+            });
         }
     }
 
