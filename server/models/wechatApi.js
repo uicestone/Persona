@@ -118,10 +118,9 @@ module.exports = async (appId, accessToken) => {
 
         if (!accessToken) {
             const wechatAuth = WechatAuth();
-            wechatAuth.refreshAuthToken(wechat.appId, wechat.refreshToken, function (err, result) {
-                accessToken = result.authorizer_access_token;
-                WechatAuth.saveAuthorizerAccessToken(wechat.appId, result.authorizer_access_token, result.expires_in);
-            });
+            const result = await wechatAuth.refreshAuthTokenAsync(wechat.appId, wechat.refreshToken);
+            accessToken = result.authorizer_access_token;
+            WechatAuth.saveAuthorizerAccessToken(wechat.appId, result.authorizer_access_token, result.expires_in);
         }
     }
 

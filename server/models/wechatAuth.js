@@ -1,5 +1,8 @@
-const WechatAuth = require('wechat-auth');
+const bluebird = require('bluebird');
 const redisClient = require('redis').createClient();
+const WechatAuth = require('wechat-auth');
+
+bluebird.promisifyAll(WechatAuth.prototype);
 
 /*
  * 获取全局component_verify_ticket的方法
