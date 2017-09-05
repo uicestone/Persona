@@ -114,7 +114,7 @@ module.exports = async (appId, accessToken) => {
             throw 'Wechat App ID not found'; 
         }
 
-        let accessToken = await redisClient.getAsync(`authorizer_access_token_${wechat.appId}`);
+        accessToken = await redisClient.getAsync(`authorizer_access_token_${wechat.appId}`);
 
         if (!accessToken) {
             const wechatAuth = WechatAuth();
