@@ -378,7 +378,7 @@
                         {
                             name: '跳出率',
                             type: 'bar',
-                            data: kpiByChannels.register.map(function (escapeRatePerChannel) {
+                            data: kpiByChannels.escape.map(function (escapeRatePerChannel) {
                                 var count = escapeRatePerChannel.count;
                                 var uv = kpiByChannels.uv.filter(function (uvPerChannel) {
                                     return uvPerChannel._id._id === escapeRatePerChannel._id._id;
