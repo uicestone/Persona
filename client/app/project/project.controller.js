@@ -184,6 +184,7 @@
 
             $scope.getKpiByChannels = function () {projectService.getKpiByChannels(angular.extend($scope.queryKpi, {id:$route.current.params.id})).$promise.then(function(kpiByChannels) {
 
+                if (kpiByChannels.uv && kpiByChannels.uv.length) {
                 $scope.uvByChannelsChart.options = {
                     title : {
                         text: 'UV',
@@ -228,7 +229,9 @@
                         }
                     ]
                 };
+                }
 
+                if (kpiByChannels.pv && kpiByChannels.pv.length) {
                 $scope.pvByPage = {};
 
                 kpiByChannels.pv.forEach(function (channel) {
@@ -294,7 +297,9 @@
                         }
                     })
                 };
+                }
 
+                if (kpiByChannels.stay && kpiByChannels.stay.length) {
                 $scope.stayingTimeByChannelsChart.options = {
                     title : {
                         text: '平均访问时长',
@@ -339,7 +344,9 @@
                         }
                     ]
                 };
+                }
 
+                if (kpiByChannels.escape && kpiByChannels.escape.length) {
                 $scope.escapeRateByChannelsChart.options = {
                     title : {
                         text: '跳出率',
@@ -388,7 +395,9 @@
                         }
                     ]
                 };
+                }
 
+                if (kpiByChannels.register && kpiByChannels.register.length) {
                 $scope.registersByChannelsChart.options = {
                     title : {
                         text: '获取用户数',
@@ -433,7 +442,9 @@
                         }
                     ]
                 };
+                }
 
+                if (kpiByChannels.share && kpiByChannels.share.length) {
                 $scope.sharesByPage = {};
 
                 kpiByChannels.share.forEach(function (channel) {
@@ -499,7 +510,9 @@
                         }
                     })
                 };
+                }
 
+                if (kpiByChannels.uv && kpiByChannels.uv.length && kpiByChannels.register && kpiByChannels.register.length) {
                 $scope.registerRateByChannelsChart.options = {
                     title : {
                         text: '获取用户率',
@@ -548,7 +561,9 @@
                         }
                     ]
                 };
+                }
 
+                if (kpiByChannels.order && kpiByChannels.order.length) {
                 $scope.ordersByChannelsChart.options = {
                     title : {
                         text: '下单用户数',
@@ -593,7 +608,9 @@
                         }
                     ]
                 };
+                }
 
+                if (kpiByChannels.pay && kpiByChannels.pay.length) {
                 $scope.paymentsByChannelsChart.options = {
                     title : {
                         text: '付款用户数',
@@ -638,7 +655,9 @@
                         }
                     ]
                 };
+                }
 
+                if (kpiByChannels.uv && kpiByChannels.uv.length && kpiByChannels.pay && kpiByChannels.pay.length) {
                 $scope.paymentRateByChannelsChart.options = {
                     title : {
                         text: '下单用户付款率',
@@ -687,10 +706,12 @@
                         }
                     ]
                 };
+                }
             })};
 
             $scope.getKpiByDate = function () {projectService.getKpiByDate(angular.extend($scope.queryKpi, {id:$route.current.params.id})).$promise.then(function(kpiByDate) {
 
+                if (kpiByDate[0].pv !== null) {
                 $scope.viewsByDateChart.options = {
                     title : {
                         text: '受访情况 - 日期分布',
@@ -746,7 +767,9 @@
                     ],
                     color: $scope.chartColors
                 };
+                }
 
+                if (kpiByDate[0].stayingTime !== null) {
                 $scope.stayingTimeByDateChart.options = {
                     title : {
                         text: '访问时长 - 日期分布',
@@ -790,7 +813,9 @@
                     ],
                     color: $scope.chartColors.slice(1)
                 };
+                }
 
+                if (kpiByDate[0].shares !== null) {
                 $scope.sharesByDateChart.options = {
                     title : {
                         text: '分享数 - 日期分布',
@@ -833,7 +858,9 @@
                     ],
                     color: $scope.chartColors.slice(2)
                 };
+                }
 
+                if (kpiByDate[0].escapeRate !== null) {
                 $scope.escapeRateByDateChart.options = {
                     title : {
                         text: '跳出率 - 日期分布',
@@ -881,7 +908,9 @@
                     ],
                     color: $scope.chartColors.slice(3)
                 };
+                }
 
+                if (kpiByDate[0].registers !== null) {
                 $scope.registersByDateChart.options = {
                     title : {
                         text: '获取用户数 - 日期分布',
@@ -923,10 +952,12 @@
                     ],
                     color: $scope.chartColors.slice(4)
                 };
+                }
             })};
 
             $scope.getKpiByRegion = function () {projectService.getKpiByRegion(angular.extend($scope.queryKpi, {id:$route.current.params.id})).$promise.then(function(kpiByRegion) {
 
+                if (kpiByRegion[0].register !== null) {
                 $scope.registersByRegionChart.options = {
                     title: {
                         text: '获取用户数 - 区域分布',
@@ -974,10 +1005,12 @@
                         }
                     ]
                 };
+                }
             })};
 
             $scope.getKpiByDevice = function () {projectService.getKpiByDevice(angular.extend($scope.queryKpi, {id:$route.current.params.id})).$promise.then(function(kpiByDevice) {
 
+                if (kpiByDevice[0].uv !== null) {
                 $scope.uvByDeviceChart.options = {
                     title : {
                         text: '访问数 - 设备分布',
@@ -1017,46 +1050,7 @@
                         }
                     ]
                 };
-
-                $scope.convertsByDeviceChart.options = {
-                    title : {
-                        text: '转化率 - 设备分布',
-                        x:'center'
-                    },
-                    tooltip : {
-                        trigger: 'item',
-                        formatter: "{a} <br/>{b} : {c} ({d}%)"
-                    },
-                    legend: {
-                        orient : 'vertical',
-                        x : 'left',
-                        data: kpiByDevice.map(function(kpiPerDevice) {
-                            return kpiPerDevice._id;
-                        })
-                    },
-                    toolbox: {
-                        show : true,
-                        feature : {
-                            restore : {show: true, title: "刷新"},
-                            saveAsImage : {show: true, title: "保存为图片"}
-                        }
-                    },
-                    calculable : true,
-                    series : [
-                        {
-                            name:'设备',
-                            type:'pie',
-                            radius : '55%',
-                            center: ['50%', '60%'],
-                            data: kpiByDevice.map(function(kpiPerDevice) {
-                                return {
-                                    name: kpiPerDevice._id,
-                                    value: kpiPerDevice.converts
-                                };
-                            })
-                        }
-                    ]
-                };
+                }
             })};
 
             $scope.getKpiByChannels(); $scope.getKpiByDate(); $scope.getKpiByRegion(); $scope.getKpiByDevice();          

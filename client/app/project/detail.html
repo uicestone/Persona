@@ -173,27 +173,8 @@
                                 <md-button type="submit" class="md-primary md-raised" style="min-height:29px;min-width:70px"><md-icon>search</md-icon></md-button>
                             </md-input-container>
                         </form>
-                        <!-- <div layout="row">
-                            <table class="table table-hover table-bordered" flex="80" flex-offset="10" style="background:white">
-                                <thead>
-                                    <tr>
-                                        <th>监控字段</th>
-                                        <th ng-repeat="channel in project.channels">{{ channel.name }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="kpi in project.kpis">
-                                        <td>{{ kpi.type }}</td>
-                                        <td ng-repeat="channel in project.channels">
-                                            <span ng-if="kpi.type.search('率')>-1">{{ kpiByChannelsTree[channel.name][kpi.type] * 100 | number:1 }}%</span>
-                                            <span ng-if="kpi.type.search('率')==-1">{{ kpiByChannelsTree[channel.name][kpi.type] | number }}</span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> -->
                         <div class="row">
-                            <div class="col-md-6">
+                            <div ng-show="uvByChannelsChart.options" class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
                                     <div class="panel-heading">独立访客数</div>
@@ -202,7 +183,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div ng-show="pvByChannelsChart.options" class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
                                     <div class="panel-heading">页面访问数</div>
@@ -211,7 +192,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div ng-show="stayingTimeByChannelsChart.options" class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
                                     <div class="panel-heading">平均访问时长</div>
@@ -220,7 +201,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div ng-show="escapeRateByChannelsChart.options" class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
                                     <div class="panel-heading">跳出率</div>
@@ -229,7 +210,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div ng-show="registersByChannelsChart.options" class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
                                     <div class="panel-heading">获取用户数</div>
@@ -238,7 +219,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div ng-show="registerRateByChannelsChart.options" class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
                                     <div class="panel-heading">获取用户率</div>
@@ -247,7 +228,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div ng-show="sharesByChannelsChart.options" class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
                                     <div class="panel-heading">分享数</div>
@@ -256,7 +237,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div ng-show="ordersByChannelsChart.options" class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
                                     <div class="panel-heading">下单用户数</div>
@@ -265,7 +246,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div ng-show="paymentsByChannelsChart.options" class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
                                     <div class="panel-heading">付款用户数</div>
@@ -274,7 +255,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div ng-show="paymentRateByChannelsChart.options" class="col-md-6">
                                 <div class="panel panel-default panel-minimal">
                                     <div class="divider divider-md"></div>
                                     <div class="panel-heading">下单用户付款率</div>
@@ -340,10 +321,10 @@
                                     <div class="divider divider-md"></div>
                                     <div class="panel-heading">受访情况</div>
                                     <div class="panel-body">
-                                        <div data-echarts data-options="viewsByDateChart.options" style="height: 350px"></div>
-                                        <div data-echarts data-options="stayingTimeByDateChart.options" style="height: 350px"></div>
-                                        <div data-echarts data-options="sharesByDateChart.options" style="height: 350px"></div>
-                                        <div data-echarts data-options="escapeRateByDateChart.options" style="height: 350px"></div>
+                                        <div ng-show="viewsByDateChart.options" data-echarts data-options="viewsByDateChart.options" style="height: 350px"></div>
+                                        <div ng-show="stayingTimeByDateChart.options" data-echarts data-options="stayingTimeByDateChart.options" style="height: 350px"></div>
+                                        <div ng-show="sharesByDateChart.options" data-echarts data-options="sharesByDateChart.options" style="height: 350px"></div>
+                                        <div ng-show="escapeRateByDateChart.options" data-echarts data-options="escapeRateByDateChart.options" style="height: 350px"></div>
                                     </div>
                                 </div>
                             </div>
@@ -354,9 +335,9 @@
                                     <div class="divider divider-md"></div>
                                     <div class="panel-heading">获客情况</div>
                                     <div class="panel-body">
-                                        <div data-echarts data-options="registersByDateChart.options" style="height: 350px"></div>
-                                        <div data-echarts data-options="registersByRegionChart.options" style="height: 350px"></div>
-                                        <div data-echarts data-options="registersByDeviceChart.options" style="height: 350px"></div>
+                                        <div ng-show="registersByDateChart.options" data-echarts data-options="registersByDateChart.options" style="height: 350px"></div>
+                                        <div ng-show="registersByRegionChart.options" data-echarts data-options="registersByRegionChart.options" style="height: 350px"></div>
+                                        <div ng-show="registersByDeviceChart.options" data-echarts data-options="registersByDeviceChart.options" style="height: 350px"></div>
                                     </div>
                                 </div>
                             </div>
