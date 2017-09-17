@@ -1,7 +1,7 @@
 const authenticate = require('../middlewares/authenticate');
 const cors = require('cors');
 
-module.exports = (app, router) => {
+module.exports = (app, router, wss) => {
     // register routes
     router = require('./brand.js')(router);
     router = require('./channel.js')(router);
@@ -9,7 +9,7 @@ module.exports = (app, router) => {
     router = require('./customerField.js')(router);
     router = require('./customerGroup.js')(router);
     router = require('./customerReaching.js')(router);
-    router = require('./project.js')(router);
+    router = require('./project.js')(router, wss);
     router = require('./user.js')(router);
     router = require('./auth.js')(router);
     router = require('./wechat.js')(router);

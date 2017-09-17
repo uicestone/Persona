@@ -6,6 +6,7 @@ const campaignSchema = new Schema({
     fromChannel: {_id: Schema.Types.ObjectId, name: String},
     time: Date,
     device: String,
+    ip: String,
     mobile: String,
     email: String,
     sex: String,

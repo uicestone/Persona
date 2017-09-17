@@ -1,9 +1,15 @@
+const bluebird = require('bluebird');
+const redisClient = require('redis').createClient();
 const Project = require('../models/project.js');
 const Campaign = require('../models/campaign.js');
 const Channel = require('../models/channel.js');
 const Types = require('mongoose').Types;
+const Url = require('url');
+const QueryString = require('querystring');
 
-module.exports = (router) => {
+bluebird.promisifyAll(redisClient);
+
+module.exports = (router, wss) => {
     // Project CURD
     router.route('/project')
 
@@ -465,7 +471,7 @@ module.exports = (router) => {
                 return res.status(400).send({message: 'Empty input.'});
             }
 
-            record.createdAt = record.createdAt ? new Date(record.createdAt) : new Date();
+            record.time = record.time ? new Date(record.time) : new Date();
             record.project = req.params.projectId;
 
             let query;
@@ -509,6 +515,124 @@ module.exports = (router) => {
                 return res.status(400).send({message: err});
             });
 
+        });
+
+        wss.on('connection', async (ws, req) => {
+            
+            const connectedAt = new Date();
+            const projectId = req.url.match(/project\/(.*?)(\?.*?)?$/)[1];
+            const url = Url.parse(req.url);
+            const query = QueryString.parse(url.query);
+
+            try {
+
+                if (projectId && !Types.ObjectId.isValid(projectId)) {
+                    throw 'Invalid Project ID';
+                }
+
+                if (query.channel && !Types.ObjectId.isValid(query.channel)) {
+                    throw 'Invalid Channel ID';
+                }
+
+                if (!query.tempId && !query.openId) {
+                    throw 'No tempId or openId is defined';
+                }
+
+                const project = await Project.findById(projectId);
+
+                if (!project) {
+                    throw `Project not found: ${projectId}`;
+                }
+
+                let channel;
+
+                if (query.channel) {
+                    channel = await Channel.findById(query.channel);
+                }
+                else if (query.spid) {
+                    channel = await Channel.findOne({spid: query.spid});
+                }
+
+                if (!channel) {
+                    throw `Channel not found: ${query.channel || query.spid}`;
+                }
+
+                ws.on('message', function incoming(message) {
+                    console.log('received: %s', message);
+                    ws.send(`echo ${message}`);
+                });
+
+                ws.on('close', async () => {
+                    
+                    const timeStay = new Date() - connectedAt;
+
+                    // redis key 'last_seen_{tempId|openId}'
+                    // value '{"recordId":"{ObjectId}","time":"1500000000000"}'
+                    let lastSeenOpenId, lastSeenTempId, lastSeenTime = null, lastSeenRecordId;
+
+                    if (query.openId) {
+                        lastSeenOpenId = JSON.parse(await redisClient.getAsync(`last_seen_${query.openId}`));
+                    }
+
+                    if (query.tempId) {
+                        lastSeenTempId = JSON.parse(await redisClient.getAsync(`last_seen_${query.tempId}`));
+                    }
+
+                    if (lastSeenTempId) {
+                        lastSeenTime = lastSeenTempId.time;
+                        lastSeenRecordId = lastSeenTempId.recordId;
+                    }
+
+                    if (lastSeenOpenId
+                         && (!lastSeenTempId || lastSeenTempId.time < lastSeenOpenId.time)) {
+                        lastSeenTime = lastSeenOpenId.time;
+                        lastSeenRecordId = lastSeenOpenId.recordId;
+                    }
+
+                    let campaignRecord;
+
+                    // We find the previous stayingTime record and update it
+                    if (lastSeenRecordId) {
+                        campaignRecord = await Campaign.findById(lastSeenRecordId);
+                        // console.log(campaignRecord.stayingTime, new Date() - campaignRecord.time);
+                        campaignRecord.stayingTime = campaignRecord.stayingTime + (new Date() - campaignRecord.time)
+                        campaignRecord.time = new Date();
+                        // console.log(`updating stayingTime ${campaignRecord.stayingTime}`);
+                    }
+                    // otherwise we create a stayingTime record if we last saw this user 15min ago
+                    else {
+                        campaignRecord = new Campaign({
+                            ip: req.connection.remoteAddress,
+                            time: new Date(),
+                            stayingTime: timeStay,
+                            project: project._id,
+                            fromChannel: {_id: channel._id, name: channel.name}
+                        });
+                        // console.log(`creating stayingTime ${timeStay}`);
+                    }
+
+                    const lastSeen = JSON.stringify({recordId: campaignRecord._id, time: new Date().getTime()});
+
+                    if (query.openId) {
+                        campaignRecord.openId = query.openId;
+                        redisClient.setexAsync(`last_seen_${query.openId}`, 300, lastSeen);
+                    }
+
+                    if (query.tempId) {
+                        campaignRecord.tempId = query.tempId;
+                        redisClient.setexAsync(`last_seen_${query.tempId}`, 300, lastSeen);
+                    }
+
+                    campaignRecord.save();
+                });
+
+            }
+            catch (e) {
+                setTimeout(() => {
+                    console.error(`${e}, closing WebSocket from ${req.connection.remoteAddress}`)
+                    ws.close(1003, e);
+                });
+            }
         });
 
     return router;
