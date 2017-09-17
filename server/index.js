@@ -9,13 +9,13 @@ const http        = require('http');
 const app         = express();
 const router      = express.Router();
 const httpServer  = http.createServer(app);
-const io          = require('socket.io')(httpServer);
+const env         = require('node-env-file');
+const WebSocket   = require('ws');
 
-const env 		  = require('node-env-file');
-
-env(`${__dirname}/.env`);
+env(`${__dirname}/../.env`);
 
 const portHttp    = process.env.PORT_HTTP;
+const wss         = new WebSocket.Server({server: httpServer});
 mongoose.connect(process.env.MONGODB_URL);
 mongoose.Promise = global.Promise;
 
@@ -26,13 +26,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.xml());
 
-require('./server/apis')(app, router);
+require('./apis')(app, router, wss);
 
 app.use(express.static('dist'));
 
 app.use('/', (req, res) => {
     if (req.accepts(['html', 'json']) === 'html') {
-        res.sendFile(`${__dirname}/dist/index.html`);
+        res.sendFile(`${__dirname}/../dist/index.html`);
     }
     else {
         res.sendStatus(404);
@@ -41,4 +41,20 @@ app.use('/', (req, res) => {
 
 httpServer.listen(portHttp, () => {
     console.log(`[${new Date()}] HTTP server listening port:${portHttp}`);
+});
+
+wss.on('connection', (ws, req) => {
+    
+    console.log(`[${new Date()}] WebSocket connected.`, req.connection.remoteAddress, req.url);
+    
+    ws.send('Welcome to Persona!');
+
+    ws.on('message', message => {
+        console.log('received: %s', message);
+        ws.send(`echo ${message}`);
+    });
+
+    ws.on('close', () => {
+        console.log(`[${new Date()}] WebSocket disconnected.`, req.connection.remoteAddress, req.url);
+    });
 });
