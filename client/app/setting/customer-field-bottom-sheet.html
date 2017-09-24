@@ -10,20 +10,20 @@
                 <label>字段标签</label>
                 <input ng-model="customerField.label">
             </md-input-container>
-            <md-input-container ng-if="$parent.$parent.user.can('set-user')">
-                <md-checkbox ng-model="customerField.reserved">保留字段</md-checkbox>
-            </md-input-container>
-            <md-input-container ng-if="$parent.$parent.user.can('set-user') && !customerField.reserved">
-                <label>品牌</label>
-                <input ng-model="customerField.brand">
-            </md-input-container>
-            <md-input-container ng-if="$parent.$parent.user.can('set-user') && !customerField.reserved">
+            <md-input-container>
                 <label>类型</label>
                 <md-select ng-model="customerField.type">
                     <md-option value="char">特征字段</md-option>
                     <md-option value="act">行为字段</md-option>
                     <md-option value="calc">计算字段</md-option>
                 </md-select>
+            </md-input-container>
+            <md-input-container ng-if="$parent.$parent.user.can('set-user')">
+                <md-checkbox ng-model="customerField.reserved">保留字段</md-checkbox>
+            </md-input-container>
+            <md-input-container ng-if="$parent.$parent.user.can('set-user') && !customerField.reserved">
+                <label>品牌</label>
+                <input ng-model="customerField.brand">
             </md-input-container>
         </div>
         <div flex layout="row" layout-align="end start">
