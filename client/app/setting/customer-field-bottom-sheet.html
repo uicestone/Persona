@@ -17,6 +17,14 @@
                 <label>品牌</label>
                 <input ng-model="customerField.brand">
             </md-input-container>
+            <md-input-container ng-if="$parent.$parent.user.can('set-user') && !customerField.reserved">
+                <label>类型</label>
+                <md-select ng-model="customerField.type">
+                    <md-option value="char">特征字段</md-option>
+                    <md-option value="act">行为字段</md-option>
+                    <md-option value="calc">计算字段</md-option>
+                </md-select>
+            </md-input-container>
         </div>
         <div flex layout="row" layout-align="end start">
             <div><md-button ng-click="updateCustomerField(customerField)">保存</md-button></div>

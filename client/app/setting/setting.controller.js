@@ -20,18 +20,34 @@
 
         $scope.query = {page: 1, limit: 20};
 
+        function ucfirst(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
         $scope.getChannels = function() {
             $scope.promise = channelService.query($scope.query).$promise
-                .then(function(channels) {
-                    $scope.channels = channels;
-                });
+            .then(function(channels) {
+                $scope.channels = channels;
+            });
         };
 
-        $scope.getCustomerFields = function() {
-            $scope.promise = customerFieldService.query($scope.query).$promise
-                .then(function(channels) {
-                    $scope.customerFields = channels;
-                });
+        $scope.getCustomerFields = function(type) {
+            $scope['promiseCustomer' + ucfirst(type) + 'Fields'] = customerFieldService.query(angular.extend({type: type}, $scope.query)).$promise
+            .then(function(customerFields) {
+                $scope['customer' + ucfirst(type) + 'Fields'] = customerFields;
+            });
+        };
+
+        $scope.getCustomerCharFields = function () {
+            $scope.getCustomerFields('char');
+        };
+
+        $scope.getCustomerActFields = function () {
+            $scope.getCustomerFields('act');
+        };
+
+        $scope.getCustomerCalcFields = function () {
+            $scope.getCustomerFields('calc');
         };
 
         $scope.getUsers = function() {
@@ -42,7 +58,7 @@
         };
 
         switch ($location.path()) {
-            case '/setting/data': $scope.getCustomerFields(); break;
+            case '/setting/data': $scope.getCustomerCharFields(); $scope.getCustomerActFields(); $scope.getCustomerCalcFields(); break;
             case '/setting/channel': $scope.getChannels(); break;
             case '/setting/user': $scope.getUsers(); break;
         }
@@ -81,13 +97,17 @@
             }
         };
 
-        $scope.editCustomerField = function(customerField) {
+        $scope.editCustomerField = function(customerField, type) {
             
             if(!customerField) {
                 customerField = new customerFieldService();
             }
 
             $scope.customerField = customerField;
+
+            if (type) {
+                $scope.customerField.type = type;
+            }
 
             $mdBottomSheet.show({
                 templateUrl: 'app/setting/customer-field-bottom-sheet.html',
@@ -96,18 +116,30 @@
             });
         };
 
+        $scope.addCustomerField = function (type) {
+            $scope.editCustomerField(null, type);
+        };
+
         $scope.removeCustomerField = function(customerFieldToRemove) {
+
+            var customerFieldKeyName = 'customer' + ucfirst(customerFieldToRemove.type) + 'Fields';
+
+            if (!confirm ('确定要删除字段 ' + customerFieldToRemove.label)) {
+                return;
+            }
             customerFieldToRemove.$delete();
-            $scope.customerFields = $scope.customerFields.filter(function(customerField) {
+
+            $scope[customerFieldKeyName] = $scope[customerFieldKeyName].filter(function(customerField) {
                 return customerField._id !== customerFieldToRemove._id;
             });
         };
 
         $scope.updateCustomerField = function(customerField) {
+            var customerFieldKeyName = 'customer' + ucfirst(customerField.type) + 'Fields';
             $mdBottomSheet.hide();
             customerField.$save();
             if(!customerField._id) {
-                $scope.customerFields.push(customerField);
+                $scope[customerFieldKeyName].push(customerField);
             }
         };
 

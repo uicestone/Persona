@@ -67,7 +67,5 @@
     "wechat-crypto": "0.0.2",
     "ws": "^3.2.0"
   },
-  "optionalDependencies": {
-    "bufferutil": "^3.0.2"
-  }
+  "optionalDependencies": {}
 }
