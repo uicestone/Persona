@@ -34,7 +34,7 @@
 
         $scope.users = userService.query();
 
-        $scope.timelineStartDate = moment().startOf('year');
+        $scope.timelineStartDate = moment().startOf('quarter');
 
         $scope.$watch('timelineStartDate', function(timelineStartDate) {
             $scope.timelineEndDate = timelineStartDate.clone().endOf('quarter');
