@@ -415,7 +415,7 @@
                         x:'center'
                     },
                     legend: {
-                        data: ['场景关注', '场景扫码'],
+                        data: ['未关注用户关注数', '已关注用户扫码数'],
                         x: 'left'
                     },
                     tooltip : {
