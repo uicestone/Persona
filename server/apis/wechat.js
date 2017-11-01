@@ -320,7 +320,7 @@ module.exports = (router) => {
                 console.log(`[${new Date()}] 收到微信消息`, wechatMessage);
             });
 
-            // res.send('success').end();
+            res.send('success').end();
         }
         else {
             WechatApi(req.params.appId).then(wechatApi => {
