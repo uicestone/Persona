@@ -16,7 +16,7 @@ env(`${__dirname}/../.env`);
 
 const portHttp    = process.env.PORT_HTTP;
 const wss         = new WebSocket.Server({server: httpServer});
-mongoose.connect(process.env.MONGODB_URL);
+mongoose.connect(process.env.MONGODB_URL, {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
 require('body-parser-xml')(bodyParser);
