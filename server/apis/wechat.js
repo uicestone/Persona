@@ -128,6 +128,12 @@ module.exports = (router) => {
     .get((req, res) => {        
         const wechatAuth = WechatAuth();
         wechatAuth.getOAuthAccessToken(req.query.appid, req.query.code, function(err, reply) {
+
+            if (err) {
+                console.error('wechat oauth error', err);
+                return;
+            }
+
             const redirectUrl = new url.URL(req.query.state);
             redirectUrl.searchParams.set('openid', reply.openid);
             res.redirect(redirectUrl.toString());
