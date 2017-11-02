@@ -183,7 +183,7 @@ module.exports = (router) => {
         WechatApi(req.params.appId).then(wechatApi => {
             wechatApi.getJsConfig({
                 debug: req.query.debug,
-                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseWXPay'],
+                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseWXPay', 'hideMenuItems', 'showMenuItems'],
                 url: req.headers.referer
             }, (err, result) => {
                 res.json(result);
