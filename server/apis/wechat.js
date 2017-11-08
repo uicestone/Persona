@@ -130,7 +130,7 @@ module.exports = (router) => {
         wechatAuth.getOAuthAccessToken(req.query.appid, req.query.code, function(err, reply) {
 
             if (err) {
-                console.error('wechat oauth error', err);
+                console.error(`AppID ${req.query.appid}: wechat oauth error`, err);
                 return;
             }
 

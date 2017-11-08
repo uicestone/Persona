@@ -554,7 +554,7 @@ module.exports = (router, wss) => {
                 }
 
                 if (!channel) {
-                    throw `Channel not found: ${query.channel || query.spid}`;
+                    throw `Project ${projectId}: Channel not found: ${query.channel || query.spid}`;
                 }
 
                 ws.on('message', function incoming(message) {
