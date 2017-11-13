@@ -22,10 +22,10 @@ module.exports = (router) => {
             }).catch(err => {
                 if (err.code === 11000) {
                     res.status(409).json({message:'无法创建重复数据'});
-                    console.error(err.message);
+                    console.error(new Date(), err.message);
                 }
                 else {
-                    console.error(err);
+                    console.error(new Date(), err);
                     res.status(500);
                 }
             });
@@ -221,7 +221,7 @@ module.exports = (router) => {
             Customer.findById(req.params.customerId).then(customer => {
                 res.json(customer);
             }).catch(err => {
-                console.error(err);
+                console.error(new Date(), err);
                 res.status(500);
             });
         })
@@ -230,7 +230,7 @@ module.exports = (router) => {
             Customer.findByIdAndUpdate(req.params.customerId, req.body, {new: true}).then(customer => {
                 res.json(customer);
             }).catch(err => {
-                console.error(err);
+                console.error(new Date(), err);
                 res.status(500);
             });
         })
@@ -240,7 +240,7 @@ module.exports = (router) => {
             Customer.findByIdAndRemove(req.params.customerId).then(() => {
                 res.end();
             }).catch(err => {
-                console.error(err);
+                console.error(new Date(), err);
                 res.status(500);
             });
         });

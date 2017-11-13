@@ -55,7 +55,7 @@ connection.query(
         })
 
         .catch(err => {
-            console.error(err);
+            console.error(new Date(), err);
             process.exit();
         });
     }

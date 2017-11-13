@@ -15,10 +15,10 @@ module.exports = (router) => {
             }).catch(err => {
                 if (err.code === 11000) {
                     res.status(409).json({message:'无法创建重复数据'});
-                    console.error(err.message);
+                    console.error(new Date(), err.message);
                 }
                 else {
-                    console.error(err);
+                    console.error(new Date(), err);
                     res.status(500);
                 }
             });
@@ -76,7 +76,7 @@ module.exports = (router) => {
             Channel.findById(req.params.channelId).then(channel => {
                 res.json(channel);
             }).catch(err => {
-                console.error(err);
+                console.error(new Date(), err);
                 res.status(500);
             });
         })
@@ -85,7 +85,7 @@ module.exports = (router) => {
             Channel.findByIdAndUpdate(req.params.channelId, req.body, {new: true}).then(channel => {
                 res.json(channel);
             }).catch(err => {
-                console.error(err);
+                console.error(new Date(), err);
                 res.status(500);
             });
         })
@@ -95,7 +95,7 @@ module.exports = (router) => {
             Channel.findByIdAndRemove(req.params.channelId).then(() => {
                 res.end();
             }).catch(err => {
-                console.error(err);
+                console.error(new Date(), err);
                 res.status(500);
             });
         });

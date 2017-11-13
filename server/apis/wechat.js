@@ -114,7 +114,7 @@ module.exports = (router) => {
         else {
             wechatAuth.getPreAuthCode((err, reply) => {
                 if (err) {
-                    console.error(err);
+                    console.error(new Date(), err);
                     res.status(500).send(err);
                     return;
                 }
@@ -419,7 +419,7 @@ module.exports = (router) => {
                             syncFinalPromises.push(promise);
                         })
                         .catch(err => {
-                            console.error(err);
+                            console.error(new Date(), err);
                         });
                     });
 
@@ -429,7 +429,7 @@ module.exports = (router) => {
                 }
 
             }).catch(err => {
-                console.error(err);
+                console.error(new Date(), err);
             });
         }
     })
@@ -526,7 +526,7 @@ module.exports = (router) => {
             });
         })
         .catch(err => {
-            console.error(err);
+            console.error(new Date(), err);
         });
 
         function createTagAndInsertUsers (wechatApi, group, openIds) {
