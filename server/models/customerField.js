@@ -6,7 +6,8 @@ const customerFieldSchema = new Schema({
     label: String,
     reserved: Boolean,
     brand: String,
-    type: String // 'char', 'act' or 'calc'
+    type: String, // 'char', 'act' or 'calc'
+    remark: String
 });
 
 module.exports = mongoose.model('CustomerField', customerFieldSchema);

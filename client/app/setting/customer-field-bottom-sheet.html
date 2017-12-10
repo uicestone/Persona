@@ -26,6 +26,12 @@
                 <input ng-model="customerField.brand">
             </md-input-container>
         </div>
+        <div flex="30" layout="column">
+            <md-input-container>
+                <label>备注</label>
+                <textarea ng-model="customerField.remark"></textarea>
+            </md-input-container>
+        </div>
         <div flex layout="row" layout-align="end start">
             <div><md-button ng-click="updateCustomerField(customerField)">保存</md-button></div>
         </div>

@@ -20,6 +20,7 @@
                                         <tr md-row>
                                             <th md-column>字段名</th>
                                             <th md-column>字段标签</th>
+                                            <th md-column>备注</th>
                                             <th md-column>操作</th>
                                         </tr>
                                     </thead>
@@ -27,6 +28,7 @@
                                         <tr md-row ng-repeat="field in customerCharFields">
                                             <td md-cell>{{ field.key }}</td>
                                             <td md-cell>{{ field.label }}</td>
+                                            <td md-cell>{{ field.remark }}</td>
                                             <td md-cell>
                                                 <div class="label label-primary" ng-if="field.brand">{{ field.brand }}</div>
                                                 <div class="label label-default" ng-if="field.reserved">保留字段</div>
@@ -62,6 +64,7 @@
                                         <tr md-row>
                                             <th md-column>字段名</th>
                                             <th md-column>字段标签</th>
+                                            <th md-column>备注</th>
                                             <th md-column>操作</th>
                                         </tr>
                                     </thead>
@@ -69,6 +72,7 @@
                                         <tr md-row ng-repeat="field in customerActFields">
                                             <td md-cell>{{ field.key }}</td>
                                             <td md-cell>{{ field.label }}</td>
+                                            <td md-cell>{{ field.remark }}</td>
                                             <td md-cell>
                                                 <div class="label label-primary" ng-if="field.brand">{{ field.brand }}</div>
                                                 <div class="label label-default" ng-if="field.reserved">保留字段</div>
@@ -104,6 +108,7 @@
                                         <tr md-row>
                                             <th md-column>字段名</th>
                                             <th md-column>字段标签</th>
+                                            <th md-column>备注</th>
                                             <th md-column>操作</th>
                                         </tr>
                                     </thead>
@@ -111,6 +116,7 @@
                                         <tr md-row ng-repeat="field in customerCalcFields">
                                             <td md-cell>{{ field.key }}</td>
                                             <td md-cell>{{ field.label }}</td>
+                                            <td md-cell>{{ field.remark }}</td>
                                             <td md-cell>
                                                 <div class="label label-primary" ng-if="field.brand">{{ field.brand }}</div>
                                                 <div class="label label-default" ng-if="field.reserved">保留字段</div>
