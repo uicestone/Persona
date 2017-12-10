@@ -105,6 +105,9 @@ module.exports = (router, wss) => {
                     [req.query.orderBy]: (req.query.order === 'desc' || req.query.order === 'false' || Number(req.query.order) <= 0 ? 'desc' : 'asc')
                 });
             }
+            else {
+                query.sort({endDate:-1});
+            }
 
             query.count()
             .then((total) => {
