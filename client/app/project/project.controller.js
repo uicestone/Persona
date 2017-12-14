@@ -916,6 +916,12 @@
                         text: '获取用户数 - 日期分布',
                         x:'center'
                     },
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer : {
+                            type : 'shadow'
+                        }
+                    },
                     toolbox: {
                         show : true,
                         feature : {
