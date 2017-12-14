@@ -160,8 +160,8 @@ module.exports = (router, wss) => {
             });
         });
 
-    router.route('/project/:projectId/kpi-by-channels').get(async (req, res) => {
-
+    router.route('/project/:projectId/kpi').get(async (req, res) => {
+        
         const match = {
             project: Types.ObjectId(req.params.projectId)
         };
@@ -177,8 +177,47 @@ module.exports = (router, wss) => {
             match.time = matchTime;
         }
 
-        if (req.query.endDate) {
-            match.time.$lt = new Date(req.query.endDate);
+        const kpi = (await Campaign.aggregate([{
+            $match: match
+        }, {
+            $group: {
+                _id: true,
+                uniqueIds: {$addToSet: {$ifNull: ["$openId", "$tempId"]}},
+                registers: {$sum: {$cond: [{$or:["$mobile", "$registered"]}, 1, 0]}},
+                pv: {$sum: {$cond: ["$visited", 1, 0]}},
+                stayingTime: {$avg: {$cond: ["$stayingTime", "$stayingTime", null]}},
+                shares: {$sum: {$cond: ["$shared", 1, 0]}}
+            }
+        }, {
+            $project: {
+                uv: {$size: "$uniqueIds"},
+                pv: "$pv",
+                registers: "$registers",
+                stayingTime: "$stayingTime",
+                shares: "$shares"
+            }
+        }]))[0];
+
+        delete kpi._id;
+
+        res.json(kpi);
+    });
+
+    router.route('/project/:projectId/kpi-by-channels').get(async (req, res) => {
+
+        const match = {
+            project: Types.ObjectId(req.params.projectId)
+        };
+
+        if (req.query.startDate || req.query.endDate) {
+            const matchTime = {};
+            if (req.query.startDate) {
+                matchTime.$gte = new Date(req.query.startDate);
+            }
+            if (req.query.endDate) {
+                matchTime.$lt = new Date(req.query.endDate);
+            }
+            match.time = matchTime;
         }
 
         const uvByChannel = await Campaign.aggregate([{
