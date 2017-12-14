@@ -99,7 +99,7 @@
                                 </md-input-container>
                                 <md-input-container flex="1">
                                     <label>开始时间</label>
-                                    <md-datepicker ng-model="kpi.newTiming.startDate" md-min-date="project.startDate" md-max-date="project.endDate" md-hide-icons="calendar"></md-datepicker>
+                                    <md-datepicker ng-model="kpi.newTiming.startDate" md-min-date="kpi.timings[kpi.timings.length-1].startDate || project.startDate" md-max-date="project.endDate" md-hide-icons="calendar"></md-datepicker>
                                 </md-input-container>
                                 <md-input-container flex="1">
                                     <label>结束时间</label>
@@ -107,7 +107,7 @@
                                 </md-input-container>
                                 <md-slider-container flex>
                                     <span>完成率</span>
-                                    <md-slider min="0" max="100" ng-model="kpi.newTiming.percentage" aria-label="percentage" id="timing-percentage-slider-{{$index}}"></md-slider>
+                                    <md-slider min="{{ kpi.timings[kpi.timings.length-1].percentage || 0 }}" max="100" ng-model="kpi.newTiming.percentage" aria-label="percentage" id="timing-percentage-slider-{{$index}}"></md-slider>
                                     <md-input-container>
                                         <input flex type="number" ng-model="kpi.newTiming.percentage" aria-label="percentage" aria-controls="timing-percentage-slider-{{$index}}">
                                     </md-input-container>
