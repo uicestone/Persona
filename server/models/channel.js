@@ -10,6 +10,7 @@ const channelSchema = new Schema({
     topic: String,
     fans: Number,
     rank: Number,
+    distributionAbility: Number,
     score: Number,
     wasIn500: Boolean,
     updatedAt: Date

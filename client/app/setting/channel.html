@@ -21,6 +21,7 @@
                                         <th md-column>渠道名称</th>
                                         <th md-column>渠道分类</th>
                                         <th md-column>渠道评分</th>
+                                        <th md-column>分销能力</th>
                                         <th md-column>渠道ID</th>
                                         <th md-column>SPID</th>
                                         <th md-column>操作</th>
@@ -31,6 +32,7 @@
                                         <td md-cell>{{ channel.name }}</td>
                                         <td md-cell>{{ channel.topic }}</td>
                                         <td md-cell>{{ channel.rank }}</td>
+                                        <td md-cell>{{ channel.distributionAbility }}</td>
                                         <td md-cell>{{ channel._id }}</td>
                                         <td md-cell>{{ channel.spid }}</td>
                                         <td md-cell><md-icon class="md-primary" ng-click="editChannel(channel)">edit</md-icon> <md-icon class="md-primary" ng-click="removeChannel(channel)">delete</md-icon></td>

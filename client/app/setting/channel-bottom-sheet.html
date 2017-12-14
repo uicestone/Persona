@@ -11,12 +11,18 @@
                 <input ng-model="channel.topic">
             </md-input-container>
             <md-input-container>
+                <label>SPID</label>
+                <input ng-model="channel.spid">
+            </md-input-container>
+        </div>
+        <div flex="30" layout="column">
+            <md-input-container>
                 <label>渠道评分</label>
                 <input type="number" ng-model="channel.rank">
             </md-input-container>
             <md-input-container>
-                <label>SPID</label>
-                <input ng-model="channel.spid">
+                <label>渠道分销能力</label>
+                <input type="number" ng-model="channel.distributionAbility">
             </md-input-container>
         </div>
         <div flex layout="row" layout-align="end start">
