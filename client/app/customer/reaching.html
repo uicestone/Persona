@@ -106,17 +106,29 @@
                             <md-button href="#!/profile" class="btn btn-lg btn-w-lg md-raised md-primary">个人中心</md-button>
                         </div>
                     </div>
-                    <div class="md-padding" ng-if="brand.wechats.length>0">
-                        <form>
-                            <md-input-container>
-                                <md-select ng-model="wechat" placeholder="选择公众号" ng-change="getWechat(wechat)">
-                                    <md-option ng-repeat="wechat in brand.wechats" ng-value="wechat">{{ wechat.name }}</md-option>
-                                </md-select>
-                            </md-input-container>
-                            <md-input-container class="pull-right">
-                                <md-button class="btn md-raised md-primary" ng-click="editQrScene()" ng-disabled="!wechat">创建场景</md-button>
-                            </md-input-container>
-                        </form>
+                    <div class="md-padding row" ng-if="brand.wechats.length>0">
+                        <div class="col-md-4">
+                            <form>
+                                <md-input-container>
+                                    <md-select ng-model="wechat" placeholder="选择公众号" ng-change="getWechat(wechat)">
+                                        <md-option ng-repeat="wechat in brand.wechats" ng-value="wechat">{{ wechat.name }}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container>
+                                    <md-button class="btn md-raised md-primary" ng-click="editQrScene()" ng-disabled="!wechat">创建场景</md-button>
+                                </md-input-container>
+                                <span ng-show="wechatDetail.qrScenesKpiScan || wechatDetail.qrScenesKpiSubscribe">
+                                    <h4>已关注扫码总数：{{ wechatDetail.qrScenesKpiScan }}</h4>
+                                    <h4>新关注扫码总数：{{ wechatDetail.qrScenesKpiSubscribe }}</h4>
+                                </span>
+                            </form>
+                        </div>
+                        <div class="col-md-4">
+                            <div data-echarts data-options="qrSceneKpiScanChartOptions" style="height: 350px"></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div data-echarts data-options="qrSceneKpiSubscribeChartOptions" style="height: 350px"></div>
+                        </div>
                     </div>
                 </md-tab>
             </md-tabs>

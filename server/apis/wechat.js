@@ -442,10 +442,61 @@ module.exports = (router) => {
 
     router.route('/wechat/:appId/qrscene')
 
-    .get((req, res) => {
-        Wechat.findOne({appId: req.params.appId}).then(wechat => {
-            res.json(wechat.qrScenes);
+    .get(async (req, res) => {
+        
+        const wechat = await Wechat.findOne({appId: req.params.appId});
+
+        const scanScenes = (await WechatMessage.aggregate([
+            {
+                $match: {
+                    appId: wechat.appId,
+                    event: 'SCAN'
+                }
+            },
+            {
+                $group: {
+                    _id : "$eventKey",
+                    scan: {$sum: 1}
+                }
+            }
+        ])).map(scene => {
+            return {id: Number(scene._id), sum: scene.scan};
         });
+
+        const subscribeScenes = (await WechatMessage.aggregate([
+            {
+                $match: {
+                    appId: wechat.appId,
+                    event: 'subscribe',
+                    eventKey: {$regex: /^qrscene_/}
+                }
+            },
+            {
+                $group: {
+                    _id : "$eventKey",
+                    subscribe: {$sum: 1}
+                }
+            }
+        ])).map(scene => {
+            return {id: Number(scene._id.replace(/^qrscene_/, '')), sum: scene.subscribe};
+        });
+
+        const scenes = wechat.qrScenes.map(scene => {
+
+            var kpiSubscribe, kpiScan;
+
+            scene = scene.toObject();
+
+            kpiSubscribe = subscribeScenes.filter(s => s.id === scene.id)[0];
+            scene.kpiSubscribe = kpiSubscribe ? kpiSubscribe.sum : 0;
+
+            kpiScan = scanScenes.filter(s => s.id === scene.id)[0];
+            scene.kpiScan = kpiScan ? kpiScan.sum : 0;
+
+            return scene;
+        });
+
+        res.json(scenes);
     })
 
     .post((req, res) => {

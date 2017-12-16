@@ -404,6 +404,8 @@
         $scope.chartColors = ['#2ec7c9','#b6a2de', '#5ab1ef', '#ffb980', '#6ed0ff', '#ffbfe0', '#e9f58a', '#67e8c5'];
 
         $scope.qrSceneKpiByDateChartOptions = null;
+        $scope.qrSceneKpiScanChartOptions = null;
+        $scope.qrSceneKpiSubscribeChartOptions = null;
 
         $scope.showQrSceneKpiByDate = function (appId, qrSceneId) {
             
@@ -466,6 +468,97 @@
                 };
             });
         };
+
+        $scope.$watch('wechatDetail.appId', function (appId) {
+            wechatService.getQrScene(appId).then(function (res) {
+                
+                var scenes = res.data;
+
+                $scope.wechatDetail.qrScenesKpiSubscribe = scenes.map(function (scene) {
+                    return scene.kpiSubscribe;
+                }).reduce(function (prev, current) { return prev + current}, 0);
+
+                $scope.wechatDetail.qrScenesKpiScan = scenes.map(function (scene) {
+                    return scene.kpiScan;
+                }).reduce(function (prev, current) { return prev + current}, 0);
+
+                $scope.qrSceneKpiScanChartOptions = {
+                    title : {
+                        text: '已关注扫码比例',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    itemStyle : {
+                        normal : {
+                            color:function(d){ return $scope.chartColors[d.dataIndex]; }
+                        }
+                    },
+                    legend: {
+                        orient : 'vertical',
+                        x : 'left',
+                        data: scenes.map(function (scene) { return scene.name; })
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    calculable : true,
+                    series : [
+                        {
+                            name:'场景',
+                            type:'pie',
+                            radius : '55%',
+                            center: ['50%', '60%'],
+                            data: scenes.map(function (scene) { return {name: scene.name, value: scene.kpiScan}; })
+                        }
+                    ]
+                }
+
+                $scope.qrSceneKpiSubscribeChartOptions = {
+                    title : {
+                        text: '新关注扫码比例',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    itemStyle : {
+                        normal : {
+                            color:function(d){ return $scope.chartColors[d.dataIndex]; }
+                        }
+                    },
+                    legend: {
+                        orient : 'vertical',
+                        x : 'left',
+                        data: scenes.map(function (scene) { return scene.name; })
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            restore : {show: true, title: "刷新"},
+                            saveAsImage : {show: true, title: "保存为图片"}
+                        }
+                    },
+                    calculable : true,
+                    series : [
+                        {
+                            name:'场景',
+                            type:'pie',
+                            radius : '55%',
+                            center: ['50%', '60%'],
+                            data: scenes.map(function (scene) { return {name: scene.name, value: scene.kpiSubscribe}; })
+                        }
+                    ]
+                }
+            });
+        });
 
         $scope.selectTab = function (tab) {
             $location.search('tab', tab);

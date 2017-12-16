@@ -24,6 +24,6 @@ const wechatMessageSchema = new Schema({
     createdAt: Date
 });
 
-wechatMessageSchema.index({appId:1});
+wechatMessageSchema.index({appId:1, event:1, eventKey:1});
 
 module.exports = mongoose.model('WechatMessage', wechatMessageSchema);
