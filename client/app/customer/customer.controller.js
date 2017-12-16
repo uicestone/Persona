@@ -569,6 +569,12 @@
         $scope.$watch('$parent.$parent.user.$resolved', function (resolved) {
             if (!resolved) return;
             $scope.brand = brandService.get({id:$scope.$parent.$parent.user.brand.name});
+            $scope.brand.$promise.then(function (brand) {
+                if (brand.wechats) {
+                    $scope.wechat = brand.wechats[0];
+                    $scope.getWechat(brand.wechats[0]);
+                }
+            });
         });
 
         $scope.getWechat = function (wechat) {
