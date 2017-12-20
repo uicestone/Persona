@@ -14,7 +14,8 @@ const channelSchema = new Schema({
     distributionAbility: Number,
     score: Number,
     wasIn500: Boolean,
-    updatedAt: Date
+    updatedAt: Date,
+    remark: String
 });
 
 channelSchema.index({spid:1}, {unique:true, sparse:true});
