@@ -9,6 +9,7 @@ const channelSchema = new Schema({
     wechatId: String,
     mcnId: String,
     topic: String,
+    tags: [String],
     fans: Number,
     rank: Number,
     distributionAbility: Number,

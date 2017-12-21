@@ -43,10 +43,23 @@ module.exports = (router) => {
                 });
             }
 
-            if(req.query.type) {
+            if(req.query.topic) {
                 query.find({
-                    type: req.query.type
+                    topic: req.query.topic
                 });
+            }
+
+            if(req.query.orderBy) {
+                if (true) {
+
+                }
+                
+                query.sort({
+                    [req.query.orderBy]: (req.query.order === 'desc' || req.query.order === 'false' || Number(req.query.order) <= 0 ? 'desc' : 'asc')
+                });
+            }
+            else {
+                query.sort({:-1});
             }
 
             query.count()
