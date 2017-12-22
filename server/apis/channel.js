@@ -59,7 +59,7 @@ module.exports = (router) => {
                 });
             }
             else {
-                query.sort({:-1});
+                query.sort({rank:-1});
             }
 
             query.count()
