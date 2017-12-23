@@ -44,19 +44,23 @@ module.exports = (router) => {
             }
 
             if(req.query.topic) {
+                const queryTopics = req.query.topic.split(',');
                 query.find({
-                    topic: req.query.topic
+                    topic: {$in: queryTopics}
                 });
             }
 
             if(req.query.orderBy) {
-                if (true) {
-
+                if (['distributionAbility', 'rank', 'score', 'fans', 'updatedAt'].indexOf(req.query.orderBy) > -1) {
+                    query.sort({
+                        [req.query.orderBy]: (req.query.order === 'asc' || req.query.order === 'true' || Number(req.query.order) > 0 ? 'asc' : 'desc')
+                    });
                 }
-                
-                query.sort({
-                    [req.query.orderBy]: (req.query.order === 'desc' || req.query.order === 'false' || Number(req.query.order) <= 0 ? 'desc' : 'asc')
-                });
+                else {
+                    query.sort({
+                        [req.query.orderBy]: (req.query.order === 'desc' || req.query.order === 'false' || Number(req.query.order) < 0 ? 'desc' : 'asc')
+                    });
+                }
             }
             else {
                 query.sort({rank:-1});
