@@ -401,7 +401,7 @@
             });
         };
 
-        $scope.chartColors = ['#2ec7c9','#b6a2de', '#5ab1ef', '#ffb980', '#6ed0ff', '#ffbfe0', '#e9f58a', '#67e8c5'];
+        $scope.chartColors = ['#2ec7c9','#b6a2de', '#5ab1ef', '#ffb980', '#6ed0ff', '#ffbfe0', '#e9f58a', '#67e8c5', '#ffa2a2', '#8aff8e'];
 
         $scope.qrSceneKpiByDateChartOptions = null;
         $scope.qrSceneKpiScanChartOptions = null;
@@ -472,7 +472,9 @@
         $scope.$watch('wechatDetail.appId', function (appId) {
             wechatService.getQrScene(appId).then(function (res) {
                 
-                var scenes = res.data;
+                var scenes = res.data.sort(function (sceneA, sceneB) {
+                    return new Date(sceneB.createdAt) - new Date(sceneA.createdAt)
+                }).slice(0, 10);
 
                 $scope.wechatDetail.qrScenesKpiSubscribe = scenes.map(function (scene) {
                     return scene.kpiSubscribe;
@@ -497,8 +499,7 @@
                         }
                     },
                     legend: {
-                        orient : 'vertical',
-                        x : 'left',
+                        y : 'bottom',
                         data: scenes.map(function (scene) { return scene.name; })
                     },
                     toolbox: {
@@ -514,7 +515,7 @@
                             name:'场景',
                             type:'pie',
                             radius : '55%',
-                            center: ['50%', '60%'],
+                            center: ['50%', '45%'],
                             data: scenes.map(function (scene) { return {name: scene.name, value: scene.kpiScan}; })
                         }
                     ]
@@ -535,8 +536,7 @@
                         }
                     },
                     legend: {
-                        orient : 'vertical',
-                        x : 'left',
+                        y : 'bottom',
                         data: scenes.map(function (scene) { return scene.name; })
                     },
                     toolbox: {
@@ -552,7 +552,7 @@
                             name:'场景',
                             type:'pie',
                             radius : '55%',
-                            center: ['50%', '60%'],
+                            center: ['50%', '45%'],
                             data: scenes.map(function (scene) { return {name: scene.name, value: scene.kpiSubscribe}; })
                         }
                     ]
