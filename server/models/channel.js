@@ -13,8 +13,8 @@ const channelSchema = new Schema({
     distributionAbility: Number,
     updatedAt: Date,
     remark: String,
-    identified: Boolean
-
+    identified: Boolean,
+    logoUrl: String
 });
 
 channelSchema.index({spid:1}, {unique:true, sparse:true});
