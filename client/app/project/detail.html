@@ -283,6 +283,28 @@
                                 <md-button type="submit" class="md-primary md-raised" style="min-height:29px;min-width:70px"><md-icon>search</md-icon></md-button>
                             </md-input-container>
                         </form>
+                        <div class="row page-dashboard">
+                            <div class="col-md-offset-1 col-md-2 box-stats">
+                                <span class="box-desc">PV</span>
+                                <p class="box-num">{{ kpi.pv | number }}</p>
+                            </div>
+                            <div class="col-md-2 box-stats">
+                                <span class="box-desc">UV</span>
+                                <p class="box-num">{{ kpi.uv | number }}</p>
+                            </div>
+                            <div class="col-md-2 box-stats">
+                                <span class="box-desc">分享</span>
+                                <p class="box-num">{{ kpi.shares | number }}</p>
+                            </div>
+                            <div class="col-md-2 box-stats">
+                                <span class="box-desc">获客</span>
+                                <p class="box-num">{{ kpi.registers | number }}</p>
+                            </div>
+                            <div class="col-md-2 box-stats no-border">
+                                <span class="box-desc">访问时长</span>
+                                <p class="box-num">{{ kpi.stayingTime / 1000 | number:0 }} 秒</p>
+                            </div>
+                        </div>
                         <div>
                             <md-card>
                                 <md-table-container>

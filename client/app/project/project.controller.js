@@ -181,7 +181,7 @@
             }, true);
 
             $scope.chartColors = ['#2ec7c9','#b6a2de', '#5ab1ef', '#ffb980', '#6ed0ff', '#ffbfe0', '#e9f58a', '#67e8c5'];
-
+            $scope.kpi = projectService.getKpi({id:$route.current.params.id});
             $scope.getKpiByChannels = function () {projectService.getKpiByChannels(angular.extend($scope.queryKpi, {id:$route.current.params.id})).$promise.then(function(kpiByChannels) {
 
                 if (kpiByChannels.uv && kpiByChannels.uv.length) {
