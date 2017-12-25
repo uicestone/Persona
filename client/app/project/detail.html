@@ -305,6 +305,33 @@
                                 <p class="box-num">{{ kpi.stayingTime / 1000 | number:0 }} 秒</p>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">受访情况</div>
+                                    <div class="panel-body">
+                                        <div ng-show="viewsByDateChart.options" data-echarts data-options="viewsByDateChart.options" style="height: 350px"></div>
+                                        <div ng-show="stayingTimeByDateChart.options" data-echarts data-options="stayingTimeByDateChart.options" style="height: 350px"></div>
+                                        <div ng-show="sharesByDateChart.options" data-echarts data-options="sharesByDateChart.options" style="height: 350px"></div>
+                                        <div ng-show="escapeRateByDateChart.options" data-echarts data-options="escapeRateByDateChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-default panel-minimal">
+                                    <div class="divider divider-md"></div>
+                                    <div class="panel-heading">获客情况</div>
+                                    <div class="panel-body">
+                                        <div ng-show="registersByDateChart.options" data-echarts data-options="registersByDateChart.options" style="height: 350px"></div>
+                                        <div ng-show="registersByRegionChart.options" data-echarts data-options="registersByRegionChart.options" style="height: 350px"></div>
+                                        <div ng-show="registersByDeviceChart.options" data-echarts data-options="registersByDeviceChart.options" style="height: 350px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div>
                             <md-card>
                                 <md-table-container>
@@ -335,34 +362,6 @@
                                 </md-table-container>
                                 <md-table-pagination md-limit="queryCampaignRecords.limit" md-limit-options="[10, 50, 100]" md-page="queryCampaignRecords.page" md-total="{{ campaignRecords.$total }}" md-on-paginate="getCampaignRecords" md-page-select md-label="{of:'/', page:'页码', rowsPerPage:'每页条数'}"></md-table-pagination>
                             </md-card>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="panel panel-default panel-minimal">
-                                    <div class="divider divider-md"></div>
-                                    <div class="panel-heading">受访情况</div>
-                                    <div class="panel-body">
-                                        <div ng-show="viewsByDateChart.options" data-echarts data-options="viewsByDateChart.options" style="height: 350px"></div>
-                                        <div ng-show="stayingTimeByDateChart.options" data-echarts data-options="stayingTimeByDateChart.options" style="height: 350px"></div>
-                                        <div ng-show="sharesByDateChart.options" data-echarts data-options="sharesByDateChart.options" style="height: 350px"></div>
-                                        <div ng-show="escapeRateByDateChart.options" data-echarts data-options="escapeRateByDateChart.options" style="height: 350px"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="panel panel-default panel-minimal">
-                                    <div class="divider divider-md"></div>
-                                    <div class="panel-heading">获客情况</div>
-                                    <div class="panel-body">
-                                        <div ng-show="registersByDateChart.options" data-echarts data-options="registersByDateChart.options" style="height: 350px"></div>
-                                        <div ng-show="registersByRegionChart.options" data-echarts data-options="registersByRegionChart.options" style="height: 350px"></div>
-                                        <div ng-show="registersByDeviceChart.options" data-echarts data-options="registersByDeviceChart.options" style="height: 350px"></div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </md-content>
                 </md-tab>
