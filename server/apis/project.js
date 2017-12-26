@@ -198,9 +198,20 @@ module.exports = (router, wss) => {
             }
         }]))[0];
 
-        delete kpi._id;
+        if (kpi) {
+            delete kpi._id;
+            res.json(kpi);
+        }
+        else {
+            res.json({
+                uv: 0,
+                pv: 0,
+                registers: 0,
+                stayingTime: 0,
+                shares: 0
+            });
+        }
 
-        res.json(kpi);
     });
 
     router.route('/project/:projectId/kpi-by-channels').get(async (req, res) => {
