@@ -166,16 +166,12 @@ module.exports = (router, wss) => {
             project: Types.ObjectId(req.params.projectId)
         };
 
-        if (req.query.startDate || req.query.endDate) {
-            const matchTime = {};
-            if (req.query.startDate) {
-                matchTime.$gte = new Date(req.query.startDate);
-            }
-            if (req.query.endDate) {
-                matchTime.$lt = new Date(req.query.endDate);
-            }
-            match.time = matchTime;
-        }
+        const project = await Project.findById(req.params.projectId);
+
+        match.time = {
+            $gte: new Date(req.query.startDate || project.startDate),
+            $lt: new Date(req.query.endDate || project.endDate)
+        };
 
         const kpi = (await Campaign.aggregate([{
             $match: match
@@ -220,16 +216,12 @@ module.exports = (router, wss) => {
             project: Types.ObjectId(req.params.projectId)
         };
 
-        if (req.query.startDate || req.query.endDate) {
-            const matchTime = {};
-            if (req.query.startDate) {
-                matchTime.$gte = new Date(req.query.startDate);
-            }
-            if (req.query.endDate) {
-                matchTime.$lt = new Date(req.query.endDate);
-            }
-            match.time = matchTime;
-        }
+        const project = await Project.findById(req.params.projectId);
+
+        match.time = {
+            $gte: new Date(req.query.startDate || project.startDate),
+            $lt: new Date(req.query.endDate || project.endDate)
+        };
 
         const uvByChannel = await Campaign.aggregate([{
             $match: match
@@ -347,21 +339,17 @@ module.exports = (router, wss) => {
 
     router.route('/project/:projectId/kpi-by-date').get(async (req, res) => {
 
-        let match = {
+        const match = {
             project: Types.ObjectId(req.params.projectId),
             time: {$exists: true}
         };
 
-        if (req.query.startDate || req.query.endDate) {
-            const matchTime = {};
-            if (req.query.startDate) {
-                matchTime.$gte = new Date(req.query.startDate);
-            }
-            if (req.query.endDate) {
-                matchTime.$lt = new Date(req.query.endDate);
-            }
-            match.time = matchTime;
-        }
+        const project = await Project.findById(req.params.projectId);
+
+        match.time = {
+            $gte: new Date(req.query.startDate || project.startDate),
+            $lt: new Date(req.query.endDate || project.endDate)
+        };
 
         const kpiByDate = await Campaign.aggregate([{
             $match: match
@@ -416,23 +404,19 @@ module.exports = (router, wss) => {
         res.send(kpiByDate);
     });
 
-    router.route('/project/:projectId/kpi-by-device').get((req, res) => {
+    router.route('/project/:projectId/kpi-by-device').get(async (req, res) => {
 
-        let match = {
+        const match = {
             project: Types.ObjectId(req.params.projectId),
             device: {$exists: true}
         };
 
-        if (req.query.startDate || req.query.endDate) {
-            const matchTime = {};
-            if (req.query.startDate) {
-                matchTime.$gte = new Date(req.query.startDate);
-            }
-            if (req.query.endDate) {
-                matchTime.$lt = new Date(req.query.endDate);
-            }
-            match.time = matchTime;
-        }
+        const project = await Project.findById(req.params.projectId);
+
+        match.time = {
+            $gte: new Date(req.query.startDate || project.startDate),
+            $lt: new Date(req.query.endDate || project.endDate)
+        };
 
         Campaign.aggregate([{
             $match: match
