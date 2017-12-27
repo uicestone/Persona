@@ -530,7 +530,10 @@ module.exports = (router) => {
 
         const kpiByDate = await WechatMessage.aggregate([
             {
-                $match: {appId: wechat.appId}
+                $match: {
+                    appId: wechat.appId,
+                    createdAt: {$gte: qrScene.createdAt}
+                }
             },
             {
                 $group: {
