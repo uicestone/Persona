@@ -290,8 +290,12 @@
                         return {
                             name: pageName,
                             type: 'bar',
-                            data: $scope.pvByPage[pageName].map(function (pvPerChannel) {
-                                return pvPerChannel.views
+                            data: kpiByChannels.pv.map(function (kpiPerChannel) {
+                                const foundChannel = $scope.pvByPage[pageName].filter(function (pvPerChannel) {
+                                    return pvPerChannel.channel === kpiPerChannel._id.name;
+                                })[0];
+
+                                return foundChannel ? foundChannel.views : 0;
                             }),
                             stack: 'PV'
                         }
@@ -503,8 +507,12 @@
                         return {
                             name: pageName,
                             type: 'bar',
-                            data: $scope.sharesByPage[pageName].map(function (pvPerChannel) {
-                                return pvPerChannel.shares
+                            data: kpiByChannels.share.map(function (kpiPerChannel) {
+                                const foundChannel = $scope.sharesByPage[pageName].filter(function (sharesPerChannel) {
+                                    return sharesPerChannel.channel === kpiPerChannel._id.name;
+                                })[0];
+
+                                return foundChannel ? foundChannel.shares : 0;
                             }),
                             stack: '分享'
                         }
