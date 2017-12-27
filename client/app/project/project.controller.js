@@ -310,7 +310,7 @@
                     },
                     itemStyle : {
                         normal : {
-                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                            color:function(d){ return $scope.chartColors[d.dataIndex]; }
                         }
                     },
                     toolbox: {
@@ -357,7 +357,7 @@
                     },
                     itemStyle : {
                         normal : {
-                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                            color:function(d){ return $scope.chartColors[d.dataIndex]; }
                         }
                     },
                     toolbox: {
@@ -409,7 +409,7 @@
                     },
                     itemStyle : {
                         normal : {
-                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                            color:function(d){ return $scope.chartColors[d.dataIndex]; }
                         }
                     },
                     legend: {
@@ -469,7 +469,7 @@
                     },
                     itemStyle : {
                         normal : {
-                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                            color:function(d){ return $scope.chartColors[d.dataIndex]; }
                         }
                     },
                     grid: {
@@ -523,7 +523,7 @@
                     },
                     itemStyle : {
                         normal : {
-                            color:function(d){ return $scope.chartColors[d.seriesIndex]; }
+                            color:function(d){ return $scope.chartColors[d.dataIndex]; }
                         }
                     },
                     toolbox: {
