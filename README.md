@@ -36,3 +36,5 @@ gulp build
 
 Apache2或NGINX等Web Server，绑定dist目录
 PM2等进程管理工具启动`node server`
+
+
