@@ -7,6 +7,7 @@ const channelSchema = new Schema({
     platform: String,
     mcnId: String,
     topic: String,
+    region: String,
     tags: [String],
     fans: Number,
     rank: Number,
