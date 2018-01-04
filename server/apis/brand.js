@@ -77,7 +77,7 @@ module.exports = (router) => {
 
             let query;
 
-            if (mongoose.Types.ObjectId.isValid(req.params.brandId)) {
+            if (mongoose.Types.ObjectId.isValid(req.params.brandId) && req.params.brandId.match(new RegExp("^[0-9a-fA-F]{24}$"))) {
                 query = Brand.findById({_id: req.params.brandId});
             }
             else {
