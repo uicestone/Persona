@@ -13,29 +13,32 @@
                             <input ng-model="query.userKeyword">
                         </md-input-container>
                     </div>
-                    <md-content md-whiteframe="2" style="background:white">
-                        <table class="table" style="margin-bottom:0">
-                            <thead>
-                                <tr>
-                                    <th>名称</th>
-                                    <th>邮箱</th>
-                                    <th>公司</th>
-                                    <th>品牌</th>
-                                    <th>角色</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="user in users | filter:query.userKeyword">
-                                	<td>{{ user.name }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.company }}</td>
-                                    <td>{{ user.brand.name }}</td>
-                                    <td>{{ getRolesLabel(user.roles) }}</td>
-                                    <td><md-icon class="md-primary" ng-click="editUser(user)">edit</md-icon> <md-icon class="md-primary" ng-click="removeUser(user)">delete</md-icon></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </md-content>
+                    <md-card>
+                        <md-table-container>
+                            <table md-table md-progress="promise" style="margin-bottom:0">
+                                <thead md-head>
+                                    <tr md-row>
+                                        <th md-column>名称</th>
+                                        <th md-column>邮箱</th>
+                                        <th md-column>公司</th>
+                                        <th md-column>品牌</th>
+                                        <th md-column>角色</th>
+                                    </tr>
+                                </thead>
+                                <tbody md-body>
+                                    <tr md-row ng-repeat="user in users | filter:query.userKeyword">
+                                    	<td md-cell>{{ user.name }}</td>
+                                        <td md-cell>{{ user.email }}</td>
+                                        <td md-cell>{{ user.company }}</td>
+                                        <td md-cell>{{ user.brand.name }}</td>
+                                        <td md-cell>{{ getRolesLabel(user.roles) }}</td>
+                                        <td md-cell><md-icon class="md-primary" ng-click="editUser(user)">edit</md-icon> <md-icon class="md-primary" ng-click="removeUser(user)">delete</md-icon></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                        <md-table-pagination md-limit="query.limit" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{ users.$total }}" md-on-paginate="getUsers" md-page-select md-label="{of:'/', page:'页码', rowsPerPage:'每页条数'}"></md-table-pagination>
+                    </md-card>
                     <div class="actions text-right" style="margin-top:20px">
                         <md-button ng-click="editUser()" class="md-raised md-primary">添加用户</md-button>
                     </div>
