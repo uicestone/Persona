@@ -446,6 +446,11 @@ module.exports = (router) => {
         
         const wechat = await Wechat.findOne({appId: req.params.appId});
 
+        if (!wechat) {
+            res.status(404);
+            return;
+        }
+
         const scanScenes = (await WechatMessage.aggregate([
             {
                 $match: {
