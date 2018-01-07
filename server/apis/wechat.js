@@ -188,7 +188,14 @@ module.exports = (router) => {
             }, (err, result) => {
                 res.json(result);
             });
-        })
+        }).catch(err => {
+            if (err === 'Wechat App ID not found') {
+                res.status(404);
+            }
+            else {
+                throw err;
+            }
+        });
     });
 
     router.route('/wechat/:appId')
