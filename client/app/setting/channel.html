@@ -7,12 +7,15 @@
                     <div class="panel-title">渠道管理</div>
                 </div>
                 <div class="panel-body">
-                    <div class="filters" layout="row">
+                    <form ng-submit="getChannels()" class="filters" layout="row">
                         <md-input-container flex>
                             <label>搜索渠道</label>
                             <input ng-model="query.keyword">
                         </md-input-container>
-                    </div>
+                        <md-input-container>
+                            <md-button type="submit" flex="1" class="md-primary md-raised" style="min-height:29px;min-width:70px"><md-icon>search</md-icon></md-button>
+                        </md-input-container>
+                    </form>
                     <md-card>
                         <md-table-container>
                             <table md-table md-progress="promise" style="margin-bottom:0">
