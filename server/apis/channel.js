@@ -39,7 +39,10 @@ module.exports = (router) => {
 
             if(req.query.keyword) {
                 query.find({
-                    name: new RegExp(req.query.keyword)
+                    $or: [
+                        {name: new RegExp(req.query.keyword)},
+                        {spid: req.query.keyword}
+                    ]
                 });
             }
 
