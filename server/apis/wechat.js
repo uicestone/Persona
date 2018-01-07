@@ -190,7 +190,7 @@ module.exports = (router) => {
             });
         }).catch(err => {
             if (err === 'Wechat App ID not found') {
-                res.status(404);
+                res.status(404).json({message: err});
             }
             else {
                 throw err;
