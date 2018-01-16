@@ -179,7 +179,7 @@ module.exports = (router, wss) => {
             $group: {
                 _id: true,
                 uniqueIds: {$addToSet: {$ifNull: ["$openId", "$tempId"]}},
-                registers: {$sum: {$cond: [{$or:["$mobile", "$registered"]}, 1, 0]}},
+                registers: {$sum: {$cond: ["$registered", 1, 0]}},
                 pv: {$sum: {$cond: ["$visited", 1, 0]}},
                 stayingTime: {$avg: {$cond: ["$stayingTime", "$stayingTime", null]}},
                 shares: {$sum: {$cond: ["$shared", 1, 0]}}
