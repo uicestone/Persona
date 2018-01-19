@@ -297,7 +297,7 @@ module.exports = (router, wss) => {
         }]).allowDiskUse(true);
 
         const registersByChannel = await Campaign.aggregate([{
-            $match: Object.assign({$or: [{mobile: {$exists: true}}, {registered: {$exists: true}}]}, match)
+            $match: Object.assign({registered: {$exists: true}}, match)
         }, {
             $group: {
                 _id: "$fromChannel",
@@ -357,7 +357,7 @@ module.exports = (router, wss) => {
             $group: {
                 _id: {$dateToString: {format: "%Y-%m-%d", date: "$time"}},
                 uniqueIds: {$addToSet: {$ifNull: ["$openId", "$tempId"]}},
-                registers: {$sum: {$cond: [{$or:["$mobile", "$registered"]}, 1, 0]}},
+                registers: {$sum: {$cond: ["$registered", 1, 0]}},
                 pv: {$sum: {$cond: ["$visited", 1, 0]}},
                 stayingTime: {$avg: {$cond: ["$stayingTime", "$stayingTime", null]}},
                 shares: {$sum: {$cond: ["$shared", 1, 0]}}
