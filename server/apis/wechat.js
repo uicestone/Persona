@@ -127,10 +127,20 @@ module.exports = (router) => {
 
     .get((req, res) => {        
         const wechatAuth = WechatAuth();
+
+        ['appid', 'code'].forEach(param => {
+            if (!req.query[param]) {
+                res.status(400).send(`Param \'${param}\' is missing.`);
+                throw `wechat-oauth/url missing ${param}`;
+            }
+        });
+
+        console.log(`wechat oauth, code ${req.query.code}`);
+
         wechatAuth.getOAuthAccessToken(req.query.appid, req.query.code, function(err, reply) {
 
             if (err) {
-                console.error(`AppID ${req.query.appid}: wechat oauth error`, err);
+                console.error(`AppID ${req.query.appid}: wechat oauth error, code ${req.query.code}`, err);
                 return;
             }
 
@@ -164,15 +174,22 @@ module.exports = (router) => {
 
     .get((req, res) => {
 
-        ['redirect_url', 'token', 'appid'].forEach(param => {
+        ['redirect_url', 'appid'].forEach(param => {
             if (!req.query[param]) {
-                res.status(401).send(`缺少${param}`);
+                res.status(400).send(`Param \'${param}\' is missing.`);
                 throw `wechat-oauth/url missing ${param}`;
             }
         });
 
+        const token = req.get('authorization') || req.query.token
+
+        if (!token) {
+            res.status(400).send('Param \'token\' is missing.');
+            throw `wechat-oauth/url missing token`;
+        }
+
         const wechatAuth = WechatAuth();
-        const redirectUrl = `${process.env.API_BASE}wechat-oauth?appid=${req.query.appid}&token=${req.query.token}`;
+        const redirectUrl = `${process.env.API_BASE}wechat-oauth?appid=${req.query.appid}&token=${token}`;
         const url = wechatAuth.getOAuthURL(req.query.appid, redirectUrl, req.query.redirect_url, 'snsapi_userinfo');
         res.redirect(url);
     });
