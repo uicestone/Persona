@@ -44,7 +44,7 @@ module.exports = (router) => {
                     }, (err, res, body) => {
 
                         if (err) {
-                            console.error(new Date(), err);
+                            console.error(err);
                             return;
                         }
 
@@ -60,10 +60,10 @@ module.exports = (router) => {
             }).catch(err => {
                 if (err.code === 11000) {
                     res.status(409).json({message:'无法创建重复数据'});
-                    console.error(new Date(), err.message);
+                    console.error(err.message);
                 }
                 else {
-                    console.error(new Date(), err);
+                    console.error(err);
                     res.status(500);
                 }
             });
@@ -133,7 +133,7 @@ module.exports = (router) => {
             CustomerReaching.findById(req.params.customerReachingId).then(customerReaching => {
                 res.json(customerReaching);
             }).catch(err => {
-                console.error(new Date(), err);
+                console.error(err);
                 res.status(500);
             });
         })
@@ -142,7 +142,7 @@ module.exports = (router) => {
             CustomerReaching.findByIdAndUpdate(req.params.customerReachingId, req.body, {new: true}).then(customerReaching => {
                 res.json(customerReaching);
             }).catch(err => {
-                console.error(new Date(), err);
+                console.error(err);
                 res.status(500);
             });
         })
@@ -152,7 +152,7 @@ module.exports = (router) => {
             CustomerReaching.findByIdAndRemove(req.params.customerReachingId).then(() => {
                 res.end();
             }).catch(err => {
-                console.error(new Date(), err);
+                console.error(err);
                 res.status(500);
             });
         });

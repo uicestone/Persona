@@ -34,10 +34,10 @@ module.exports = (router, wss) => {
             }).catch(err => {
                 if (err.code === 11000) {
                     res.status(409).json({message:'无法创建重复数据'});
-                    console.error(new Date(), err.message);
+                    console.error(err.message);
                 }
                 else {
-                    console.error(new Date(), err);
+                    console.error(err);
                     res.status(500);
                 }
             });
@@ -136,7 +136,7 @@ module.exports = (router, wss) => {
             Project.findById(req.params.projectId).then(project => {
                 res.json(project);
             }).catch(err => {
-                console.error(new Date(), err);
+                console.error(err);
                 res.status(500);
             });
         })
@@ -145,7 +145,7 @@ module.exports = (router, wss) => {
             Project.findByIdAndUpdate(req.params.projectId, req.body, {new: true}).then(project => {
                 res.json(project);
             }).catch(err => {
-                console.error(new Date(), err);
+                console.error(err);
                 res.status(500);
             });
         })
@@ -155,7 +155,7 @@ module.exports = (router, wss) => {
             Project.findByIdAndRemove(req.params.projectId).then(() => {
                 res.end();
             }).catch(err => {
-                console.error(new Date(), err);
+                console.error(err);
                 res.status(500);
             });
         });

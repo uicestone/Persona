@@ -32,7 +32,7 @@ module.exports = (router) => {
             if (result.xml.ComponentVerifyTicket) {
                 ticket = result.xml.ComponentVerifyTicket[0];
                 redisClient.setex('component_verify_ticket', 7000, ticket);
-                console.log(`[${new Date()}] ComponentVerifyTicket已更新：${ticket}`);
+                console.log(`ComponentVerifyTicket已更新：${ticket}`);
             }
         });
 
@@ -114,7 +114,7 @@ module.exports = (router) => {
         else {
             wechatAuth.getPreAuthCode((err, reply) => {
                 if (err) {
-                    console.error(new Date(), err);
+                    console.error(err);
                     res.status(500).send(err);
                     return;
                 }
@@ -426,7 +426,7 @@ module.exports = (router) => {
                             syncFinalPromises.push(promise);
                         })
                         .catch(err => {
-                            console.error(new Date(), err);
+                            console.error(err);
                         });
                     });
 
@@ -436,7 +436,7 @@ module.exports = (router) => {
                 }
 
             }).catch(err => {
-                console.error(new Date(), err);
+                console.error(err);
             });
         }
     })
@@ -592,7 +592,7 @@ module.exports = (router) => {
             });
         })
         .catch(err => {
-            console.error(new Date(), err);
+            console.error(err);
         });
 
         function createTagAndInsertUsers (wechatApi, group, openIds) {

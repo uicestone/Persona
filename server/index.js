@@ -40,12 +40,12 @@ app.use('/', (req, res) => {
 });
 
 httpServer.listen(portHttp, () => {
-    console.log(`[${new Date()}] HTTP server listening port:${portHttp}`);
+    console.log(`HTTP server listening port:${portHttp}`);
 });
 
 wss.on('connection', (ws, req) => {
     
-    console.log(`[${new Date()}] WebSocket connected.`, req.connection.remoteAddress, req.url);
+    console.log(`WebSocket connected.`, req.connection.remoteAddress, req.url);
     
     ws.send('Welcome to Persona!');
 
@@ -55,6 +55,6 @@ wss.on('connection', (ws, req) => {
     });
 
     ws.on('close', () => {
-        console.log(`[${new Date()}] WebSocket disconnected.`, req.connection.remoteAddress, req.url);
+        console.log(`WebSocket disconnected.`, req.connection.remoteAddress, req.url);
     });
 });
