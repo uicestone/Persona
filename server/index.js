@@ -30,15 +30,6 @@ require('./apis')(app, router, wss);
 
 app.use(express.static('dist'));
 
-app.use('/', (req, res) => {
-    if (req.accepts(['html', 'json']) === 'html') {
-        res.sendFile(`${__dirname}/../dist/index.html`);
-    }
-    else {
-        res.sendStatus(404);
-    }
-});
-
 httpServer.listen(portHttp, () => {
     console.log(`HTTP server listening port:${portHttp}`);
 });
