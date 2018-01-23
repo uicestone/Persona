@@ -341,7 +341,7 @@ module.exports = (router) => {
 
                 wechatMessage.save();
 
-                console.log(`[${new Date()}] 收到微信消息`, wechatMessage);
+                console.log('收到微信消息', wechatMessage);
             });
 
             res.send('success').end();
