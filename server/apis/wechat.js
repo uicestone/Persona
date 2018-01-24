@@ -146,7 +146,7 @@ module.exports = (router) => {
 
             const redirectUrl = new url.URL(req.query.state);
             redirectUrl.searchParams.set('openid', reply.openid);
-            res.redirect(redirectUrl.toString());
+            
             wechatAuth.getUserInfo(reply.openid, reply.access_token, 'zh_CN', (err, user) => {
                 // update user info
                 const customer = {
@@ -166,6 +166,8 @@ module.exports = (router) => {
                     customer,
                     {upsert: true}
                 ).exec();
+
+                res.redirect(redirectUrl.toString());
             });
         });
     });
