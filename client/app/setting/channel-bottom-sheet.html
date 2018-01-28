@@ -1,13 +1,13 @@
 <md-bottom-sheet class="md-list md-has-header" style="position:fixed">
     <md-subheader ng-cloak>编辑渠道</md-subheader>
     <div layout="row">
-        <div flex="30" layout="column">
+        <div flex="20" layout="column">
             <md-input-container>
-                <label>渠道名称</label>
+                <label>名称</label>
                 <input ng-model="channel.name">
             </md-input-container>
             <md-input-container>
-                <label>渠道分类</label>
+                <label>分类</label>
                 <input ng-model="channel.topic">
             </md-input-container>
             <md-input-container>
@@ -15,18 +15,50 @@
                 <input ng-model="channel.spid">
             </md-input-container>
         </div>
-        <div flex="30" layout="column">
+        <div flex="20" layout="column">
             <md-input-container>
-                <label>渠道评分</label>
+                <label>平台</label>
+                <input ng-model="channel.platform">
+            </md-input-container>
+            <md-input-container>
+                <label>地区</label>
+                <input ng-model="channel.region">
+            </md-input-container>
+            <md-input-container>
+                <label>评分</label>
                 <input type="number" ng-model="channel.rank">
             </md-input-container>
+        </div>
+        <div flex="20" layout="column">
             <md-input-container>
-                <label>渠道分销能力</label>
+                <label>分销能力</label>
                 <input type="number" ng-model="channel.distributionAbility">
             </md-input-container>
+            <md-input-container>
+                <label>粉丝数（万）</label>
+                <input type="number" ng-model="channel.fans">
+            </md-input-container>
+            <md-input-container>
+                <label>头像链接</label>
+                <input type="url" ng-model="channel.logoUrl">
+            </md-input-container>
         </div>
-        <div flex layout="row" layout-align="end start">
-            <div><md-button ng-click="updateChannel(channel)">保存</md-button></div>
+        <div flex="20" layout="column">
+            <md-input-container>
+                <md-checkbox ng-model="channel.identified">已认证</md-checkbox>
+            </md-input-container>
+            <md-input-container>
+                <label>简介</label>
+                <textarea ng-model="channel.remark" style="min-height:116px"></textarea>
+            </md-input-container>
+        </div>
+        <div flex layout="column" layout-align="center center">
+            <div flex>
+                <md-button ng-click="updateChannel(channel)">保存</md-button>
+            </div>
+            <div flex>
+                <img ng-if="channel.logoUrl" ng-src="{{ channel.logoUrl }}" style="max-width: 72px;margin-left: 10px;border-radius: 10px;box-shadow: 2px 2px 5px #ccc">
+            </div>
         </div>
     </div>
 </md-bottom-sheet>
