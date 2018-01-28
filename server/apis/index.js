@@ -5,11 +5,13 @@ module.exports = (app, router, wss) => {
     // register routes
     router = require('./brand.js')(router);
     router = require('./channel.js')(router);
+    router = require('./campaign.js')(router, wss);
     router = require('./customer.js')(router);
     router = require('./customerField.js')(router);
     router = require('./customerGroup.js')(router);
     router = require('./customerReaching.js')(router);
-    router = require('./project.js')(router, wss);
+    router = require('./project.js')(router);
+    router = require('./projectStat.js')(router);
     router = require('./user.js')(router);
     router = require('./auth.js')(router);
     router = require('./wechat.js')(router);
