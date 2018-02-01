@@ -53,6 +53,14 @@ module.exports = (router) => {
                 });
             }
 
+            ['spid', 'name', 'platform', 'mcnId', 'region', 'identified'].forEach(field => {
+                if (req.query[field]) {
+                    query.find({
+                        [field]: req.query[field]
+                    });
+                }
+            });
+
             if(req.query.orderBy) {
                 if (['distributionAbility', 'rank', 'score', 'fans', 'updatedAt'].indexOf(req.query.orderBy) > -1) {
                     query.sort({

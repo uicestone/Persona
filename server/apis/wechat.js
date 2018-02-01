@@ -131,7 +131,7 @@ module.exports = (router) => {
         ['appid', 'code'].forEach(param => {
             if (!req.query[param]) {
                 res.status(400).send(`Param \'${param}\' is missing.`);
-                throw `wechat-oauth/url missing ${param}`;
+                throw `wechat-oauth missing ${param}`;
             }
         });
 
