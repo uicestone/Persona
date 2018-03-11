@@ -76,27 +76,35 @@ module.exports = (router, wss) => {
         query
         .then((channel) => {
             if(!channel)
-                throw '';
+                throw 'Invalid channel id.';
             record.fromChannel = {_id: channel._id, name: channel.name};
         })
-        .catch(() => {
-            throw 'Invalid channel id.'
-        })
-
         .then(() => {
             return Project.findOne({_id: record.project});
         })
         .then((project) => {
             if(!project)
-                throw '';
+                throw 'Invalid project id.';
+
+            ['openId', 'tempId', 'mobile'].forEach(field => {
+                if (Object.keys(record.toObject()).indexOf(field) === -1) {
+                    return;
+                }
+
+                if (!record[field] || record[field] == 'undefined' || record[field] == 'null') {
+                    record[field] = undefined;
+                }
+            });
+            
+            if (!record.tempId && !record.openId && !record.mobile) {
+                throw 'Cannot identify customer.'
+            }
+
+            res.json(record);
             return record.save();
         })
-        .catch(() => {
-            throw 'Invalid project id.'
-        })
-
-        .then((record) => {
-            res.json(record);
+        .then(record => {
+            record.syncToUser();
         })
         .catch((err) => {
             return res.status(400).send({message: err});
@@ -121,8 +129,8 @@ module.exports = (router, wss) => {
                 throw 'Invalid Channel ID';
             }
 
-            if (!query.tempId && !query.openId) {
-                throw 'No tempId or openId is defined';
+            if (!query.tempId && !query.openId && !query.mobile) {
+                throw 'Non of tempId, openId or mobile is defined';
             }
 
             const project = await Project.findById(projectId);
@@ -157,12 +165,16 @@ module.exports = (router, wss) => {
                 // value '{"recordId":"{ObjectId}","time":"1500000000000"}'
                 let lastSeenOpenId, lastSeenTempId, lastSeenTime = null, lastSeenRecordId;
 
+                if (query.tempId) {
+                    lastSeenTempId = JSON.parse(await redisClient.getAsync(`last_seen_${query.tempId}`));
+                }
+
                 if (query.openId) {
                     lastSeenOpenId = JSON.parse(await redisClient.getAsync(`last_seen_${query.openId}`));
                 }
 
-                if (query.tempId) {
-                    lastSeenTempId = JSON.parse(await redisClient.getAsync(`last_seen_${query.tempId}`));
+                if (query.mobile) {
+                    lastSeenMobile = JSON.parse(await redisClient.getAsync(`last_seen_${query.mobile}`));
                 }
 
                 if (lastSeenTempId) {
@@ -174,6 +186,12 @@ module.exports = (router, wss) => {
                      && (!lastSeenTempId || lastSeenTempId.time < lastSeenOpenId.time)) {
                     lastSeenTime = lastSeenOpenId.time;
                     lastSeenRecordId = lastSeenOpenId.recordId;
+                }
+
+                if (lastSeenMobile
+                     && (!lastSeenTempId || lastSeenTempId.time < lastSeenMobile.time)) {
+                    lastSeenTime = lastSeenMobile.time;
+                    lastSeenRecordId = lastSeenMobile.recordId;
                 }
 
                 let campaignRecord;
@@ -208,6 +226,11 @@ module.exports = (router, wss) => {
                 if (query.tempId) {
                     campaignRecord.tempId = query.tempId;
                     redisClient.setexAsync(`last_seen_${query.tempId}`, 300, lastSeen);
+                }
+
+                if (query.mobile) {
+                    campaignRecord.mobile = query.mobile;
+                    redisClient.setexAsync(`last_seen_${query.mobile}`, 300, lastSeen);
                 }
 
                 campaignRecord.save();

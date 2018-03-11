@@ -63,7 +63,13 @@
         $scope.customerFields = customerFieldService.query({limit:9999});
         
         $scope.customerFields.$promise.then(function(customerFields){
+            
+            if ($scope.$parent.user.can('edit-brand')) {
+                customerFields.unshift({key:'brand', label:'品牌'});
+            }
+
             $scope.customerFieldKeys = {};
+
             customerFields.forEach(function(customerField) {
                 $scope.customerFieldKeys[customerField.label] = customerField.key;
             });
