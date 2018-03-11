@@ -15,7 +15,7 @@ const channelSchema = new Schema({
     updatedAt: Date,
     remark: String,
     identified: Boolean,
-    logoUrl: String
+    logoUrl: {type: String, default: 'http://persona.imnumerique.com/assets/images/channel-logo-default.png'}
 });
 
 channelSchema.index({spid:1}, {unique:true, sparse:true});
