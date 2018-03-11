@@ -5,7 +5,7 @@ const channelSchema = new Schema({
     spid: String,
     name: String,
     platform: String,
-    mcnId: String,
+    mcnId: {type: String, default: 1},
     topic: String,
     region: String,
     tags: [String],
