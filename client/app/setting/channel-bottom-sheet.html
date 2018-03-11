@@ -11,45 +11,51 @@
                 <input ng-model="channel.topic">
             </md-input-container>
             <md-input-container>
-                <label>SPID</label>
-                <input ng-model="channel.spid">
+                <label>平台</label>
+                <input ng-model="channel.platform">
             </md-input-container>
         </div>
         <div flex="20" layout="column">
             <md-input-container>
-                <label>平台</label>
-                <input ng-model="channel.platform">
+                <label>SPID</label>
+                <input ng-model="channel.spid">
+            </md-input-container>
+            <md-input-container>
+                <label>MCN ID</label>
+                <input ng-model="channel.mcnId">
             </md-input-container>
             <md-input-container>
                 <label>地区</label>
                 <input ng-model="channel.region">
             </md-input-container>
-            <md-input-container>
-                <label>评分</label>
-                <input type="number" ng-model="channel.rank">
-            </md-input-container>
         </div>
         <div flex="20" layout="column">
-            <md-input-container>
-                <label>分销能力</label>
-                <input type="number" ng-model="channel.distributionAbility">
-            </md-input-container>
-            <md-input-container>
-                <label>粉丝数（万）</label>
-                <input type="number" ng-model="channel.fans">
-            </md-input-container>
+            <div layout="row">
+                <md-input-container>
+                    <label>分销能力</label>
+                    <input type="number" ng-model="channel.distributionAbility">
+                </md-input-container>
+                <md-input-container>
+                    <label>粉丝数（万）</label>
+                    <input type="number" ng-model="channel.fans">
+                </md-input-container>
+                <md-input-container>
+                    <label>评分</label>
+                    <input type="number" ng-model="channel.rank">
+                </md-input-container>
+            </div>
             <md-input-container>
                 <label>头像链接</label>
                 <input type="url" ng-model="channel.logoUrl">
             </md-input-container>
-        </div>
-        <div flex="20" layout="column">
             <md-input-container>
                 <md-checkbox ng-model="channel.identified">已认证</md-checkbox>
             </md-input-container>
+        </div>
+        <div flex="20" layout="column">
             <md-input-container>
                 <label>简介</label>
-                <textarea ng-model="channel.remark" style="min-height:116px"></textarea>
+                <textarea ng-model="channel.remark" style="min-height:166px"></textarea>
             </md-input-container>
         </div>
         <div flex layout="column" layout-align="center center">
