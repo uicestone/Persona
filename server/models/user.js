@@ -7,6 +7,7 @@ const userSchema = new Schema({
     brand: {name: String, _id: Schema.Types.ObjectId},
     roles: [String],
     username: String,
+    mobile: String,
     email: String,
     password: {type: String, select: false},
     token: {type: String, select: false}

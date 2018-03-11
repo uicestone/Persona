@@ -11,8 +11,8 @@
                 <input ng-model="user.email" autocomplete="new-password">
             </md-input-container>
             <md-input-container>
-                <label>重置密码</label>
-                <input type="password" ng-model="user.password" autocomplete="new-password">
+                <label>手机</label>
+                <input ng-model="user.mobile" autocomplete="new-password">
             </md-input-container>
         </div>
         <div flex="30" layout="column">
@@ -24,6 +24,12 @@
                 <label>品牌</label>
                 <input ng-model="user.brand.name">
             </md-input-container>
+            <md-input-container>
+                <label>重置密码</label>
+                <input type="password" ng-model="user.password" autocomplete="new-password">
+            </md-input-container>
+        </div>
+        <div flex="30" layout="column">
             <md-input-container>
                 <label>权限</label>
                 <md-select ng-model="user.roles[0]">

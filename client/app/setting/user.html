@@ -20,7 +20,7 @@
                                     <tr md-row>
                                         <th md-column>名称</th>
                                         <th md-column>邮箱</th>
-                                        <th md-column>公司</th>
+                                        <th md-column>手机</th>
                                         <th md-column>品牌</th>
                                         <th md-column>角色</th>
                                     </tr>
@@ -29,7 +29,7 @@
                                     <tr md-row ng-repeat="user in users | filter:query.userKeyword">
                                     	<td md-cell>{{ user.name }}</td>
                                         <td md-cell>{{ user.email }}</td>
-                                        <td md-cell>{{ user.company }}</td>
+                                        <td md-cell>{{ user.mobile }}</td>
                                         <td md-cell>{{ user.brand.name }}</td>
                                         <td md-cell>{{ getRolesLabel(user.roles) }}</td>
                                         <td md-cell><md-icon class="md-primary" ng-click="editUser(user)">edit</md-icon> <md-icon class="md-primary" ng-click="removeUser(user)">delete</md-icon></td>
