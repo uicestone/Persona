@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app.wizard')
-    .controller('wizardCtrl', ['$scope', '$window', '$location', '$route', '$mdToast', 'userService', 'channelService', 'projectService', 'regionService', wizardCtrl]);
+    .controller('wizardCtrl', ['$scope', '$window', '$location', '$route', '$mdToast', '$timeout', 'userService', 'channelService', 'projectService', 'regionService', wizardCtrl]);
 
-    function wizardCtrl($scope, $window, $location, $route, $mdToast, userService, channelService, projectService, regionService) {
+    function wizardCtrl($scope, $window, $location, $route, $mdToast, $timeout, userService, channelService, projectService, regionService) {
 
         $scope.platforms = [
             '微信', '微博', 'QQ'
@@ -32,7 +32,33 @@
 
         $scope.kpiNames = ['PV', 'UV', '平均停留时间', '获取用户数', '分享数', '分享率', '下单数', '转化数', '转化率', '无效订单数', '热名单数', '潜在客户数'];
 
-        $scope.channels = channelService.query({limit:1000});
+        $scope.channelKeywordChangeTimeout;
+        $scope.$watch('channelKeyword', function (channelKeyword) {
+            
+            $timeout.cancel($scope.channelKeywordChangeTimeout);
+            
+            $timeout(function () {
+                $scope.channels = channelService.query(channelKeyword ? {keyword:channelKeyword} : {limit:100, orderBy:'rank'});
+            }, 1000);
+        });
+
+        $scope.$watch('channels', function (channels) {
+            // check items in channel list which are already in project.channels
+            var project = $scope.project;
+            var projectChannelIds;
+
+            if(!project || !project.$resolved || !project.channels) {
+                return;
+            }
+
+            projectChannelIds = project.channels.map(function(channel) { return channel._id; });
+
+            channels.forEach(function(channel) {
+                if(projectChannelIds.indexOf(channel._id) > -1) {
+                    channel.selected = true;
+                }
+            });
+        }, true);
 
         $scope.isEditing = $location.search().editing;
 
@@ -45,25 +71,6 @@
                 $scope.project.manager = $scope.$parent.user;
             }
         }
-
-        // check items in channel list which are already in project.channels
-        Promise.all([$scope.project.$promise, $scope.channels.$promise]).then(function(result) {
-            var project = result[0];
-            var channels = result[1];
-            var projectChannelIds;
-
-            if(!project || !project.channels) {
-                return;
-            }
-
-            projectChannelIds = project.channels.map(function(channel) { return channel._id; });
-
-            channels.forEach(function(channel) {
-                if(projectChannelIds.indexOf(channel._id) > -1) {
-                    channel.selected = true;
-                }
-            });
-        });
 
         $scope.saveKpi = function(kpi) {
             
