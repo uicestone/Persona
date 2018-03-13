@@ -57,6 +57,12 @@ module.exports = (router) => {
                 });
             }
 
+            if (req.query.brand) {
+                query.find({
+                    'brand.name': req.query.brand
+                });
+            }
+
             query.count()
             .then((total) => {
                 return Promise.all([total, query.find().limit(limit).skip(skip).exec()]);
