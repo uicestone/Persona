@@ -163,7 +163,7 @@ module.exports = (router, wss) => {
 
                 // redis key 'last_seen_{tempId|openId}'
                 // value '{"recordId":"{ObjectId}","time":"1500000000000"}'
-                let lastSeenOpenId, lastSeenTempId, lastSeenTime = null, lastSeenRecordId;
+                let lastSeenOpenId, lastSeenMobile, lastSeenTempId, lastSeenTime = null, lastSeenRecordId;
 
                 if (query.tempId) {
                     lastSeenTempId = JSON.parse(await redisClient.getAsync(`last_seen_${query.tempId}`));
