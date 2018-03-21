@@ -415,6 +415,10 @@
 
         $scope.showQrSceneKpiByDate = function (appId, qrSceneId) {
             
+            if (!appId) {
+                return;
+            }
+            
             wechatService.getQrSceneKpiByDate(appId, qrSceneId).then(function (res) {
                 const qrSceneKpiByDate = res.data;
                 $scope.qrSceneKpiByDateChartOptions = {
