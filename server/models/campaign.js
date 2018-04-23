@@ -78,6 +78,38 @@ campaignSchema.methods.syncToUser = async function () {
         }
     });
 
+    const customerActFields = await CustomerField.find({type:'act'});
+
+    customerActFields.forEach(customerField => {
+        const key = customerField.key;
+        
+        if (this[key]) {
+            if (!customer[key]) {
+                customer[key] = [];
+            }
+            customer[key].push(this[key]);
+            
+            if (['ordered', 'paid'].indexOf(key) > -1 && this.products) {
+                const productsKey = key + 'Products';
+                if (!customer[productsKey]) {
+                    customer[productsKey] = [];
+                }
+                customer[productsKey].concat(this[productsKey)]);
+            }
+
+            if (['ordered', 'paid'].indexOf(key) > -1 && this.total) {
+                const totalKey = key + 'Total';
+                const avgKey = key + 'Average';
+
+                if (!customer[totalKey]) {
+                    customer[totalKey] = 0;
+                }
+                customer[totalKey] += this.total;
+                customer[avgKey] = customer[totalKey] / customer[key].length;
+            }
+        }
+    });
+
     customer.save();
 
 };
