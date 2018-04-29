@@ -107,6 +107,8 @@ campaignSchema.methods.syncToUser = async function () {
                 customer[totalKey] += this.total;
                 customer[avgKey] = customer[totalKey] / customer[key].length;
             }
+
+            // TODO push this channel to custom relatedChannels
         }
     });
 
