@@ -94,7 +94,7 @@ campaignSchema.methods.syncToUser = async function () {
                 if (!customer[productsKey]) {
                     customer[productsKey] = [];
                 }
-                customer[productsKey].concat(this[productsKey)]);
+                customer[productsKey].concat(this[productsKey]);
             }
 
             if (['ordered', 'paid'].indexOf(key) > -1 && this.total) {
