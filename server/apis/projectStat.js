@@ -1,3 +1,4 @@
+const Channel = require('../models/channel.js');
 const Project = require('../models/project.js');
 const Campaign = require('../models/campaign.js');
 const Types = require('mongoose').Types;
@@ -168,6 +169,13 @@ module.exports = (router, wss) => {
                 price: {$sum: "$price"}
             }
         }]);
+
+        await Promise.all([pvByChannel, uvByChannel, stayingTimeByChannel, escapeByChannel,
+        sharesByChannel, registersByChannel, ordersByChannel, paymentsByChannel].map(statByChannel => {
+            return Promise.all(statByChannel.map(async channelStat => {
+                channelStat.channel = await Channel.findById(channelStat._id._id);
+            }));
+        }));
 
         res.json({
             pv: pvByChannel,
